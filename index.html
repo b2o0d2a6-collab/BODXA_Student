@@ -2,19 +2,135 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>BODXA Student - بوديكسا طلاب</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BODXA Student - منصة أولى ثانوي</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f4f6f9; text-align: center; padding: 50px; }
-        h1 { color: #2c3e50; }
-        p { color: #555; font-size: 18px; }
-        .box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); display: inline-block; }
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --bg: #f8fafc;
+            --text: #1e293b;
+        }
+        body {
+            font-family: 'Cairo', Tahoma, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+            text-align: right;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        header h1 { margin: 0; font-size: 2.2rem; }
+        header p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.9; }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        h3 { color: var(--primary); margin-top: 0; }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: var(--primary); }
+        .output-box {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-right: 4px solid var(--secondary);
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>مرحباً بك في BODXA Student 🚀</h1>
-        <p>مساعدك الذكي لمنهج أولى ثانوي مصري (عربي).</p>
-        <p>قريباً سيتم تفعيل الشرح والأسئلة والامتحانات!</p>
+
+    <div class="container">
+        <header>
+            <h1>🚀 BODXA Student</h1>
+            <p>مساعدك الذكي لشرح المناهج، الأسئلة المستمرة، واختبارات أولى ثانوي</p>
+        </header>
+
+        <!-- قسم الشرح التفاعلي -->
+        <div class="card">
+            <h3>📖 المعلم الذكي (اسأل في أي جزء مش فاهمه)</h3>
+            <label for="topic">اكتب اسم الدرس أو الجزء المراد شرحه (مثل: المعادلات التربيعية بـ س وص):</label>
+            <input type="text" id="topic" placeholder="مثال: حساب المثلثات، المتجهات...">
+            <button onclick="startExplain()">ابدأ الشرح المبسط</button>
+            <div id="explanationResult" class="output-box" style="display:none;">
+                <strong>الشرح التفاعلي:</strong>
+                <p id="explText">جاري تحضير الشرح بالرموز الرياضية (س، ص، ط)...</p>
+            </div>
+        </div>
+
+        <!-- قسم نظام الأسئلة -->
+        <div class="card">
+            <h3>📝 اختبارات وتقييم الدرس</h3>
+            <p>اختر نوع الاختبار للتدرب فوراً بعد المذاكرة:</p>
+            <button onclick="startQuiz(2)">سؤالان سريعان (بعد كل قطعة)</button>
+            <button onclick="startQuiz(10)" style="background-color: #0d9488; margin-right: 10px;">امتحان شامل (10 أسئلة)</button>
+            <div id="quizResult" class="output-box" style="display:none;">
+                <strong id="quizTitle">الامتحان:</strong>
+                <p id="quizText">سيتم توليد الأسئلة هنا بناءً على الدرس المختار...</p>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function startExplain() {
+            const topic = document.getElementById('topic').value;
+            const resBox = document.getElementById('explanationResult');
+            const explText = document.getElementById('explText');
+            
+            if(!topic) {
+                alert('من فضلك اكتب اسم الدرس أو الجزئية أولاً!');
+                return;
+            }
+
+            resBox.style.display = 'block';
+            explText.innerHTML = `أهلاً بك! جاري تجهيز شرح مفصل لـ "<b>${topic}</b>" باستخدام الحروف العربية (س، ص، ط) وبأبسط طريقة ممكنة لتثبيت المعلومة في دماغك... (قريباً سيتم تفعيل ربط الـ AI بالكامل هنا).`;
+        }
+
+        function startQuiz(count) {
+            const resBox = document.getElementById('quizResult');
+            const quizTitle = document.getElementById('quizTitle');
+            const quizText = document.getElementById('quizText');
+
+            resBox.style.display = 'block';
+            quizTitle.innerText = count === 2 ? "📌 اختبار سريع (سؤالان بعد الجزئية):" : "🏆 الامتحان النهائي للدرس (10 أسئلة):";
+            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بنجاح! الأسئلة دي هتقيس فهمك للجزئية دي بدقة وتظهر لك النتيجة فوراً. (قريباً تفعيل الأسئلة التفاعلية).`;
+        }
+    </script>
+
 </body>
 </html>
