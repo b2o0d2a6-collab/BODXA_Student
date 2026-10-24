@@ -71,6 +71,29 @@
             margin-top: 15px;
             border-right: 4px solid var(--secondary);
         }
+        .pdf-list {
+            list-style: none;
+            padding: 0;
+        }
+        .pdf-list li {
+            background: #f8fafc;
+            margin: 10px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+        }
+        .pdf-list a {
+            background-color: #0d9488;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .pdf-list a:hover { background-color: #0f766e; }
     </style>
 </head>
 <body>
@@ -78,19 +101,39 @@
     <div class="container">
         <header>
             <h1>🚀 BODXA Student</h1>
-            <p>مساعدك الذكي لشرح المناهج، الأسئلة المستمرة، واختبارات أولى ثانوي</p>
+            <p>مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة، واختبارات أولى ثانوي</p>
         </header>
 
-        <!-- قسم الشرح التفاعلي -->
+        <!-- قسم المعلم الذكي -->
         <div class="card">
             <h3>📖 المعلم الذكي (اسأل في أي جزء مش فاهمه)</h3>
-            <label for="topic">اكتب اسم الدرس أو الجزء المراد شرحه (مثل: المعادلات التربيعية بـ س وص):</label>
-            <input type="text" id="topic" placeholder="مثال: حساب المثلثات، المتجهات...">
+            <label for="topic">اكتب اسم الدرس أو الجزء المراد شرحه:</label>
+            <input type="text" id="topic" placeholder="مثال: الحضارة والتاريخ، حساب المثلثات، الغلاف المائي على كوكب الأرض...">
             <button onclick="startExplain()">ابدأ الشرح المبسط</button>
             <div id="explanationResult" class="output-box" style="display:none;">
                 <strong>الشرح التفاعلي:</strong>
-                <p id="explText">جاري تحضير الشرح بالرموز الرياضية (س، ص، ط)...</p>
+                <p id="explText">جاري تحضير الشرح...</p>
             </div>
+        </div>
+
+        <!-- قسم مكتبة كتب الـ PDF -->
+        <div class="card">
+            <h3>📚 مكتبة كتب المنهج (PDF)</h3>
+            <p>حمل الكتب الدراسية الخاصة بأولى ثانوي لتذاكر في أي وقت:</p>
+            <ul class="pdf-list">
+                <li>
+                    <span>📖 كتاب التاريخ (الفصل الأول)</span>
+                    <a href="#" onclick="alert('قريباً سيتم ربط ملف الـ PDF هنا!'); return false;">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>📐 كتاب الرياضيات (مجلد الجبر والهندسة)</span>
+                    <a href="#" onclick="alert('قريباً سيتم ربط ملف الـ PDF هنا!'); return false;">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>🌍 كتاب الجغرافيا (الغلاف المائي والبيئة)</span>
+                    <a href="#" onclick="alert('قريباً سيتم ربط ملف الـ PDF هنا!'); return false;">تحميل / تصفح</a>
+                </li>
+            </ul>
         </div>
 
         <!-- قسم نظام الأسئلة -->
@@ -118,7 +161,7 @@
             }
 
             resBox.style.display = 'block';
-            explText.innerHTML = `أهلاً بك! جاري تجهيز شرح مفصل لـ "<b>${topic}</b>" باستخدام الحروف العربية (س، ص، ط) وبأبسط طريقة ممكنة لتثبيت المعلومة في دماغك... (قريباً سيتم تفعيل ربط الـ AI بالكامل هنا).`;
+            explText.innerHTML = `أهلاً بك! جاري تجهيز شرح مفصل لـ "<b>${topic}</b>" بأبسط طريقة ممكنة لتثبيت المعلومة في دماغك... (قريباً سيتم تفعيل ربط الـ AI بالكامل هنا).`;
         }
 
         function startQuiz(count) {
