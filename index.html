@@ -10,6 +10,7 @@
             --secondary: #3b82f6;
             --bg: #f8fafc;
             --text: #1e293b;
+            --accent: #0d9488;
         }
         body {
             font-family: 'Cairo', Tahoma, sans-serif;
@@ -44,7 +45,7 @@
             margin-bottom: 20px;
         }
         h3 { color: var(--primary); margin-top: 0; }
-        input[type="text"], textarea {
+        input[type="text"] {
             width: 100%;
             padding: 12px;
             margin: 10px 0 15px;
@@ -64,12 +65,27 @@
             transition: background 0.3s;
         }
         button:hover { background-color: var(--primary); }
+        
         .output-box {
             background: #f1f5f9;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 10px;
             margin-top: 15px;
-            border-right: 4px solid var(--secondary);
+            border-right: 5px solid var(--secondary);
+            line-height: 1.7;
+        }
+        .output-box h4 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        .explain-section {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
         }
         .pdf-list {
             list-style: none;
@@ -86,7 +102,7 @@
             border: 1px solid #e2e8f0;
         }
         .pdf-list a {
-            background-color: #0d9488;
+            background-color: var(--accent);
             color: white;
             padding: 6px 15px;
             border-radius: 6px;
@@ -94,6 +110,21 @@
             font-size: 0.9rem;
         }
         .pdf-list a:hover { background-color: #0f766e; }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -108,11 +139,12 @@
         <div class="card">
             <h3>📖 المعلم الذكي (اسأل في أي جزء مش فاهمه)</h3>
             <label for="topic">اكتب اسم الدرس أو الجزء المراد شرحه:</label>
-            <input type="text" id="topic" placeholder="مثال: الحضارة والتاريخ، حساب المثلثات، الغلاف المائي على كوكب الأرض...">
-            <button onclick="startExplain()">ابدأ الشرح المبسط</button>
+            <input type="text" id="topic" placeholder="مثال: الحضارة والتاريخ، حساب المثلثات، العلوم المتكاملة، الفلسفة والمنطق...">
+            <button id="explainBtn" onclick="startExplain()">ابدأ الشرح المبسط 💡</button>
+            
             <div id="explanationResult" class="output-box" style="display:none;">
-                <strong>الشرح التفاعلي:</strong>
-                <p id="explText">جاري تحضير الشرح...</p>
+                <h4 id="explainTitle">🤖 المعلم الذكي يشرح لك:</h4>
+                <div id="explContent"></div>
             </div>
         </div>
 
@@ -153,7 +185,7 @@
             <h3>📝 اختبارات وتقييم الدرس</h3>
             <p>اختر نوع الاختبار للتدرب فوراً بعد المذاكرة:</p>
             <button onclick="startQuiz(2)">سؤالان سريعان (بعد كل قطعة)</button>
-            <button onclick="startQuiz(10)" style="background-color: #0d9488; margin-right: 10px;">امتحان شامل (10 أسئلة)</button>
+            <button onclick="startQuiz(10)" style="background-color: var(--accent); margin-right: 10px;">امتحان شامل (10 أسئلة)</button>
             <div id="quizResult" class="output-box" style="display:none;">
                 <strong id="quizTitle">الامتحان:</strong>
                 <p id="quizText">سيتم توليد الأسئلة هنا بناءً على الدرس المختار...</p>
@@ -163,17 +195,46 @@
 
     <script>
         function startExplain() {
-            const topic = document.getElementById('topic').value;
+            const topicInput = document.getElementById('topic');
+            const topic = topicInput.value.trim();
             const resBox = document.getElementById('explanationResult');
-            const explText = document.getElementById('explText');
+            const explContent = document.getElementById('explContent');
+            const explainTitle = document.getElementById('explainTitle');
+            const btn = document.getElementById('explainBtn');
             
             if(!topic) {
                 alert('من فضلك اكتب اسم الدرس أو الجزئية أولاً!');
                 return;
             }
 
+            // إظهار تحضير الشرح
+            btn.disabled = true;
+            btn.innerHTML = `<span class="loading-spinner"></span> جاري الشرح...`;
             resBox.style.display = 'block';
-            explText.innerHTML = `أهلاً بك! جاري تجهيز شرح مفصل لـ "<b>${topic}</b>" بأبسط طريقة ممكنة لتثبيت المعلومة في دماغك... (قريباً سيتم تفعيل ربط الـ AI بالكامل هنا).`;
+            explainTitle.innerText = `🤖 المعلم الذكي يشرح لك: "${topic}"`;
+            explContent.innerHTML = `<p style="color:#64748b;">⏳ جاري تحليل الدرس وتنسيق الشرح المبسط لك بأسهل طريقة...</p>`;
+
+            // محاكاة توليد الشرح التفاعلي الذكي (يمكن ربطها بـ API مباشرة)
+            setTimeout(() => {
+                explContent.innerHTML = `
+                    <div class="explain-section">
+                        🎯 <strong>المفهوم الأساسي:</strong><br>
+                        درس <b>(${topic})</b> يعتبر من المواضيع الأساسية في منهج الصف الأول الثانوي. الفكرة الرئيسية تعتمد على فهم القواعد وتطبيقها بطريقة منطقية ومباشرة.
+                    </div>
+                    <div class="explain-section">
+                        💡 <strong>التبسيط والأمثلة:</strong><br>
+                        • فكر في الموضوع كأنك تحل لغزاً خطوة بخطوة.<br>
+                        • عند استيعاب النقاط الرئيسية لهذا الدرس، ستتمكن من الربط بينه وبين باقي أجزاء المادة بسهولة.<br>
+                        • تذكر دائماً التركيز على "لماذا" و "كيف" يحدث المفهوم وليس الحفظ المجرد.
+                    </div>
+                    <div class="explain-section">
+                        📌 <strong>كبسولة الـ BODXA للتفوق:</strong><br>
+                        احفظ الخريطة الذهنية للدرس: اقرأ الجزئية من كتاب الـ PDF بالمكتبة، ثم جرب حل سؤالين من قسم الاختبارات بالأسفل للتأكد من ثبات المعلومة! 🚀
+                    </div>
+                `;
+                btn.disabled = false;
+                btn.innerHTML = `ابدأ الشرح المبسط 💡`;
+            }, 1200);
         }
 
         function startQuiz(count) {
@@ -183,7 +244,7 @@
 
             resBox.style.display = 'block';
             quizTitle.innerText = count === 2 ? "📌 اختبار سريع (سؤالان بعد الجزئية):" : "🏆 الامتحان النهائي للدرس (10 أسئلة):";
-            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بنجاح! الأسئلة دي هتقيس فهمك للجزئية دي بدقة وتظهر لك النتيجة فوراً. (قريباً تفعيل الأسئلة التفاعلية).`;
+            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بنجاح! الأسئلة دي هتقيس فهمك للجزئية دي بدقة وتظهر لك النتيجة فوراً. (الخطوة القادمة: تفعيل الاختبار التفاعلي بالكامل).`;
         }
     </script>
 
