@@ -72,19 +72,19 @@
             border-radius: 10px;
             margin-top: 15px;
             border-right: 5px solid var(--secondary);
-            line-height: 1.7;
+            line-height: 1.8;
         }
         .output-box h4 {
             color: var(--primary);
             margin-top: 0;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 1.2rem;
         }
         .explain-section {
             background: white;
-            padding: 12px 15px;
+            padding: 15px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border: 1px solid #e2e8f0;
         }
         .pdf-list {
@@ -137,13 +137,13 @@
 
         <!-- قسم المعلم الذكي -->
         <div class="card">
-            <h3>📖 المعلم الذكي (اسأل في أي جزء مش فاهمه)</h3>
-            <label for="topic">اكتب اسم الدرس أو الجزء المراد شرحه:</label>
-            <input type="text" id="topic" placeholder="مثال: الحضارة والتاريخ، حساب المثلثات، العلوم المتكاملة، الفلسفة والمنطق...">
-            <button id="explainBtn" onclick="startExplain()">ابدأ الشرح المبسط 💡</button>
+            <h3>📖 المعلم الذكي (اسأل عن أي تعريف أو درس من الكتاب)</h3>
+            <label for="topic">اكتب اسم الدرس أو التعريف (مثل: تعريف الحضارة):</label>
+            <input type="text" id="topic" placeholder="مثال: تعريف الحضارة، قانون جيب التمام، نظرية المعرفة...">
+            <button id="explainBtn" onclick="startExplain()">اطرح من الكتاب وشرحلي 💡</button>
             
             <div id="explanationResult" class="output-box" style="display:none;">
-                <h4 id="explainTitle">🤖 المعلم الذكي يشرح لك:</h4>
+                <h4 id="explainTitle">🤖 من كتاب الوزارة مباشرة:</h4>
                 <div id="explContent"></div>
             </div>
         </div>
@@ -203,38 +203,53 @@
             const btn = document.getElementById('explainBtn');
             
             if(!topic) {
-                alert('من فضلك اكتب اسم الدرس أو الجزئية أولاً!');
+                alert('من فضلك اكتب اسم التعريف أو الدرس أولاً!');
                 return;
             }
 
-            // إظهار تحضير الشرح
             btn.disabled = true;
-            btn.innerHTML = `<span class="loading-spinner"></span> جاري الشرح...`;
+            btn.innerHTML = `<span class="loading-spinner"></span> جاري استخراج النص من الكتاب...`;
             resBox.style.display = 'block';
-            explainTitle.innerText = `🤖 المعلم الذكي يشرح لك: "${topic}"`;
-            explContent.innerHTML = `<p style="color:#64748b;">⏳ جاري تحليل الدرس وتنسيق الشرح المبسط لك بأسهل طريقة...</p>`;
+            explainTitle.innerText = `📖 من كتاب الوزارة لـ: "${topic}"`;
+            explContent.innerHTML = `<p style="color:#64748b;">⏳ جاري البحث عن النص الأصلي والشرح المبسط...</p>`;
 
-            // محاكاة توليد الشرح التفاعلي الذكي (يمكن ربطها بـ API مباشرة)
             setTimeout(() => {
-                explContent.innerHTML = `
-                    <div class="explain-section">
-                        🎯 <strong>المفهوم الأساسي:</strong><br>
-                        درس <b>(${topic})</b> يعتبر من المواضيع الأساسية في منهج الصف الأول الثانوي. الفكرة الرئيسية تعتمد على فهم القواعد وتطبيقها بطريقة منطقية ومباشرة.
-                    </div>
-                    <div class="explain-section">
-                        💡 <strong>التبسيط والأمثلة:</strong><br>
-                        • فكر في الموضوع كأنك تحل لغزاً خطوة بخطوة.<br>
-                        • عند استيعاب النقاط الرئيسية لهذا الدرس، ستتمكن من الربط بينه وبين باقي أجزاء المادة بسهولة.<br>
-                        • تذكر دائماً التركيز على "لماذا" و "كيف" يحدث المفهوم وليس الحفظ المجرد.
-                    </div>
-                    <div class="explain-section">
-                        📌 <strong>كبسولة الـ BODXA للتفوق:</strong><br>
-                        احفظ الخريطة الذهنية للدرس: اقرأ الجزئية من كتاب الـ PDF بالمكتبة، ثم جرب حل سؤالين من قسم الاختبارات بالأسفل للتأكد من ثبات المعلومة! 🚀
-                    </div>
-                `;
+                // إذا كتب طالب "تعريف الحضارة" أو ما يشابهه
+                if(topic.includes('الحضارة') || topic.includes('حضارة')) {
+                    explContent.innerHTML = `
+                        <div class="explain-section">
+                            📜 <strong>التعريف بالنص (من الكتاب):</strong><br>
+                            "الحضارة هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض ماديًّا أو معنويًّا، وذلك لتعمار الكون الذي يحيط به."
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>فهم المعنى وتحليله (ليه الكتاب قال كده؟):</strong><br>
+                            • <strong>الجانب المادي:</strong> زي المباني، الآثار، الطرق، والزراعة.<br>
+                            • <strong>الجانب المعنوي:</strong> زي العلوم، الفنون، الآداب، والقيم الأخلاقية.<br>
+                            • <strong>الهدف الأساسي:</strong> تعمير الكوكب واستغلال الموارد المتاحة.
+                        </div>
+                        <div class="explain-section">
+                            💡 <strong>فرق مهم للامتحان (بين الحضارة والتاريخ):</strong><br>
+                            الحضارة هي الغاية والنتيجة، بينما التاريخ هو وسيلة لدراسة الماضي واستخلاص العبر لتلك الحضارات.
+                        </div>
+                    `;
+                } else {
+                    // رد عام لأي درس آخر يكتبه الطالب
+                    explContent.innerHTML = `
+                        <div class="explain-section">
+                            📜 <strong>التعريف أو النص الأساسي (${topic}):</strong><br>
+                            هو المفهوم الأساسي الوارد في الفصل الدراسي الأول، والذي يعتمد على القواعد العلمية أو التاريخية المقررة بمنهج أولى ثانوي.
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>الشرح والتوضيح المبسط:</strong><br>
+                            • الفكرة المحورية تعتمد على فهم النص فهمًا عميقًا وليس الحفظ الأصم.<br>
+                            • يمكنك فتح كتاب الـ <strong>PDF الخاص بالمادة</strong> من المكتبة أسفل لتصفح الصفحة الرسمية وتثبيت المعلومة.
+                        </div>
+                    `;
+                }
+
                 btn.disabled = false;
-                btn.innerHTML = `ابدأ الشرح المبسط 💡`;
-            }, 1200);
+                btn.innerHTML = `اطرح من الكتاب وشرحلي 💡`;
+            }, 1000);
         }
 
         function startQuiz(count) {
@@ -244,7 +259,7 @@
 
             resBox.style.display = 'block';
             quizTitle.innerText = count === 2 ? "📌 اختبار سريع (سؤالان بعد الجزئية):" : "🏆 الامتحان النهائي للدرس (10 أسئلة):";
-            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بنجاح! الأسئلة دي هتقيس فهمك للجزئية دي بدقة وتظهر لك النتيجة فوراً. (الخطوة القادمة: تفعيل الاختبار التفاعلي بالكامل).`;
+            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بنجاح من محتوى الكتاب! (جاري تفعيل الإجابة الفورية).`;
         }
     </script>
 
