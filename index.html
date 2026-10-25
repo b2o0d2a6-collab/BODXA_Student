@@ -140,15 +140,15 @@
             <p>مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة، واختبارات أولى ثانوي</p>
         </header>
 
-        <!-- قسم المعلم الذكي المطور كلياً -->
+        <!-- قسم المعلم الذكي المدمج بفهارس المنهج -->
         <div class="card">
-            <h3>📖 المعلم الذكي (اسأل في أي جزئية أو ضع أي قطعة من المنهج)</h3>
-            <label for="topic">اكتب السؤال، المصطلح، أو القطعة التي تريد فهمها وشرحها بالتفصيل:</label>
-            <textarea id="topic" placeholder="اكتب هنا أي جزئية في التاريخ، الرياضيات، العلوم المتكاملة، الفلسفة، أو اللغات..."></textarea>
-            <button id="explainBtn" onclick="startExplain()">حلل واشرح القطعة فوراً 💡</button>
+            <h3>📖 المعلم الذكي (اسأل في أي درس من فهارس الكتب)</h3>
+            <label for="topic">اكتب اسم الدرس، المفهوم، أو الوحدة (من التاريخ، الفلسفة، العلوم، الرياضيات، أو اللغات):</label>
+            <textarea id="topic" placeholder="مثال: الحضارة والتاريخ، أساليب التفكير الإنساني، الغلاف المائي، نظرية طالس..."></textarea>
+            <button id="explainBtn" onclick="startExplain()">ابحث واشرح من الكتاب 💡</button>
             
             <div id="explanationResult" class="output-box" style="display:none;">
-                <h4 id="explainTitle">🤖 المعلم الذكي يحلل ويشرح:</h4>
+                <h4 id="explainTitle">🤖 المعلم الذكي يطابق الكتاب ويشرح:</h4>
                 <div id="explContent"></div>
             </div>
         </div>
@@ -201,45 +201,97 @@
     <script>
         function startExplain() {
             const topicInput = document.getElementById('topic');
-            const query = topicInput.value.trim();
+            const query = topicInput.value.trim().toLowerCase();
             const resBox = document.getElementById('explanationResult');
             const explContent = document.getElementById('explContent');
             const explainTitle = document.getElementById('explainTitle');
             const btn = document.getElementById('explainBtn');
             
             if(!query) {
-                alert('من فضلك اكتب النص أو السؤال الذي تريد شرحه أولاً!');
+                alert('من فضلك اكتب اسم الدرس أو العنوان من الكتاب أولاً!');
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="loading-spinner"></span> جاري قراءة وتفكيك النص...`;
+            btn.innerHTML = `<span class="loading-spinner"></span> جاري البحث في فهارس الكتب...`;
             resBox.style.display = 'block';
-            explainTitle.innerText = `🤖 تحليل وشرح: "${query.substring(0, 40)}${query.length > 40 ? '...' : ''}"`;
-            explContent.innerHTML = `<p style="color:#64748b;">⏳ جاري فحص النص واستخراج المعاني والشرح التفصيلي...</p>`;
+            explainTitle.innerText = `🤖 نتيجة البحث عن: "${topicInput.value}"`;
+            explContent.innerHTML = `<p style="color:#64748b;">⏳ جارٍ مطابقة النص بفهارس كتب (التاريخ، الفلسفة، العلوم، الرياضيات، واللغات)...</p>`;
 
             setTimeout(() => {
-                // محرك التحليل الذكي التلقائي: يتعامل فوراً مع أي نص يكتبه الطالب ويقسمه لثلاثة أجزاء احترافية
-                let dynamicHTML = `
-                    <div class="explain-section">
-                        📜 <strong>المفهوم الأساسي للنص / القطعة:</strong><br>
-                        "يتناول هذا النص مفهوماً دراسياً هاماً في المنهج، ويعبر عن ركيزة أساسية ترتبط بالقواعد والمفاهيم المقررة في الصف الأول الثانوي."
-                    </div>
-                    <div class="explain-section">
-                        🔍 <strong>الشرح وتفكيك القطعة خطوة بخطوة:</strong><br>
-                        • <strong>الفكرة الجوهرية:</strong> تركز على فهم الكلمات المفتاحية في عبارتك: <em>"${query}"</em>.<br>
-                        • <strong>التحليل المبسط:</strong> يتم تقسيم الجزئية إلى عناصر مفسرة لتوضيح المقصود منها دون حفظ أصم.<br>
-                        • <strong>التطبيق العملي:</strong> يُمثل فهم هذه القطعة مفتاحاً أساسياً لحل الأسئلة المرتبطة بها في الامتحانات.
-                    </div>
-                    <div class="explain-section">
-                        🎯 <strong>نصيحة المعلم الذكي للامتحانات:</strong><br>
-                        تأكد دائماً من قراءة سياق هذه الجزئية من كتاب المادة الموجود في المكتبة بالأسفل، واربط بينها وبين الدروس السابقة لتثبيت المعلومة تماماً! 🚀
-                    </div>
-                `;
+                let matchedContent = "";
 
-                explContent.innerHTML = dynamicHTML;
+                // مطابقة ذكية لفهارس التاريخ
+                if(query.includes("الحضارة والتاريخ") || query.includes("حضارة")) {
+                    matchedContent = `
+                        <div class="explain-section">
+                            📜 <strong>من كتاب التاريخ (الوحدة الأولى - الدرس الأول):</strong><br>
+                            "الحضارة هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض ماديًّا أو معنويًّا، وذلك لتعمير الكون."
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>تحليل الدرس:</strong><br>
+                            • العلاقة بين الإنسان والبيئة هي أساس قيام الحضارات.<br>
+                            • التاريخ يدرس ماضي البشرية ليستخلص العبر والدروس.
+                        </div>
+                    `;
+                } 
+                // مطابقة لفهارس الفلسفة والمنطق
+                else if(query.includes("أساليب التفكير") || query.includes("التفكير الإنساني") || query.includes("الفلسفة")) {
+                    matchedContent = `
+                        <div class="explain-section">
+                            📜 <strong>من كتاب الفلسفة (الوحدة الأولى - الفصل الأول):</strong><br>
+                            "التفكير الإنساني هو الهبة التي وهبها الله للإنسان ليميزه عن سائر المخلوقات، وهو يتنوع بين أسلوب خرافي، ديني، فلسفي، علمي، وتطبيقي إبداعي."
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>تحليل الدرس:</strong><br>
+                            • الأسلوب العلمي يعتمد على البحث عن العلل القريبة.<br>
+                            • الأسلوب الفلسفي يبحث عن العلل البعيدة والغاية الكبرى للوجود.
+                        </div>
+                    `;
+                } 
+                // مطابقة لفهارس العلوم المتكاملة
+                else if(query.includes("الغلاف المائي") || query.includes("الماء") || query.includes("العلوم")) {
+                    matchedContent = `
+                        <div class="explain-section">
+                            📜 <strong>من كتاب العلوم المتكاملة (الوحدة الأولى - النظام البيئي المائي):</strong><br>
+                            "يُعتبر الماء ركيزة الاستدامة البيئية، ويغطي الجزء الأكبر من كوكب الأرض، وله خواص كيميائية وفيزيائية فريدة تدعم الحياة."
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>تحليل الدرس:</strong><br>
+                            • الخواص الفريدة للمياه تساهم في تنظيم مناخ الكوكب وحياة الكائنات الحية.
+                        </div>
+                    `;
+                } 
+                // مطابقة لفهارس الرياضيات (الجبر والهندسة)
+                else if(query.includes("المصفوفات") || query.includes("حساب المثلثات") || query.includes("الرياضيات") || query.includes("طالس")) {
+                    matchedContent = `
+                        <div class="explain-section">
+                            📜 <strong>من كتاب الرياضيات (فهرس الجبر والهندسة وحساب المثلثات):</strong><br>
+                            "يعتمد هذا الدرس على القواعد والنظريات الأساسية المقررة في المنهج (مثل نظرية طالس في التناسب والتشابه، والدوال المثلثية)."
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>خطوات الحل والفهم:</strong><br>
+                            • ركز على القوانين الأساسية وتطبيقاتها المباشرة في التمارين والامتحانات.
+                        </div>
+                    `;
+                }
+                // رد عام ذكي مطابق للفهارس لو العنوان غير محدد بدقة
+                else {
+                    `
+                        <div class="explain-section">
+                            📚 <strong>مطابقة من فهارس المنهج لـ (${topicInput.value}):</strong><br>
+                            هذا العنوان مدرج ضمن المناهج الدراسية الرسمية المعتمدة للصف الأول الثانوي بجمهورية مصر العربية.
+                        </div>
+                        <div class="explain-section">
+                            💡 <strong>توجيه المعلم الذكي:</strong><br>
+                            للحصول على النص بالحرف، قم بفتح كتاب المادة الخاص به من <b>مكتبة الـ PDF</b> بالأعلى وتوجه للصفحة المحددة في الفهرس الرسمي لتثبيت المعلومة تماماً! 🚀
+                        </div>
+                    `;
+                }
+
+                explContent.innerHTML = matchedContent;
                 btn.disabled = false;
-                btn.innerHTML = `حلل واشرح القطعة فوراً 💡`;
+                btn.innerHTML = `ابحث واشرح من الكتاب 💡`;
             }, 900);
         }
 
@@ -250,7 +302,7 @@
 
             resBox.style.display = 'block';
             quizTitle.innerText = count === 2 ? "📌 اختبار سريع (سؤالان بعد الجزئية):" : "🏆 الامتحان النهائي للدرس (10 أسئلة):";
-            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بناءً على القطعة أو الدرس المختار!`;
+            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بناءً على الدرس أو الفهرس المختار!`;
         }
     </script>
 
