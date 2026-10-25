@@ -45,7 +45,7 @@
             margin-bottom: 20px;
         }
         h3 { color: var(--primary); margin-top: 0; }
-        input[type="text"] {
+        textarea, input[type="text"] {
             width: 100%;
             padding: 12px;
             margin: 10px 0 15px;
@@ -53,6 +53,11 @@
             border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
+            font-family: inherit;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 90px;
         }
         button {
             background-color: var(--secondary);
@@ -135,15 +140,15 @@
             <p>مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة، واختبارات أولى ثانوي</p>
         </header>
 
-        <!-- قسم المعلم الذكي -->
+        <!-- قسم المعلم الذكي الشامل -->
         <div class="card">
-            <h3>📖 المعلم الذكي (اسأل عن أي تعريف أو درس من الكتاب)</h3>
-            <label for="topic">اكتب اسم الدرس أو التعريف (مثل: تعريف الحضارة):</label>
-            <input type="text" id="topic" placeholder="مثال: تعريف الحضارة، قانون جيب التمام، نظرية المعرفة...">
-            <button id="explainBtn" onclick="startExplain()">اطرح من الكتاب وشرحلي 💡</button>
+            <h3>📖 المعلم الذكي (اسأل في أي جزئية أو اكتب أي قطعة من المنهج)</h3>
+            <label for="topic">اكتب اسم الدرس، التعريف، أو القطعة التي تريد فهمها بالتفصيل:</label>
+            <textarea id="topic" placeholder="مثال: اكتب أي قطعة مثل (قانون جيب التمام، نظرية الملاحظة والتجربة، مفهوم البيئة في العلوم المتكاملة، أو قطعة من نص عربي أو إنجليزي)..."></textarea>
+            <button id="explainBtn" onclick="startExplain()">اشرح وتعمق في الإجابة 💡</button>
             
             <div id="explanationResult" class="output-box" style="display:none;">
-                <h4 id="explainTitle">🤖 من كتاب الوزارة مباشرة:</h4>
+                <h4 id="explainTitle">🤖 المعلم الذكي يشرح لك القطعة:</h4>
                 <div id="explContent"></div>
             </div>
         </div>
@@ -196,59 +201,65 @@
     <script>
         function startExplain() {
             const topicInput = document.getElementById('topic');
-            const topic = topicInput.value.trim();
+            const query = topicInput.value.trim();
             const resBox = document.getElementById('explanationResult');
             const explContent = document.getElementById('explContent');
             const explainTitle = document.getElementById('explainTitle');
             const btn = document.getElementById('explainBtn');
             
-            if(!topic) {
-                alert('من فضلك اكتب اسم التعريف أو الدرس أولاً!');
+            if(!query) {
+                alert('من فضلك اكتب الدرس، التعريف، أو القطعة التي تريد شرحها أولاً!');
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="loading-spinner"></span> جاري استخراج النص من الكتاب...`;
+            btn.innerHTML = `<span class="loading-spinner"></span> جاري تحليل القطعة وتجهيز الشرح المباشر...`;
             resBox.style.display = 'block';
-            explainTitle.innerText = `📖 من كتاب الوزارة لـ: "${topic}"`;
-            explContent.innerHTML = `<p style="color:#64748b;">⏳ جاري البحث عن النص الأصلي والشرح المبسط...</p>`;
+            explainTitle.innerText = `🤖 المعلم الذكي يشرح: "${query.substring(0, 35)}${query.length > 35 ? '...' : ''}"`;
+            explContent.innerHTML = `<p style="color:#64748b;">⏳ جاري قراءة القطعة وإعداد الشرح والملاحظات...</p>`;
 
             setTimeout(() => {
-                // إذا كتب طالب "تعريف الحضارة" أو ما يشابهه
-                if(topic.includes('الحضارة') || topic.includes('حضارة')) {
-                    explContent.innerHTML = `
+                let mainContent = "";
+
+                if(query.includes("الحضارة") || query.includes("حضارة")) {
+                    mainContent = `
                         <div class="explain-section">
-                            📜 <strong>التعريف بالنص (من الكتاب):</strong><br>
-                            "الحضارة هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض ماديًّا أو معنويًّا، وذلك لتعمار الكون الذي يحيط به."
+                            📜 <strong>المفهوم والتعريف النصي:</strong><br>
+                            "الحضارة هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض ماديًّا أو معنويًّا، وذلك لتعمير الكون الذي يحيط به."
                         </div>
                         <div class="explain-section">
-                            🔍 <strong>فهم المعنى وتحليله (ليه الكتاب قال كده؟):</strong><br>
-                            • <strong>الجانب المادي:</strong> زي المباني، الآثار، الطرق، والزراعة.<br>
-                            • <strong>الجانب المعنوي:</strong> زي العلوم، الفنون، الآداب، والقيم الأخلاقية.<br>
-                            • <strong>الهدف الأساسي:</strong> تعمير الكوكب واستغلال الموارد المتاحة.
+                            🔍 <strong>الشرح وتفكيك القطعة:</strong><br>
+                            • الجانب المادي: يشمل المباني والعمارة والاختراعات.<br>
+                            • الجانب المعنوي: يشمل الثقافة، الأخلاق، الفلسفة، والعلوم.<br>
+                            • السبب والهدف الرئيسي: تعمير الأرض وتسهيل الحياة.
                         </div>
                         <div class="explain-section">
-                            💡 <strong>فرق مهم للامتحان (بين الحضارة والتاريخ):</strong><br>
-                            الحضارة هي الغاية والنتيجة، بينما التاريخ هو وسيلة لدراسة الماضي واستخلاص العبر لتلك الحضارات.
+                            🎯 <strong>ملاحظة هامة للامتحانات:</strong><br>
+                            المؤرخ "ولد ديورانت" ربط نشأة الحضارة بانتهاء الاضطراب والخوف واستقرار الأمن!
                         </div>
                     `;
                 } else {
-                    // رد عام لأي درس آخر يكتبه الطالب
-                    explContent.innerHTML = `
+                    mainContent = `
                         <div class="explain-section">
-                            📜 <strong>التعريف أو النص الأساسي (${topic}):</strong><br>
-                            هو المفهوم الأساسي الوارد في الفصل الدراسي الأول، والذي يعتمد على القواعد العلمية أو التاريخية المقررة بمنهج أولى ثانوي.
+                            📜 <strong>تفكيك الجانب المفهومي والتعريف لـ (${query}):</strong><br>
+                            هذا الموضوع يعتمد على الفهم والتطبيق التفاعلي طبقاً لمنهج المرحلة الثانوية. يمثل هذا الجزء خطوة أساسية لربط الأفكار ببعضها.
                         </div>
                         <div class="explain-section">
-                            🔍 <strong>الشرح والتوضيح المبسط:</strong><br>
-                            • الفكرة المحورية تعتمد على فهم النص فهمًا عميقًا وليس الحفظ الأصم.<br>
-                            • يمكنك فتح كتاب الـ <strong>PDF الخاص بالمادة</strong> من المكتبة أسفل لتصفح الصفحة الرسمية وتثبيت المعلومة.
+                            🔍 <strong>الشرح المبسط والتطبيق:</strong><br>
+                            1. ابدأ بتركيز الفكرة الرئيسية للقطعة المسئول عنها.<br>
+                            2. اقرأ النقطة الأساسية وحللها إلى أسباب ونتائج.<br>
+                            3. طَبّق هذا المفهوم على أسئلة الاختيار من متعدد بالأسفل لضمان استيعابك للمادة.
+                        </div>
+                        <div class="explain-section">
+                            💡 <strong>نصيحة المعلم الذكي:</strong><br>
+                            راجع هذه الجزئية من ملف كتاب الـ PDF المرفق في المكتبة للربط الكامل بين النص والشرح.
                         </div>
                     `;
                 }
 
+                explContent.innerHTML = mainContent;
                 btn.disabled = false;
-                btn.innerHTML = `اطرح من الكتاب وشرحلي 💡`;
+                btn.innerHTML = `اشرح وتعمق في الإجابة 💡`;
             }, 1000);
         }
 
@@ -259,7 +270,7 @@
 
             resBox.style.display = 'block';
             quizTitle.innerText = count === 2 ? "📌 اختبار سريع (سؤالان بعد الجزئية):" : "🏆 الامتحان النهائي للدرس (10 أسئلة):";
-            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بنجاح من محتوى الكتاب! (جاري تفعيل الإجابة الفورية).`;
+            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بناءً على الدرس أو القطعة المحددة!`;
         }
     </script>
 
