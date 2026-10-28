@@ -11,6 +11,8 @@
             --bg: #f8fafc;
             --text: #1e293b;
             --accent: #0d9488;
+            --success: #10b981;
+            --danger: #ef4444;
         }
         body {
             font-family: 'Cairo', Tahoma, sans-serif;
@@ -99,6 +101,87 @@
         .explain-section li {
             margin-bottom: 8px;
         }
+
+        /* ديزاين اختيار الدروس الجديد بالأزرار الدائرية/المتصلة */
+        .lessons-grid {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .lesson-chip {
+            background: white;
+            color: var(--text);
+            border: 2px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .lesson-chip.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* ديزاين إعدادات الاختبار الجديد */
+        .quiz-config {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .quiz-config select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .question-box {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-right: 4px solid var(--primary);
+        }
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: right;
+            background: white;
+            color: var(--text);
+            border: 1px solid #cbd5e1;
+            padding: 10px 15px;
+            margin: 6px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .option-btn:hover {
+            background: #e2e8f0;
+            color: var(--primary);
+        }
+        .option-btn.correct {
+            background-color: #d1fae5 !important;
+            border-color: var(--success) !important;
+            color: #065f46 !important;
+            font-weight: bold;
+        }
+        .option-btn.wrong {
+            background-color: #fee2e2 !important;
+            border-color: var(--danger) !important;
+            color: #991b1b !important;
+        }
+
         .pdf-list {
             list-style: none;
             padding: 0;
@@ -157,6 +240,35 @@
             </div>
         </div>
 
+        <!-- قسم الاختبارات الجديد بالدوائر وأعداد الأسئلة -->
+        <div class="card">
+            <h3>📝 بنك الأسئلة والاختبارات التفاعلية</h3>
+            <p>اختر الدرس المطلوب:</p>
+            
+            <!-- أزرار الدروس الدائرية -->
+            <div class="lessons-grid">
+                <div class="lesson-chip" onclick="selectLesson(this, 'الحضارة والتاريخ')">الحضارة والتاريخ</div>
+                <div class="lesson-chip" onclick="selectLesson(this, 'مصادر دراسة الحضارات')">مصادر دراسة الحضارات</div>
+                <div class="lesson-chip" onclick="selectLesson(this, 'عوامل قيام الحضارات')">عوامل قيام الحضارات</div>
+            </div>
+
+            <div class="quiz-config">
+                <label for="questionCount">عدد الأسئلة (الحد الأدنى 10):</label>
+                <select id="questionCount">
+                    <option value="10" selected>10 أسئلة</option>
+                    <option value="15">15 سؤالاً</option>
+                    <option value="20">20 سؤالاً</option>
+                </select>
+                <button onclick="startCustomQuiz()" style="background-color: var(--accent);">ابدأ الاختبار 🎯</button>
+            </div>
+
+            <div id="quizContainer" style="display:none;" class="quiz-card">
+                <div id="quizHeader" style="margin-bottom: 15px; font-weight: bold; color: var(--primary);"></div>
+                <div id="quizQuestions"></div>
+                <div id="quizResultSummary" style="display:none; text-align: center; margin-top: 15px; padding: 15px; background: #e0f2fe; border-radius: 8px; font-weight: bold; color: var(--primary);"></div>
+            </div>
+        </div>
+
         <!-- مكتبة كتب الـ PDF الكاملة -->
         <div class="card">
             <h3>📚 مكتبة كتب المنهج (PDF)</h3>
@@ -188,21 +300,23 @@
                 </li>
             </ul>
         </div>
-
-        <!-- قسم نظام الأسئلة -->
-        <div class="card">
-            <h3>📝 اختبارات وتقييم الدرس</h3>
-            <p>اختر نوع الاختبار للتدرب فوراً بعد المذاكرة:</p>
-            <button onclick="startQuiz(2)">سؤالان سريعان (بعد كل قطعة)</button>
-            <button onclick="startQuiz(10)" style="background-color: var(--accent); margin-right: 10px;">امتحان شامل (10 أسئلة)</button>
-            <div id="quizResult" class="output-box" style="display:none;">
-                <strong id="quizTitle">الامتحان:</strong>
-                <p id="quizText">سيتم توليد الأسئلة هنا بناءً على الدرس المختار...</p>
-            </div>
-        </div>
     </div>
 
     <script>
+        let selectedLessonName = "";
+
+        function selectLesson(element, lessonName) {
+            // إزالة التحديد عن كل الأزرار
+            document.querySelectorAll('.lesson-chip').forEach(chip => {
+                chip.classList.remove('selected');
+            });
+            // تظليل الزر المختار بالأزرق والخط الأبيض
+            element.classList.add('selected');
+            selectedLessonName = lessonName;
+        }
+
+        function startنظامTest() {} // placeholder
+
         function startExplain() {
             const query = document.getElementById('topic').value.trim();
             const resBox = document.getElementById('explanationResult');
@@ -224,7 +338,6 @@
             setTimeout(() => {
                 let historyHTML = "";
 
-                // الدرس الأول: الحضارة والتاريخ
                 if(query.includes("الحضارة والتاريخ") || query.includes("تعريف الحضارة") || (query.includes("الحضارة") && !query.includes("عوامل"))) {
                     historyHTML = `
                         <div class="explain-section">
@@ -261,9 +374,7 @@
                             </ul>
                         </div>
                     `;
-                } 
-                // الدرس الثاني: مصادر دراسة الحضارات
-                else if(query.includes("مصادر") || query.includes("دراسة الحضارات")) {
+                } else if(query.includes("مصادر") || query.includes("دراسة الحضارات")) {
                     historyHTML = `
                         <div class="explain-section">
                             <h4>1. مفهوم مصادر دراسة الحضارات</h4>
@@ -294,9 +405,7 @@
                             </ul>
                         </div>
                     `;
-                } 
-                // الدرس الثالث: عوامل قيام الحضارات
-                else if(query.includes("عوامل") || query.includes("قيام الحضارات")) {
+                } else if(query.includes("عوامل") || query.includes("قيام الحضارات")) {
                     historyHTML = `
                         <div class="explain-section">
                             <h4>1. تمهيد ومقدمة الدرس</h4>
@@ -321,13 +430,12 @@
                             </ul>
                         </div>
                     `;
-                } 
-                else {
+                } else {
                     historyHTML = `
                         <div class="explain-section">
                             <h4>📖 تنبيه من المعلم الذكي</h4>
                             <ul>
-                                <li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي، والدروس المتاحة حالياً في النظام هي أول 3 دروس من كتاب التاريخ (الحضارة والتاريخ، مصادر دراسة الحضارات، وعوامل قيام الحضارات). باقي المناهج سيتم إضافتها تباعاً!</li>
+                                <li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي، والدروس المتاحة حالياً في النظام هي أول 3 دروس من كتاب التاريخ.</li>
                             </ul>
                         </div>
                     `;
@@ -339,14 +447,88 @@
             }, 800);
         }
 
-        function startQuiz(count) {
-            const resBox = document.getElementById('quizResult');
-            const quizTitle = document.getElementById('quizTitle');
-            const quizText = document.getElementById('quizText');
+        // بنك الأسئلة الشامل (اختر، صح وخطأ، أكمل، و3 أسئلة مقالي)
+        const fullQuizBank = [
+            { type: "mcq", q: "ويرى المؤرخ 'ولد ديورانت' أن الحضارة تبدأ عندما يتخلص الإنسان من:", options: ["الجهل والأمية", "الاضطراب الخوف والقلق", "الفقر المالي", "العزلة الجغرافية"], correct: 1 },
+            { type: "mcq", q: "أي مما يلي يُعد من المصادر الأولية بدراسة الحضارات وتتميز برخص ثمنها واستخدامها بين الطبقات المتوسطة والفقيرة؟", options: ["البرديات", "النقود والعملات", "الاستراكا (الشقف)", "كتابات الفلاسفة"], correct: 2 },
+            { type: "mcq", q: "تستطيع تحديد العصور التاريخية والحالة الاقتصادية للملوك القدامى من خلال دراسة:", options: ["النقود والعملات", "الأساطير الشفهية", "الاستراكا", "الشعر والأدب"], correct: 0 },
+            { type: "tf", q: "تعتبر الآثار والبرديات من المصادر الثانوية لدراسة الحضارات.", options: ["خطأ", "صح"], correct: 0 },
+            { type: "tf", q: "المناخ المعتدل والموقع الجغرافي من العوامل الطبيعية لقيام الحضارات.", options: ["صح", "خطأ"], correct: 0 },
+            { type: "complete", q: "أطلق المؤرخون على كسرات الفخار والخزف المستخدمة للكتابة اسم ..........", options: ["البرديات", "الاستراكا", "النقوش البارزة", "المسكوكات"], correct: 1 },
+            { type: "complete", q: "جانبا الحضارة ينقسمان إلى جانب مادي و جانب ..........", options: ["معنوي", "سياسي", "اقتصادي", "عسكري"], correct: 0 },
+            // الأسئلة المقالي الثلاثة الثابتة
+            { type: "essay", q: "سؤال مقالي (1): ما مدي صحة العبارة: 'ارتبط قيام الحضارات بانتهاء الخوف والقلق عند ول ديورانت'؟", options: ["إجابة نموذجية: عبارة صادقة؛ حيث يرى ديورانت أن الأمن والاستقرار هما أساس الإبداع ونشأة الحضارة."], correct: 0 },
+            { type: "essay", q: "سؤال مقالي (2): وضح الفرق الأساسي بين المصادر الأولية والمراجع الثانوية في دراسة التاريخ؟", options: ["إجابة نموذجية: المصادر الأولية أُنتجت وقت الحدث وأكثر دقة، بينما المراجع كُتبت لاحقاً وتعتمد عليها."], correct: 0 },
+            { type: "essay", q: "سؤال مقالي (3): ما هو الدور الذي لعبه نهر النيل كعامل طبيعي في قيام الحضارة المصرية القديمة؟", options: ["إجابة نموذجية: وفر المياه والوحدة والتربة الخصبة للزراعة وتوحيد جهود المصريين."], correct: 0 }
+        ];
 
-            resBox.style.display = 'block';
-            quizTitle.innerText = count === 2 ? "📌 اختبار سريع (سؤالان بعد الجزئية):" : "🏆 الامتحان النهائي للدرس (10 أسئلة):";
-            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بناءً على الدرس المختار!`;
+        let currentScore = 0;
+        let totalAnswered = 0;
+        let targetQuestionCount = 0;
+
+        function startCustomQuiz() {
+            if(!selectedLessonName) {
+                alert('من فضلك اختر الدرس أولاً بالضغط على اسم الدرس من الأعلى!');
+                return;
+            }
+
+            const countSelect = document.getElementById('questionCount').value;
+            targetQuestionCount = parseInt(countSelect);
+
+            const container = document.getElementById('quizContainer');
+            const header = document.getElementById('quizHeader');
+            const questionsDiv = document.getElementById('quizQuestions');
+            const summary = document.getElementById('quizResultSummary');
+
+            container.style.display = 'block';
+            summary.style.display = 'none';
+            questionsDiv.innerHTML = '';
+            currentScore = 0;
+            totalAnswered = 0;
+
+            header.innerText = `📋 اختبار درس: "${selectedLessonName}" (${targetQuestionCount} أسئلة - تشمل اختر، صح/خطأ، أكمل، ومقالي):`;
+
+            for(let i = 0; i < targetQuestionCount; i++) {
+                const item = fullQuizBank[i % fullQuizBank.length];
+                const qBox = document.createElement('div');
+                qBox.className = 'question-box';
+                
+                let optionsHTML = '';
+                item.options.forEach((opt, optIndex) => {
+                    optionsHTML += `<button class="option-btn" onclick="checkCustomAnswer(this, ${optIndex}, ${item.correct})">${opt}</button>`;
+                });
+
+                let badgeType = item.type === 'essay' ? '📝 [سؤال مقالي]' : (item.type === 'tf' ? '⚖️ [صح وخطأ]' : (item.type === 'complete' ? '✍️ [أكمل]' : '📌 [اختر]'));
+
+                qBox.innerHTML = `
+                    <div class="question-title">س${i+1} ${badgeType}: ${item.q}</div>
+                    <div>${optionsHTML}</div>
+                `;
+                questionsDiv.appendChild(qBox);
+            }
+        }
+
+        function checkCustomAnswer(btn, selectedOpt, correctOpt) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('.option-btn');
+            
+            buttons.forEach(b => b.onclick = null);
+
+            if(selectedOpt === correctOpt) {
+                btn.classList.add('correct');
+                currentScore++;
+            } else {
+                btn.classList.add('wrong');
+                buttons[correctOpt].classList.add('correct');
+            }
+
+            totalAnswered++;
+
+            if(totalAnswered === targetQuestionCount) {
+                const summary = document.getElementById('quizResultSummary');
+                summary.style.display = 'block';
+                summary.innerHTML = `🎉 انتهى الاختبار! تقدير درجتك التقديرية: <b>${currentScore} من ${targetQuestionCount}</b> (عاش يا فنان!)`;
+            }
         }
     </script>
 
