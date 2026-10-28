@@ -299,6 +299,7 @@
             transform: none;
         }
 
+        /* --- الدائرة الرهيبة للنتيجة (Circular Progress) --- */
         .result-card-container {
             text-align: center;
             padding: 25px;
@@ -318,6 +319,7 @@
             justify-content: center;
             margin: 0 auto 15px auto;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: background 0.5s ease-in-out;
         }
         .circular-progress::before {
             content: "";
@@ -464,6 +466,7 @@
                 <div id="quizHeader" style="margin-bottom: 15px; font-weight: bold; color: var(--primary);"></div>
                 <div id="quizQuestions"></div>
                 
+                <!-- 🏆 العداد الدائري والملاحظة البارزة -->
                 <div id="quizResultSummary" style="display:none;" class="result-card-container">
                     <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 15px;">🏆 تقييم نتيجة الأسئلة الموضوعية</div>
                     <div class="circular-progress" id="circularProgress">
@@ -508,7 +511,7 @@
         </div>
     </div>
 
-    <!-- سكربت التحكم -->
+    <!-- سكربت التحكم الشامل -->
     <script>
         function checkGradeSelection() {
             const selector = document.getElementById('gradeSelector');
@@ -551,7 +554,7 @@
             }
         }
 
-        // 🧠 الشرح المفصل بدقة لأول 3 دروس في الوحدة الأولى
+        // 🧠 الشرح المفصل والدقيق للدروس الثلاثة الأولى
         function startExplain() {
             const query = document.getElementById('topic').value.trim().toLowerCase();
             const resBox = document.getElementById('explanationResult');
@@ -821,7 +824,6 @@
             const allQuestions = document.querySelectorAll('.question-box');
             let answeredCount = 0;
 
-            allQuestions.q.forEach?.(q => {}); // safe guard
             allQuestions.forEach(q => {
                 const isMcqDone = q.querySelector('.option-btn.correct, .option-btn.wrong');
                 const isEssayDone = q.querySelector('.essay-answer-box') && q.querySelector('.essay-answer-box').style.display === 'block';
