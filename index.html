@@ -24,7 +24,7 @@
             text-align: right;
         }
 
-        /* --- شاشة البداية الرئيسية (اختر السنة الدراسية) --- */
+        /* --- شاشة البداية الرئيسية --- */
         #welcomeScreen {
             display: flex;
             justify-content: center;
@@ -271,7 +271,7 @@
         .option-btn.correct { background-color: #d1fae5 !important; border-color: var(--success) !important; color: #065f46 !important; font-weight: bold; }
         .option-btn.wrong { background-color: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
 
-        /* --- تصميم زر عرض الإجابة النموذجية المودرن والراقي --- */
+        /* --- زر عرض الإجابة النموذجية المودرن --- */
         .essay-btn {
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
@@ -430,7 +430,7 @@
         <div class="card">
             <h3>📖 المعلم الذكي</h3>
             <label for="topic">اكتب اسم الدرس:</label>
-            <textarea id="topic" placeholder="اكتب هنا عنوان الدرس..."></textarea>
+            <textarea id="topic" placeholder="اكتب هنا عنوان الدرس (مثال: الحضارة والتاريخ، مصادر دراسة الحضارات، عوامل قيام الحضارات)..."></textarea>
             <button class="action-btn" id="explainBtn" onclick="startExplain()">اشرح وتعمق في الإجابة 💡</button>
             
             <div id="explanationResult" class="output-box" style="display:none;">
@@ -551,8 +551,9 @@
             }
         }
 
+        // 🧠 الشرح المفصل بدقة لأول 3 دروس في الوحدة الأولى
         function startExplain() {
-            const query = document.getElementById('topic').value.trim();
+            const query = document.getElementById('topic').value.trim().toLowerCase();
             const resBox = document.getElementById('explanationResult');
             const explContent = document.getElementById('explContent');
             const explainTitle = document.getElementById('explainTitle');
@@ -564,45 +565,117 @@
             }
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="loading-spinner"></span> جاري استخراج الشرح...`;
+            btn.innerHTML = `<span class="loading-spinner"></span> جاري استخراج الشرح التفصيلي...`;
             resBox.style.display = 'block';
-            explainTitle.innerText = `🤖 المعلم الذكي يشرح: "${query}"`;
-            explContent.innerHTML = `<p style="color:#64748b;">⏳ جارٍ تجهيز الشرح بالتنسيق المطلوب...</p>`;
+            explainTitle.innerText = `🤖 المعلم الذكي يشرح: "${document.getElementById('topic').value}"`;
+            explContent.innerHTML = `<p style="color:#64748b;">⏳ جارٍ تجهيز الشرح المفصل والعميق...</p>`;
 
             setTimeout(() => {
                 let historyHTML = "";
-                if(query.includes("الحضارة والتاريخ") || query.includes("تعريف الحضارة") || (query.includes("الحضارة") && !query.includes("عوامل"))) {
+
+                if(query.includes("الحضارة والتاريخ") || query.includes("تعريف الحضارة") || query.includes("الحضارة")) {
                     historyHTML = `
                         <div class="explain-section">
-                            <h4>1. مفهوم الحضارة</h4>
+                            <h4>1. مفهوم الحضارة (Civilization)</h4>
                             <ul>
-                                <li><strong>التعريف:</strong> هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض.</li>
-                                <li><strong>جانبا الحضارة:</strong> مادي (منشآت) ومعنوي (أفكار وعلوم وفنون).</li>
+                                <li><strong>التعريف الدقيق:</strong> هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض، سواء كان هذا المجهود مادياً أو معنوياً، وذلك بهدف تعمير الكون الذي يحيط به.</li>
+                                <li><strong>جانبا الحضارة الأساسيان:</strong>
+                                    <ul>
+                                        <li><strong>الجانب المادي:</strong> يشمل كل ما بنى وشيده الإنسان (مثل: الأهرامات، المعابد، المنشآت العمرانية، والطرق).</li>
+                                        <li><strong>الجانب المعنوي:</strong> يشمل الأفكار، العلوم، الآداب، الفنون، والقيم الأخلاقية التي تنتجها عقول البشر.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>2. رؤية المؤرخ "ولد ديورانت" لنشأة الحضارة</h4>
+                            <ul>
+                                <li><strong>رأيه الفلسفي:</strong> ربط نشأة الحضارة ارتباطاً وثيقاً بانتهاء حالة الاضطراب والخوف والقلق.</li>
+                                <li><strong>التفصيل:</strong> يرى "ولد ديورانت" أن الحضارة تبدأ حيث ينتهي الاضطراب والقلق؛ لأنه عندما يتحقق للإنسان <strong>الأمن والاستقرار</strong>، تتطلع نفسه للإبداع، الإنشاء، والارتقاء الثقافي والمادي.</li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>3. مفهوم علم التاريخ وأهميته</h4>
+                            <ul>
+                                <li><strong>التعريف:</strong> هو علم يتناول ماضي البشرية ودراسة الأحداث بمختلف أشكالها لتحليلها واستخلاص العبر والدروس.</li>
+                                <li><strong>أهمية دراسة التاريخ:</strong>
+                                    <ul>
+                                        <li>استخلاص العبر والدروس المستفادة من تاريخ الأمم السابقة.</li>
+                                        <li>إبراز القدوة الصالحة من الشخصيات التاريخية للاقتداء بها.</li>
+                                        <li>تعزيز الشعور بالمسؤولية تجاه الحفاظ على مكاسب المجتمع وتراثه.</li>
+                                        <li>الابتعاد عن التعصب؛ فالإنسانية لم تقم على أمة واحدة أو حضارة مفردة، بل تضافرت وتكاملت فيها جهود جميع الأمم والشعوب.</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                     `;
                 } else if(query.includes("مصادر") || query.includes("دراسة الحضارات")) {
                     historyHTML = `
                         <div class="explain-section">
-                            <h4>1. مصادر دراسة الحضارات</h4>
+                            <h4>1. مفهوم مصادر دراسة الحضارات</h4>
                             <ul>
-                                <li><strong>المصادر الأولية:</strong> أُنتجت وقت الحدث مثل (الآثار، النقوش، البرديات، الاستراكا، والعملات).</li>
-                                <li><strong>المراجع الثانوية:</strong> مؤلفات كُتبت لاحقاً تعتمد على المصادر الأولية.</li>
+                                <li><strong>التعريف:</strong> هي كل ما يُعتمد عليه في معرفة التاريخ وتدوينه، وتُقسم إلى قسمين رئيسيين لضمان دقة وصحة المعلومة التاريخية.</li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>2. المصادر الأولية (الأثرية)</h4>
+                            <ul>
+                                <li><strong>التعريف:</strong> كل ما أُنتج في زمن وقوع الحدث التاريخي نفسه، وتتميز بأنها الأكثر دقة وموضوعية وثقة.</li>
+                                <li><strong>أبرز أنواعها:</strong>
+                                    <ul>
+                                        <li><strong>الآثار:</strong> الباقية على سطح الأرض (مثل الأهرامات، المعابد، والتمثال).</li>
+                                        <li><strong>النقوش:</strong> رسوم أو كتابات مدونة على مواد صلبة (مثل حجر بالرمو وصلاية نعرمر). وتُقسم إلى نقوش بارزة وغائرة.</li>
+                                        <li><strong>البرديات:</strong> وثائق مكتوبة على لفائف نبات البردي (مثل برديات إيبرس الطبية).</li>
+                                        <li><strong>الإستراكا (الشقف):</strong> كسرات الفخار والخزف التي كانت تُستخدم للكتابة عليها لسهولتها ورخص ثمنها بين الطبقات المتوسطة والفقيرة لعدم قدرتهم على ورق البردي.</li>
+                                        <li><strong>العملات والنقود:</strong> قطع معدنية تحمل خاتماً من السلطة العامة لضمان وزنها ونقائها، وتفيد في تحديد العصور التاريخية، الحالة الاقتصادية، وتصوير الملوك.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>3. المراجع الثانوية (المصادر التقليدية)</h4>
+                            <ul>
+                                <li><strong>التعريف:</strong> المؤلفات التي كُتبت بعد مرور فترات زمنية طويلة على وقوع الحدث، وتعتمد في كتابتها وأبحاثها على المصادر الأولية.</li>
+                                <li><strong>أبرز أمثلتها:</strong> كتابات المؤرخين القدامى مثل (هيرودوت ومانيتون)، والفلاسفة، والشعر والأساطير التي تعكس الحالة الثقافية والاجتماعية.</li>
                             </ul>
                         </div>
                     `;
                 } else if(query.includes("عوامل") || query.includes("قيام الحضارات")) {
                     historyHTML = `
                         <div class="explain-section">
-                            <h4>1. العوامل الطبيعية والبشرية</h4>
+                            <h4>1. مقدمة عوامل قيام الحضارات</h4>
                             <ul>
-                                <li>الموقع الجغرافي المتميز، المناخ المعتدل، الأنهار (نهر النيل)، والثروات المعدنية.</li>
+                                <li><strong>الفكرة الكبرى:</strong> لم تقم أي حضارة في العالم بمعزل عن غيرها، بل تضافرت مجموعة من العوامل الطبيعية والبشرية لإنتاج حضارات كبرى مثل الحضارة المصرية القديمة، حضارة بلاد العراق، وفينيقيا.</li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>2. العوامل الطبيعية (الجغرافية والمناخية)</h4>
+                            <ul>
+                                <li><strong>الموقع الجغرافي المتميز:</strong> يمنح الدولة اتصالاً بالعالم التجاري والحضاري (مثل موقع مصر المتوسط بين قارات العالم القديم).</li>
+                                <li><strong>المناخ المعتدل:</strong> يساعد على نشاط الإنسان ودفع عجلة الإنتاج والبناء والتطور (مقارنة بالمناخات المتطرفة حاراً أو بارداً).</li>
+                                <li><strong>الأنهار والأمطار:</strong> توفر المياه العذبة واستقرار الزراعة (مثل نهر النيل في مصر الذي وحد جهود أبنائها وأكسبهم قيم التضامن والتكامل).</li>
+                                <li><strong>الثروات المعدنية:</strong> وجود صخور ومعادن متنوعة تساعد على قيام الصناعات والأدوات والمباني الضخمة.</li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>3. العوامل البشرية</h4>
+                            <ul>
+                                <li><strong>الإنسان المجتهد:</strong> رغبة الإنسان القوية في تطويع البيئة واستغلال مواردها لخدمة مجتمعه وتعمير الكون.</li>
+                                <li><strong>الجهود المشتركة:</strong> تضامن أفراد المجتمع ووحدتهم كان أساس قيام أعظم الحضارات القديمة.</li>
                             </ul>
                         </div>
                     `;
                 } else {
-                    historyHTML = `<div class="explain-section"><h4>📖 تنبيه</h4><ul><li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي.</li></ul></div>`;
+                    historyHTML = `
+                        <div class="explain-section">
+                            <h4>📖 تنبيه من المعلم الذكي</h4>
+                            <ul>
+                                <li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي. الدروس المتاحة للشرح المفصل هي: (الحضارة والتاريخ، مصادر دراسة الحضارات، وعوامل قيام الحضارات).</li>
+                            </ul>
+                        </div>
+                    `;
                 }
+
                 explContent.innerHTML = historyHTML;
                 btn.disabled = false;
                 btn.innerHTML = `اشرح وتعمق في الإجابة 💡`;
@@ -748,6 +821,7 @@
             const allQuestions = document.querySelectorAll('.question-box');
             let answeredCount = 0;
 
+            allQuestions.q.forEach?.(q => {}); // safe guard
             allQuestions.forEach(q => {
                 const isMcqDone = q.querySelector('.option-btn.correct, .option-btn.wrong');
                 const isEssayDone = q.querySelector('.essay-answer-box') && q.querySelector('.essay-answer-box').style.display === 'block';
