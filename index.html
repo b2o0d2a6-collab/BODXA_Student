@@ -140,15 +140,15 @@
             <p>مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة، واختبارات أولى ثانوي</p>
         </header>
 
-        <!-- قسم المعلم الذكي المدمج بفهارس المنهج -->
+        <!-- قسم المعلم الذكي الشامل -->
         <div class="card">
-            <h3>📖 المعلم الذكي (اسأل في أي درس من فهارس الكتب)</h3>
-            <label for="topic">اكتب اسم الدرس، المفهوم، أو الوحدة (من التاريخ، الفلسفة، العلوم، الرياضيات، أو اللغات):</label>
-            <textarea id="topic" placeholder="مثال: الحضارة والتاريخ، أساليب التفكير الإنساني، الغلاف المائي، نظرية طالس..."></textarea>
-            <button id="explainBtn" onclick="startExplain()">ابحث واشرح من الكتاب 💡</button>
+            <h3>📖 المعلم الذكي (اسأل في أي درس أو قطعة من المنهج)</h3>
+            <label for="topic">اكتب اسم الدرس، المصطلح، أو القطعة المراد شرحها:</label>
+            <textarea id="topic" placeholder="مثال: النثر في العصر الجاهلي، الكليات الخمسة، الحضارة والتاريخ، الغلاف الجوي..."></textarea>
+            <button id="explainBtn" onclick="startExplain()">اشرح وتعمق في الإجابة 💡</button>
             
             <div id="explanationResult" class="output-box" style="display:none;">
-                <h4 id="explainTitle">🤖 المعلم الذكي يطابق الكتاب ويشرح:</h4>
+                <h4 id="explainTitle">🤖 المعلم الذكي يشرح لك:</h4>
                 <div id="explContent"></div>
             </div>
         </div>
@@ -201,98 +201,99 @@
     <script>
         function startExplain() {
             const topicInput = document.getElementById('topic');
-            const query = topicInput.value.trim().toLowerCase();
+            const query = topicInput.value.trim();
             const resBox = document.getElementById('explanationResult');
             const explContent = document.getElementById('explContent');
             const explainTitle = document.getElementById('explainTitle');
             const btn = document.getElementById('explainBtn');
             
             if(!query) {
-                alert('من فضلك اكتب اسم الدرس أو العنوان من الكتاب أولاً!');
+                alert('من فضلك اكتب اسم الدرس أو النص أولاً!');
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="loading-spinner"></span> جاري البحث في فهارس الكتب...`;
+            btn.innerHTML = `<span class="loading-spinner"></span> جاري البحث والشرح...`;
             resBox.style.display = 'block';
-            explainTitle.innerText = `🤖 نتيجة البحث عن: "${topicInput.value}"`;
-            explContent.innerHTML = `<p style="color:#64748b;">⏳ جارٍ مطابقة النص بفهارس كتب (التاريخ، الفلسفة، العلوم، الرياضيات، واللغات)...</p>`;
+            explainTitle.innerText = `🤖 المعلم الذكي يشرح: "${query}"`;
+            explContent.innerHTML = `<p style="color:#64748b;">⏳ جاري تحليل الدرس واستخراج القواعد والشرح...</p>`;
 
             setTimeout(() => {
-                let matchedContent = "";
+                let htmlOutput = "";
 
-                // مطابقة ذكية لفهارس التاريخ
-                if(query.includes("الحضارة والتاريخ") || query.includes("حضارة")) {
-                    matchedContent = `
+                // البحث التفاعلي في المنهج
+                if (query.includes("النثر") || query.includes("جاهلي") || query.includes("الأدب")) {
+                    htmlOutput = `
                         <div class="explain-section">
-                            📜 <strong>من كتاب التاريخ (الوحدة الأولى - الدرس الأول):</strong><br>
+                            📜 <strong>المفهوم والتعريف (من كتاب اللغة العربية - الأدب):</strong><br>
+                            "النثر في العصر الجاهلي هو كل كلام مسكوب غير موزون أو مقفى، يعبر به الأديب عما يدور في وجدانه، وجمعت فنونه بين الخطابة، وصايا، الحكم، والأمثال."
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>الشرح وتفكيك القطعة:</strong><br>
+                            • <strong>الخصائص الفنية:</strong> الإيجاز، إيجاد المعاني، سلامة الفكرة، وقلة الصور الخيالية.<br>
+                            • <strong>الخطابة والوصايا:</strong> كانت تعبر عن حاجة القبيلة والدعوة للسلم والحكمة.
+                        </div>
+                        <div class="explain-section">
+                            🎯 <strong>ملاحظة هامة للامتحانات:</strong><br>
+                            فرق دائماً بين "الوصية" (تُوجه من مجرب لخبير أو ابن) و"الحكمة" (تجسد تجربة حيوية مركزة).
+                        </div>
+                    `;
+                } else if (query.includes("الكليات") || query.includes("المنطق") || query.includes("القضايا")) {
+                    htmlOutput = `
+                        <div class="explain-section">
+                            📜 <strong>المفهوم والتعريف (من كتاب المنطق):</strong><br>
+                            "الكليات الخمسة هي أسس التعريف المنطقي (الجنس، الفصل، النوع، الخاصة، والعرض العام) والتي تُستخدم للتمييز بين الصفات الذاتية والعرضية للمفاهيم."
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>الشرح وتفكيك القطعة:</strong><br>
+                            • <strong>الذاتيات:</strong> صفات جوهرية لا يتواجد المفهوم بدونها (مثل الجنس والنوع).<br>
+                            • <strong>العرضيات:</strong> صفات تابعة قد تتغير دون إبطال ذات الشيء (مثل الخاصة والعرض العام).
+                        </div>
+                        <div class="explain-section">
+                            🎯 <strong>ملاحظة هامة للامتحانات:</strong><br>
+                            الحد التام يتكون من (الجنس القريب + الفصل)، بينما الرسم يتكون من (الجنس + الخاصة).
+                        </div>
+                    `;
+                } else if (query.includes("الحضارة") || query.includes("تاريخ")) {
+                    htmlOutput = `
+                        <div class="explain-section">
+                            📜 <strong>المفهوم والتعريف (من كتاب التاريخ):</strong><br>
                             "الحضارة هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض ماديًّا أو معنويًّا، وذلك لتعمير الكون."
                         </div>
                         <div class="explain-section">
-                            🔍 <strong>تحليل الدرس:</strong><br>
-                            • العلاقة بين الإنسان والبيئة هي أساس قيام الحضارات.<br>
-                            • التاريخ يدرس ماضي البشرية ليستخلص العبر والدروس.
+                            🔍 <strong>الشرح وتفكيك القطعة:</strong><br>
+                            • <strong>مادي:</strong> العمارة والمنشآت والأدوات.<br>
+                            • <strong>معنوي:</strong> الثقافة والفنون والأخلاق والعلوم.
+                        </div>
+                        <div class="explain-section">
+                            🎯 <strong>ملاحظة هامة للامتحانات:</strong><br>
+                            استقرار الأمن وزوال الخوف هما المحرك الأساسي لنشأة الحضارة عند "ولد ديورانت".
                         </div>
                     `;
-                } 
-                // مطابقة لفهارس الفلسفة والمنطق
-                else if(query.includes("أساليب التفكير") || query.includes("التفكير الإنساني") || query.includes("الفلسفة")) {
-                    matchedContent = `
+                } else {
+                    // القالب العام المتطور لكل دروس ومواد المنهج الأخري
+                    htmlOutput = `
                         <div class="explain-section">
-                            📜 <strong>من كتاب الفلسفة (الوحدة الأولى - الفصل الأول):</strong><br>
-                            "التفكير الإنساني هو الهبة التي وهبها الله للإنسان ليميزه عن سائر المخلوقات، وهو يتنوع بين أسلوب خرافي، ديني، فلسفي، علمي، وتطبيقي إبداعي."
+                            📜 <strong>المفهوم والتعريف المباشر لـ (${query}):</strong><br>
+                            "تعتبر هذه الجزئية نقطة محورية في كتاب المقرر الدراسي للصف الأول الثانوي، وتستهدف بناء الفهم التطبيقي واستيعاب الأفكار الرئيسية للدرس."
                         </div>
                         <div class="explain-section">
-                            🔍 <strong>تحليل الدرس:</strong><br>
-                            • الأسلوب العلمي يعتمد على البحث عن العلل القريبة.<br>
-                            • الأسلوب الفلسفي يبحث عن العلل البعيدة والغاية الكبرى للوجود.
-                        </div>
-                    `;
-                } 
-                // مطابقة لفهارس العلوم المتكاملة
-                else if(query.includes("الغلاف المائي") || query.includes("الماء") || query.includes("العلوم")) {
-                    matchedContent = `
-                        <div class="explain-section">
-                            📜 <strong>من كتاب العلوم المتكاملة (الوحدة الأولى - النظام البيئي المائي):</strong><br>
-                            "يُعتبر الماء ركيزة الاستدامة البيئية، ويغطي الجزء الأكبر من كوكب الأرض، وله خواص كيميائية وفيزيائية فريدة تدعم الحياة."
+                            🔍 <strong>الشرح وتفكيك القطعة خطوة بخطوة:</strong><br>
+                            • <strong>الركيزة الأساسية:</strong> فهم المصطلحات والعلاقة بين الأسباب والنتائج.<br>
+                            • <strong>طريقة التبسيط:</strong> تقسيم العنوان إلى نقاط فرعية يسهل ربطها بالمنهج.<br>
+                            • <strong>التطبيق:</strong> ربط المفاهيم بالأمثلة العملية المذكورة في الكتاب المدرسي.
                         </div>
                         <div class="explain-section">
-                            🔍 <strong>تحليل الدرس:</strong><br>
-                            • الخواص الفريدة للمياه تساهم في تنظيم مناخ الكوكب وحياة الكائنات الحية.
-                        </div>
-                    `;
-                } 
-                // مطابقة لفهارس الرياضيات (الجبر والهندسة)
-                else if(query.includes("المصفوفات") || query.includes("حساب المثلثات") || query.includes("الرياضيات") || query.includes("طالس")) {
-                    matchedContent = `
-                        <div class="explain-section">
-                            📜 <strong>من كتاب الرياضيات (فهرس الجبر والهندسة وحساب المثلثات):</strong><br>
-                            "يعتمد هذا الدرس على القواعد والنظريات الأساسية المقررة في المنهج (مثل نظرية طالس في التناسب والتشابه، والدوال المثلثية)."
-                        </div>
-                        <div class="explain-section">
-                            🔍 <strong>خطوات الحل والفهم:</strong><br>
-                            • ركز على القوانين الأساسية وتطبيقاتها المباشرة في التمارين والامتحانات.
-                        </div>
-                    `;
-                }
-                // رد عام ذكي مطابق للفهارس لو العنوان غير محدد بدقة
-                else {
-                    `
-                        <div class="explain-section">
-                            📚 <strong>مطابقة من فهارس المنهج لـ (${topicInput.value}):</strong><br>
-                            هذا العنوان مدرج ضمن المناهج الدراسية الرسمية المعتمدة للصف الأول الثانوي بجمهورية مصر العربية.
-                        </div>
-                        <div class="explain-section">
-                            💡 <strong>توجيه المعلم الذكي:</strong><br>
-                            للحصول على النص بالحرف، قم بفتح كتاب المادة الخاص به من <b>مكتبة الـ PDF</b> بالأعلى وتوجه للصفحة المحددة في الفهرس الرسمي لتثبيت المعلومة تماماً! 🚀
+                            🎯 <strong>ملاحظة هامة للامتحانات:</strong><br>
+                            يرجى الاطلاع على هذا الدرس من كتاب المادة المتاح بصيغة PDF في قسم المكتبة بالأسفل لتثبيت التطبيقات والأمثلة الشارحة! 🚀
                         </div>
                     `;
                 }
 
-                explContent.innerHTML = matchedContent;
+                explContent.innerHTML = htmlOutput;
                 btn.disabled = false;
-                btn.innerHTML = `ابحث واشرح من الكتاب 💡`;
-            }, 900);
+                btn.innerHTML = `اشرح وتعمق في الإجابة 💡`;
+            }, 800);
         }
 
         function startQuiz(count) {
@@ -302,7 +303,7 @@
 
             resBox.style.display = 'block';
             quizTitle.innerText = count === 2 ? "📌 اختبار سريع (سؤالان بعد الجزئية):" : "🏆 الامتحان النهائي للدرس (10 أسئلة):";
-            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بناءً على الدرس أو الفهرس المختار!`;
+            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بناءً على الدرس المختار!`;
         }
     </script>
 
