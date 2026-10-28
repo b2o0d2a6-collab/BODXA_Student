@@ -181,7 +181,7 @@
             color: #991b1b !important;
         }
 
-        /* تصميم العداد الدائري للنتيجة (مؤكد ظهوره) */
+        /* تصميم العداد الدائري للنتيجة */
         .result-card-container {
             text-align: center;
             padding: 25px;
@@ -215,12 +215,19 @@
             font-size: 1.4rem;
             font-weight: bold;
             color: var(--primary);
+            unicode-bidi: plaintext;
         }
         .motivational-text {
             font-size: 1.15rem;
             font-weight: bold;
             color: var(--primary);
             margin-top: 10px;
+        }
+        .essay-note {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
         }
 
         .pdf-list {
@@ -307,13 +314,14 @@
                 <div id="quizHeader" style="margin-bottom: 15px; font-weight: bold; color: var(--primary);"></div>
                 <div id="quizQuestions"></div>
                 
-                <!-- مكان ظهور العداد الدائري للنتيجة والتحفيز (مضمون ظهوره) -->
+                <!-- مكان ظهور العداد الدائري للنتيجة والتحفيز -->
                 <div id="quizResultSummary" style="display:none;" class="result-card-container">
                     <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 15px;">🏆 تقييم نتيجة الأسئلة الموضوعية</div>
                     <div class="circular-progress" id="circularProgress">
                         <span class="progress-value" id="progressValue">0/0</span>
                     </div>
                     <div class="motivational-text" id="motivationalText"></div>
+                    <div class="essay-note">ملاحظة: الأسئلة المقالية لا تحتسب في الدرجات.</div>
                 </div>
             </div>
         </div>
@@ -527,7 +535,7 @@
             const summary = document.getElementById('quizResultSummary');
 
             container.style.display = 'block';
-            summary.style.display = 'none'; // إخفاء النتيجة مؤقتاً حتى نهاية الامتحان
+            summary.style.display = 'none';
             questionsDiv.innerHTML = '';
             objectiveScore = 0;
             objectiveTotal = 0;
@@ -623,7 +631,6 @@
                 }
             });
 
-            // عندما يكتمل حل جميع الأسئلة، يظهر العداد الدائري فوراً وبوضوح
             if(answeredCount === targetQuestionCount) {
                 const summary = document.getElementById('quizResultSummary');
                 summary.style.display = 'block';
@@ -632,6 +639,7 @@
                 const circularProgress = document.getElementById('circularProgress');
                 const motivationalText = document.getElementById('motivationalText');
 
+                // تعديل عرض النتيجة لتظهر بشكل صحيح (الدرجة الصحيحة أولاً ثم إجمالي الأسئلة الموضوعية، مثل 3 / 7)
                 progressValue.innerText = `${objectiveScore} / ${objectiveTotal}`;
 
                 const percentage = objectiveTotal > 0 ? (objectiveScore / objectiveTotal) * 100 : 0;
@@ -650,8 +658,6 @@
                 }
 
                 motivationalText.innerText = message;
-                
-                // تمرير الشاشة أوتوماتيكياً لنهاية الامتحان ليراها الطالب بوضوح
                 summary.scrollIntoView({ behavior: 'smooth' });
             }
         }
