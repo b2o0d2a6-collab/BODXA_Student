@@ -24,7 +24,7 @@
             text-align: right;
         }
 
-        /* --- تصميم صفحة البداية (اختر السنة الدراسية) --- */
+        /* --- شاشة البداية الرئيسية (اختر السنة الدراسية) --- */
         #welcomeScreen {
             display: flex;
             justify-content: center;
@@ -113,9 +113,9 @@
             border: 1px solid #f87171;
         }
 
-        /* --- تصميم المنصة الداخلية (أولى ثانوي) --- */
+        /* --- المنصة الداخلية (أولى ثانوي) --- */
         #mainPlatform {
-            display: none; /* مخفية حتى يتم اختيار أولى ثانوي */
+            display: none;
             max-width: 800px;
             margin: 0 auto;
         }
@@ -271,6 +271,34 @@
         .option-btn.correct { background-color: #d1fae5 !important; border-color: var(--success) !important; color: #065f46 !important; font-weight: bold; }
         .option-btn.wrong { background-color: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
 
+        /* --- تصميم زر عرض الإجابة النموذجية المودرن والراقي --- */
+        .essay-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .essay-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+        }
+        .essay-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
         .result-card-container {
             text-align: center;
             padding: 25px;
@@ -345,13 +373,13 @@
         .pdf-list a:hover { background-color: #0f766e; }
         .loading-spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,.3);
             border-radius: 50%;
             border-top-color: #fff;
             animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
+            margin-left: 5px;
             vertical-align: middle;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -359,7 +387,7 @@
 </head>
 <body>
 
-    <!-- 🌟 شاشة البداية الرئيسية (اختيار السنة الدراسية) -->
+    <!-- 🌟 شاشة البداية الرئيسية -->
     <div id="welcomeScreen">
         <div class="welcome-card">
             <h1>BODXA Student</h1>
@@ -390,7 +418,7 @@
         </div>
     </div>
 
-    <!-- 🚀 المنصة الداخلية (أولى ثانوي - التي قمنا بتطويرها) -->
+    <!-- 🚀 المنصة الداخلية (أولى ثانوي) -->
     <div id="mainPlatform">
         <header>
             <button class="back-home-btn" onclick="returnToHome()">⬅️ تغيير السنة</button>
@@ -480,9 +508,8 @@
         </div>
     </div>
 
-    <!-- سكربت التحكم في الصفحات والمنصة -->
+    <!-- سكربت التحكم -->
     <script>
-        // التحقق من السنة الدراسية المختارة
         function checkGradeSelection() {
             const selector = document.getElementById('gradeSelector');
             const alertMsg = document.getElementById('alertMessage');
@@ -495,19 +522,16 @@
             }
 
             if (selectedValue === '1_secondary') {
-                // لو اختار أولى ثانوي، نخفي شاشة الترحيب ونظهر المنصة
                 document.getElementById('welcomeScreen').style.display = 'none';
                 document.getElementById('mainPlatform').style.display = 'block';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                // أي سنة أخرى تظهر الرسالة المطلوبة
                 alertMsg.style.display = 'block';
                 alertMsg.className = 'alert-msg alert-error';
                 alertMsg.innerText = 'عذراً، لم تتوفر المناهج الخاصة بهذه السنة الآن، ستتوفر قريباً.';
             }
         }
 
-        // العودة لشاشة اختيار السنة
         function returnToHome() {
             document.getElementById('mainPlatform').style.display = 'none';
             document.getElementById('welcomeScreen').style.display = 'flex';
@@ -516,7 +540,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- أكواد منصة أولى ثانوي (شرح، بنك أسئلة، عشوائي، مقالي) ---
         let selectedLessons = [];
 
         function toggleLesson(element, lessonName) {
@@ -553,14 +576,8 @@
                         <div class="explain-section">
                             <h4>1. مفهوم الحضارة</h4>
                             <ul>
-                                <li><strong>التعريف:</strong> هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض، سواء كان هذا المجهود ماديًّا أو معنويًّا.</li>
+                                <li><strong>التعريف:</strong> هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض.</li>
                                 <li><strong>جانبا الحضارة:</strong> مادي (منشآت) ومعنوي (أفكار وعلوم وفنون).</li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>2. رؤية المؤرخ "ولد ديورانت"</h4>
-                            <ul>
-                                <li>يرى أن الحضارة تبدأ حيث ينتهي الاضطراب والقلق؛ فالأمن والاستقرار هما أساس الإبداع.</li>
                             </ul>
                         </div>
                     `;
@@ -570,7 +587,7 @@
                             <h4>1. مصادر دراسة الحضارات</h4>
                             <ul>
                                 <li><strong>المصادر الأولية:</strong> أُنتجت وقت الحدث مثل (الآثار، النقوش، البرديات، الاستراكا، والعملات).</li>
-                                <li><strong>المراجع الثانوية:</strong> مؤلفات كُتبت بعد مرور فترات زمنية وتعتمد على المصادر الأولية.</li>
+                                <li><strong>المراجع الثانوية:</strong> مؤلفات كُتبت لاحقاً تعتمد على المصادر الأولية.</li>
                             </ul>
                         </div>
                     `;
@@ -579,7 +596,7 @@
                         <div class="explain-section">
                             <h4>1. العوامل الطبيعية والبشرية</h4>
                             <ul>
-                                <li>الموقع الجغرافي المتميز، المناخ المعتدل، الأنهار (مثل نهر النيل)، والثروات المعدنية، بجانب كفاح الإنسان.</li>
+                                <li>الموقع الجغرافي المتميز، المناخ المعتدل، الأنهار (نهر النيل)، والثروات المعدنية.</li>
                             </ul>
                         </div>
                     `;
@@ -647,7 +664,7 @@
             shuffleArray(shuffledObjective);
             let activeObjective = shuffledObjective.slice(0, Math.min(targetQuestionCount, shuffledObjective.length));
 
-            let activeEssay = [...essayQuestionBank]; // الأخذ بالـ 3 أسئلة المقالية
+            let activeEssay = [...essayQuestionBank];
 
             let combinedQuestions = [...activeObjective, ...activeEssay];
             shuffleArray(combinedQuestions);
@@ -662,7 +679,7 @@
                     qBox.innerHTML = `
                         <div class="question-title">س${i+1} 📝 [سؤال مقالي]: ${item.q}</div>
                         <textarea class="essay-input" placeholder="اكتب إجابتك هنا..." oninput="handleEssayInput(this)" style="margin-bottom: 10px;"></textarea>
-                        <button class="essay-btn" disabled style="background-color: #94a3b8; cursor: not-allowed;" onclick="revealEssayAnswer(this, \`${item.modelAnswer}\`)">عرض الإجابة النموذجية للتصحيح 💡</button>
+                        <button class="essay-btn" disabled onclick="revealEssayAnswer(this, \`${item.modelAnswer}\`)">💡 عرض الإجابة النموذجية للتصحيح</button>
                         <div class="essay-answer-box" style="display:none; margin-top:10px; padding:10px; background:#e2e8f0; border-radius:6px; font-weight:bold; color:var(--primary);"></div>
                     `;
                 } else {
@@ -693,12 +710,8 @@
             const btn = textarea.parentElement.querySelector('.essay-btn');
             if(textarea.value.trim().length > 0) {
                 btn.disabled = false;
-                btn.style.backgroundColor = 'var(--secondary)';
-                btn.style.cursor = 'pointer';
             } else {
                 btn.disabled = true;
-                btn.style.backgroundColor = '#94a3b8';
-                btn.style.cursor = 'not-allowed';
             }
         }
 
@@ -712,8 +725,6 @@
             answerBox.style.display = 'block';
             answerBox.innerHTML = modelAnswer;
             btn.disabled = true;
-            btn.style.backgroundColor = '#64748b';
-            btn.style.cursor = 'not-allowed';
 
             checkQuizCompletion();
         }
