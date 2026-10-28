@@ -181,41 +181,43 @@
             color: #991b1b !important;
         }
 
-        /* تصميم العداد الدائري للنتيجة */
+        /* تصميم العداد الدائري للنتيجة (مؤكد ظهوره) */
         .result-card-container {
             text-align: center;
-            padding: 20px;
-            background: #f1f5f9;
+            padding: 25px;
+            background: #e0f2fe;
+            border: 2px solid var(--secondary);
             border-radius: 12px;
             margin-top: 20px;
         }
         .circular-progress {
             position: relative;
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
             background: conic-gradient(var(--secondary) 0deg, #cbd5e1 0deg);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 15px auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
         .circular-progress::before {
             content: "";
             position: absolute;
-            width: 112px;
-            height: 112px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             background-color: white;
         }
         .progress-value {
             position: relative;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: var(--primary);
         }
         .motivational-text {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: bold;
             color: var(--primary);
             margin-top: 10px;
@@ -305,8 +307,9 @@
                 <div id="quizHeader" style="margin-bottom: 15px; font-weight: bold; color: var(--primary);"></div>
                 <div id="quizQuestions"></div>
                 
-                <!-- مكان ظهور العداد الدائري للنتيجة والتحفيز -->
+                <!-- مكان ظهور العداد الدائري للنتيجة والتحفيز (مضمون ظهوره) -->
                 <div id="quizResultSummary" style="display:none;" class="result-card-container">
+                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 15px;">🏆 تقييم نتيجة الأسئلة الموضوعية</div>
                     <div class="circular-progress" id="circularProgress">
                         <span class="progress-value" id="progressValue">0/0</span>
                     </div>
@@ -499,15 +502,15 @@
             { type: "tf", q: "المناخ المعتدل والموقع الجغرافي من العوامل الطبيعية لقيام الحضارات.", options: ["صح", "خطأ"], correct: 0 },
             { type: "complete", q: "أطلق المؤرخون على كسرات الفخار والخزف المستخدمة للكتابة اسم ..........", options: ["البرديات", "الاستراكا", "النقوش البارزة", "المسكوكات"], correct: 1 },
             { type: "complete", q: "جانبا الحضارة ينقسمان إلى جانب مادي و جانب ..........", options: ["معنوي", "سياسي", "اقتصادي", "عسكري"], correct: 0 },
-            // الأسئلة المقالية (مؤمنة بالكامل ضد الغش)
+            // الأسئلة المقالية
             { type: "essay", q: "ما مدى صحة العبارة: 'ارتبط قيام الحضارات بانتهـاء الخوف والقلق عند ول ديورانت'؟", modelAnswer: "إجابة نموذجية: عبارة صادقة؛ حيث يرى ديورانت أن الأمن والاستقرار هما أساس الإبداع ونشأة الحضارة." },
             { type: "essay", q: "وضح الفرق الأساسي بين المصادر الأولية والمراجع الثانوية في دراسة التاريخ؟", modelAnswer: "إجابة نموذجية: المصادر الأولية أُنتجت وقت الحدث وأكثر دقة، بينما المراجع كُتبت لاحقاً وتعتمد عليها." },
             { type: "essay", q: "ما هو الدور الذي لعبه نهر النيل كعامل طبيعي في قيام الحضارة المصرية القديمة؟", modelAnswer: "إجابة نموذجية: وفر المياه والوحدة والتربة الخصبة للزراعة وتوحيد جهود المصريين." }
         ];
 
-        let objectiveScore = 0; // درجات الأسئلة الموضوعية فقط
-        let objectiveTotal = 0; // إجمالي الأسئلة الموضوعية
-        let totalQuestionsCount = 0;
+        let objectiveScore = 0;
+        let objectiveTotal = 0;
+        let targetQuestionCount = 0;
 
         function startCustomQuiz() {
             if(selectedLessons.length === 0) {
@@ -524,7 +527,7 @@
             const summary = document.getElementById('quizResultSummary');
 
             container.style.display = 'block';
-            summary.style.display = 'none';
+            summary.style.display = 'none'; // إخفاء النتيجة مؤقتاً حتى نهاية الامتحان
             questionsDiv.innerHTML = '';
             objectiveScore = 0;
             objectiveTotal = 0;
@@ -544,7 +547,7 @@
                         <div class="essay-answer-box" style="display:none; margin-top:10px; padding:10px; background:#e2e8f0; border-radius:6px; font-weight:bold; color:var(--primary);"></div>
                     `;
                 } else {
-                    objectiveTotal++; // حساب الأسئلة الموضوعية فقط
+                    objectiveTotal++;
                     let optionsHTML = '';
                     item.options.forEach((opt, optIndex) => {
                         optionsHTML += `<button class="option-btn" onclick="checkCustomAnswer(this, ${optIndex}, ${item.correct})">${opt}</button>`;
@@ -620,7 +623,7 @@
                 }
             });
 
-            // لو خلص كل الأسئلة (الموضوعية والمقالية) يظهر العداد الدائري
+            // عندما يكتمل حل جميع الأسئلة، يظهر العداد الدائري فوراً وبوضوح
             if(answeredCount === targetQuestionCount) {
                 const summary = document.getElementById('quizResultSummary');
                 summary.style.display = 'block';
@@ -631,12 +634,10 @@
 
                 progressValue.innerText = `${objectiveScore} / ${objectiveTotal}`;
 
-                // حساب زاوية الدوران للعداد الدائري
-                const percentage = (objectiveScore / objectiveTotal) * 100;
+                const percentage = objectiveTotal > 0 ? (objectiveScore / objectiveTotal) * 100 : 0;
                 const deg = (percentage / 100) * 360;
                 circularProgress.style.background = `conic-gradient(var(--secondary) ${deg}deg, #cbd5e1 ${deg}deg)`;
 
-                // عبارات تحفيزية ذكية حسب النسبة
                 let message = "";
                 if(percentage === 100) {
                     message = "🌟 بطل الأبطال! درجة نهائية ممتازة، استمر في هذا الإبداع!";
@@ -649,6 +650,9 @@
                 }
 
                 motivationalText.innerText = message;
+                
+                // تمرير الشاشة أوتوماتيكياً لنهاية الامتحان ليراها الطالب بوضوح
+                summary.scrollIntoView({ behavior: 'smooth' });
             }
         }
     </script>
