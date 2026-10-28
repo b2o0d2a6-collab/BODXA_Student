@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BODXA Student - منصة أولى ثانوي</title>
+    <title>BODXA Student - قسم التاريخ</title>
     <style>
         :root {
             --primary: #1e3a8a;
@@ -45,7 +45,7 @@
             margin-bottom: 20px;
         }
         h3 { color: var(--primary); margin-top: 0; }
-        textarea, input[type="text"] {
+        textarea {
             width: 100%;
             padding: 12px;
             margin: 10px 0 15px;
@@ -54,8 +54,6 @@
             font-size: 1rem;
             box-sizing: border-box;
             font-family: inherit;
-        }
-        textarea {
             resize: vertical;
             min-height: 90px;
         }
@@ -78,12 +76,6 @@
             margin-top: 15px;
             border-right: 5px solid var(--secondary);
             line-height: 1.8;
-        }
-        .output-box h4 {
-            color: var(--primary);
-            margin-top: 0;
-            margin-bottom: 12px;
-            font-size: 1.2rem;
         }
         .explain-section {
             background: white;
@@ -114,8 +106,6 @@
             text-decoration: none;
             font-size: 0.9rem;
         }
-        .pdf-list a:hover { background-color: #0f766e; }
-
         .loading-spinner {
             display: inline-block;
             width: 20px;
@@ -127,183 +117,174 @@
             margin-right: 10px;
             vertical-align: middle;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div class="container">
         <header>
-            <h1>🚀 BODXA Student</h1>
-            <p>مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة، واختبارات أولى ثانوي</p>
+            <h1>🏛️ BODXA Student - قسم التاريخ</h1>
+            <p>المعلم الذكي الشامل لمنهج التاريخ لأولى ثانوي</p>
         </header>
 
-        <!-- قسم المعلم الذكي الشامل -->
+        <!-- المعلم الذكي لكتاب التاريخ -->
         <div class="card">
-            <h3>📖 المعلم الذكي (اسأل في أي درس أو قطعة من المنهج)</h3>
-            <label for="topic">اكتب اسم الدرس، المصطلح، أو القطعة المراد شرحها:</label>
-            <textarea id="topic" placeholder="مثال: النثر في العصر الجاهلي، الكليات الخمسة، الحضارة والتاريخ، الغلاف الجوي..."></textarea>
-            <button id="explainBtn" onclick="startExplain()">اشرح وتعمق في الإجابة 💡</button>
+            <h3>📖 اسأل في أي درس أو موضوع في كتاب التاريخ</h3>
+            <label for="topic">اكتب اسم الدرس (مثال: مصادر دراسة الحضارات، الحياة الاقتصادية، الحياة الدينية...):</label>
+            <textarea id="topic" placeholder="اكتب عنوان الدرس في كتاب التاريخ..."></textarea>
+            <button id="explainBtn" onclick="startHistoryExplain()">ابحث واشرح من كتاب التاريخ 💡</button>
             
             <div id="explanationResult" class="output-box" style="display:none;">
-                <h4 id="explainTitle">🤖 المعلم الذكي يشرح لك:</h4>
+                <h4 id="explainTitle">🤖 المعلم الذكي يشرح:</h4>
                 <div id="explContent"></div>
             </div>
         </div>
 
-        <!-- قسم مكتبة كتب الـ PDF -->
+        <!-- مكتبة التاريخ -->
         <div class="card">
-            <h3>📚 مكتبة كتب المنهج (PDF)</h3>
-            <p>حمل الكتب الدراسية الخاصة بأولى ثانوي لتذاكر في أي وقت:</p>
+            <h3>📚 كتاب التاريخ (PDF)</h3>
             <ul class="pdf-list">
                 <li>
-                    <span>📖 كتاب التاريخ</span>
+                    <span>📖 تصفح كتاب التاريخ كاملًا</span>
                     <a href="https://drive.google.com/file/d/1Z4yd1F6TXkwBVbAMHHkA3HIbbtThB7HC/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
                 </li>
-                <li>
-                    <span>📐 كتاب الرياضيات</span>
-                    <a href="https://drive.google.com/file/d/1OGFqzyC6IPaWYSrQ-vxqc5q6KaGKUJ4O/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
-                <li>
-                    <span>🧪 كتاب العلوم المتكاملة</span>
-                    <a href="https://drive.google.com/file/d/1v7tAQT7Su5VLyDGQgU4k7_6PAd0erLW8/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
-                <li>
-                    <span>📜 كتاب الفلسفة والمنطق</span>
-                    <a href="https://drive.google.com/file/d/1DeAYyZRSDIs6ztIH5sHCbHh9-rFg4Hp2/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
-                <li>
-                    <span>🔤 كتاب اللغة الإنجليزية</span>
-                    <a href="https://drive.google.com/file/d/1aZtqobA7nIjXQ52QIDiHtyUNummiWQEA/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
-                <li>
-                    <span>📖 كتاب اللغة العربية</span>
-                    <a href="https://drive.google.com/file/d/1B4a_GQfADTTPJiYYQEzS2A3CEbbkquQW/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
             </ul>
-        </div>
-
-        <!-- قسم نظام الأسئلة -->
-        <div class="card">
-            <h3>📝 اختبارات وتقييم الدرس</h3>
-            <p>اختر نوع الاختبار للتدرب فوراً بعد المذاكرة:</p>
-            <button onclick="startQuiz(2)">سؤالان سريعان (بعد كل قطعة)</button>
-            <button onclick="startQuiz(10)" style="background-color: var(--accent); margin-right: 10px;">امتحان شامل (10 أسئلة)</button>
-            <div id="quizResult" class="output-box" style="display:none;">
-                <strong id="quizTitle">الامتحان:</strong>
-                <p id="quizText">سيتم توليد الأسئلة هنا بناءً على الدرس المختار...</p>
-            </div>
         </div>
     </div>
 
     <script>
-        function startExplain() {
-            const topicInput = document.getElementById('topic');
-            const query = topicInput.value.trim();
+        function startHistoryExplain() {
+            const query = document.getElementById('topic').value.trim();
             const resBox = document.getElementById('explanationResult');
             const explContent = document.getElementById('explContent');
             const explainTitle = document.getElementById('explainTitle');
             const btn = document.getElementById('explainBtn');
             
             if(!query) {
-                alert('من فضلك اكتب اسم الدرس أو النص أولاً!');
+                alert('من فضلك اكتب اسم الدرس أو العنوان أولاً!');
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="loading-spinner"></span> جاري البحث والشرح...`;
+            btn.innerHTML = `<span class="loading-spinner"></span> جاري البحث في كتاب التاريخ...`;
             resBox.style.display = 'block';
-            explainTitle.innerText = `🤖 المعلم الذكي يشرح: "${query}"`;
-            explContent.innerHTML = `<p style="color:#64748b;">⏳ جاري تحليل الدرس واستخراج القواعد والشرح...</p>`;
+            explainTitle.innerText = `🤖 كتاب التاريخ - شرح: "${query}"`;
+            explContent.innerHTML = `<p style="color:#64748b;">⏳ جارٍ فتح صفحات كتاب التاريخ واستخراج الشرح...</p>`;
 
             setTimeout(() => {
-                let htmlOutput = "";
+                let historyHTML = "";
 
-                // البحث التفاعلي في المنهج
-                if (query.includes("النثر") || query.includes("جاهلي") || query.includes("الأدب")) {
-                    htmlOutput = `
+                if(query.includes("الحضارة والتاريخ") || query.includes("تعريف الحضارة") || query.includes("حضارة")) {
+                    historyHTML = `
                         <div class="explain-section">
-                            📜 <strong>المفهوم والتعريف (من كتاب اللغة العربية - الأدب):</strong><br>
-                            "النثر في العصر الجاهلي هو كل كلام مسكوب غير موزون أو مقفى، يعبر به الأديب عما يدور في وجدانه، وجمعت فنونه بين الخطابة، وصايا، الحكم، والأمثال."
-                        </div>
-                        <div class="explain-section">
-                            🔍 <strong>الشرح وتفكيك القطعة:</strong><br>
-                            • <strong>الخصائص الفنية:</strong> الإيجاز، إيجاد المعاني، سلامة الفكرة، وقلة الصور الخيالية.<br>
-                            • <strong>الخطابة والوصايا:</strong> كانت تعبر عن حاجة القبيلة والدعوة للسلم والحكمة.
-                        </div>
-                        <div class="explain-section">
-                            🎯 <strong>ملاحظة هامة للامتحانات:</strong><br>
-                            فرق دائماً بين "الوصية" (تُوجه من مجرب لخبير أو ابن) و"الحكمة" (تجسد تجربة حيوية مركزة).
-                        </div>
-                    `;
-                } else if (query.includes("الكليات") || query.includes("المنطق") || query.includes("القضايا")) {
-                    htmlOutput = `
-                        <div class="explain-section">
-                            📜 <strong>المفهوم والتعريف (من كتاب المنطق):</strong><br>
-                            "الكليات الخمسة هي أسس التعريف المنطقي (الجنس، الفصل، النوع، الخاصة، والعرض العام) والتي تُستخدم للتمييز بين الصفات الذاتية والعرضية للمفاهيم."
-                        </div>
-                        <div class="explain-section">
-                            🔍 <strong>الشرح وتفكيك القطعة:</strong><br>
-                            • <strong>الذاتيات:</strong> صفات جوهرية لا يتواجد المفهوم بدونها (مثل الجنس والنوع).<br>
-                            • <strong>العرضيات:</strong> صفات تابعة قد تتغير دون إبطال ذات الشيء (مثل الخاصة والعرض العام).
-                        </div>
-                        <div class="explain-section">
-                            🎯 <strong>ملاحظة هامة للامتحانات:</strong><br>
-                            الحد التام يتكون من (الجنس القريب + الفصل)، بينما الرسم يتكون من (الجنس + الخاصة).
-                        </div>
-                    `;
-                } else if (query.includes("الحضارة") || query.includes("تاريخ")) {
-                    htmlOutput = `
-                        <div class="explain-section">
-                            📜 <strong>المفهوم والتعريف (من كتاب التاريخ):</strong><br>
+                            📜 <strong>المفهوم والتعريف النصي (الوحدة الأولى - الدرس الأول):</strong><br>
                             "الحضارة هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض ماديًّا أو معنويًّا، وذلك لتعمير الكون."
                         </div>
                         <div class="explain-section">
-                            🔍 <strong>الشرح وتفكيك القطعة:</strong><br>
-                            • <strong>مادي:</strong> العمارة والمنشآت والأدوات.<br>
-                            • <strong>معنوي:</strong> الثقافة والفنون والأخلاق والعلوم.
+                            🔍 <strong>تحليل الدرس:</strong><br>
+                            • الجانب المادي: العمارة، والمنشآت.<br>
+                            • الجانب المعنوي: العلوم، الفنون، والأخلاق.<br>
+                            • المؤرخ "ولد ديورانت" ربط نشأة الحضارة بانتهاء الخوف وتحقيق الأمن والاستقرار.
+                        </div>
+                    `;
+                } else if(query.includes("مصادر") || query.includes("دراسة الحضارات")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            📜 <strong>ملخص الدرس الثاني (مصادر دراسة الحضارات):</strong><br>
+                            تنقسم مصادر دراسة الحضارات إلى نوعين رئيسيين: 
+                            1. <strong>المصادر الأولية:</strong> مثل الآثار، النقوش، الأوستراكا، البرديات، المكوكات، والعملات والنقود.
+                            2. <strong>المراجع الثانوية:</strong> مثل كتابات المؤرخين القدامى (مثل هيرودوت)، الفلاسفة، والأساطير والشعر.
                         </div>
                         <div class="explain-section">
-                            🎯 <strong>ملاحظة هامة للامتحانات:</strong><br>
-                            استقرار الأمن وزوال الخوف هما المحرك الأساسي لنشأة الحضارة عند "ولد ديورانت".
+                            🎯 <strong>ملاحظة للامتحانات:</strong><br>
+                            المصادر الأولية تتميز بأنها أُنشئت في نفس زمن الحدث وتعتبر أكثر دقة، بينما المراجع تعتمد على المصادر الأولية والتحليل.
+                        </div>
+                    `;
+                } else if(query.includes("عوامل") || query.includes("قيام الحضارات")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            📜 <strong>ملخص الدرس الثالث (عوامل قيام الحضارات):</strong><br>
+                            تتطلب قيام أي حضارة تضافر عدة عوامل طبيعية وبشرية هامة:
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>العناصر الأساسية:</strong><br>
+                            • <strong>عوامل طبيعية:</strong> كجغرافيا الموقع المتميز، المناخ المعتدل، وفيرة الأنهار والموارد الطبيعية (مثل نهر النيل في مصر).<br>
+                            • <strong>عوامل بشرية:</strong> كفاح الإنسان ورغبته القوية في تعمير الكون واستغلال البيئة.
+                        </div>
+                    `;
+                } else if(query.includes("الاقتصادية") || query.includes("اقتصاد") || query.includes("زراعة")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            📜 <strong>من الوحدة الثانية (الحياة الاقتصادية في مصر الفرعونية):</strong><br>
+                            اعتمد الاقتصاد المصري القديم على ثلاثة ركائز أساسية تكاملت فيما بينها لتحقيق الاكتفاء الذاتي وبناء الحضارة:
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>تفكيك القطعة:</strong><br>
+                            • <strong>الزراعة:</strong> عصب الاقتصاد (استغلال مياه الفضيان ونهر النيل، وحفر الشقوق والقنوات).<br>
+                            • <strong>الصناعة:</strong> أبدع الصانع المصري في النجارة، الفخار، التعدين، وصناعة الحلي والنسيج.<br>
+                            • <strong>التجارة:</strong> تجارة داخلية بين الأقاليم، وتجارية خارجية عبر الرحلات البحرية (مثل رحلات حتشبسوت لبلاد بونت).
+                        </div>
+                    `;
+                } else if(query.includes("السياسية") || query.includes("الإدارية") || query.includes("الحكم")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            📜 <strong>من الوحدة الثانية (الحياة السياسية والإدارية):</strong><br>
+                            تمثل النظام السياسي في مصر القديمة في سلطة مركزية قوية رأسها الفرعون (الملك المقدس)، ويعاونه وزير، ورؤساء الإدارات المركزية، وحكام الأقاليم.
+                        </div>
+                        <div class="explain-section">
+                            🎯 <strong>ملاحظة هامة:</strong><br>
+                            انقسام مصر لوحدات إدارية (أقاليم) كان تنظيماً إدارياً يهدف لتسهيل السيطرة وضبط شؤون البلاد الاقتصادية والأمنية.
+                        </div>
+                    `;
+                } else if(query.includes("الاجتماعية") || query.includes("المجتمع")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            📜 <strong>من الوحدة الثانية (الحياة الاجتماعية):</strong><br>
+                            تميز المجتمع المصري القديم بأنه مجتمع طبقي متماسك، ولكنه لم يكن طبقياً طبقية صارمة مانعة للصعود الاجتماعي، بل اعتمد على العدالة والقانون.
+                        </div>
+                        <div class="explain-section">
+                            🔍 <strong>طبقات المجتمع:</strong><br>
+                            • الطبقة الأولى: الفرعون وأسرته.<br>
+                            • الطبقة الثانية: كبار الكهنة ووزراء وحكام الأقاليم.<br>
+                            • الطبقة الثالثة والرابعة: الموظفون، الحرفيون، والزارعون.
+                        </div>
+                    `;
+                } else if(query.includes("الدينية") || query.includes("الدين") || query.includes("الآلهة")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            📜 <strong>من الوحدة الثانية (الحياة الدينية):</strong><br>
+                            اتسم المصري القديم بالتدين الشديد، وتضمنت عقائد الدينية عدة خصائص: الاعتقاد في البعث والخلود، الثواب والعقاب، التعدد الديني (عبادة الآلهة المحلية)، وحتى محاولة التوحيد مع إخناتون (آتون).
+                        </div>
+                        <div class="explain-section">
+                            🎯 <strong>ملاحظة هامة:</strong><br>
+                            بناء المقابر الحصينة (الأهرامات) وبناء المعابد يعود بشكل مباشر لاعتقادهم الراسخ في البعث والخلود بعد الموت.
+                        </div>
+                    `;
+                } else if(query.includes("الثقافية") || query.includes("الفكرية") || query.includes("العلوم")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            📜 <strong>من الوحدة الثانية (الحياة الثقافية والفكرية):</strong><br>
+                            أبدع المصري القديم في مجالات العلوم (الحساب، الفلك، الهندسة، والطب المعتمد على التحنيط)، وتطورت الكتابة لديه عبر مراحل: الهيروغليفية، الهيراطيقية، الديموطيقية، والقبطية.
                         </div>
                     `;
                 } else {
-                    // القالب العام المتطور لكل دروس ومواد المنهج الأخري
-                    htmlOutput = `
+                    historyHTML = `
                         <div class="explain-section">
-                            📜 <strong>المفهوم والتعريف المباشر لـ (${query}):</strong><br>
-                            "تعتبر هذه الجزئية نقطة محورية في كتاب المقرر الدراسي للصف الأول الثانوي، وتستهدف بناء الفهم التطبيقي واستيعاب الأفكار الرئيسية للدرس."
+                            📜 <strong>شرح عام لـ (${query}) من كتاب التاريخ:</strong><br>
+                            هذا الموضوع مدرج في منهج تاريخ أولى ثانوي، ويستهدف دراسة أحداث وتطورات التاريخ المصري والحضارات القديمة واستخلاص الدروس والعبر منها.
                         </div>
                         <div class="explain-section">
-                            🔍 <strong>الشرح وتفكيك القطعة خطوة بخطوة:</strong><br>
-                            • <strong>الركيزة الأساسية:</strong> فهم المصطلحات والعلاقة بين الأسباب والنتائج.<br>
-                            • <strong>طريقة التبسيط:</strong> تقسيم العنوان إلى نقاط فرعية يسهل ربطها بالمنهج.<br>
-                            • <strong>التطبيق:</strong> ربط المفاهيم بالأمثلة العملية المذكورة في الكتاب المدرسي.
-                        </div>
-                        <div class="explain-section">
-                            🎯 <strong>ملاحظة هامة للامتحانات:</strong><br>
-                            يرجى الاطلاع على هذا الدرس من كتاب المادة المتاح بصيغة PDF في قسم المكتبة بالأسفل لتثبيت التطبيقات والأمثلة الشارحة! 🚀
+                            💡 <strong>نصيحة المعلم الذكي:</strong><br>
+                            راجع تفاصيل هذا الدرس بالكامل من خلال تحميل كتاب التاريخ من قسم الـ PDF بالأعلى، وركز على تحليلات الأحداث وليس الحفظ فقط! 🚀
                         </div>
                     `;
                 }
 
-                explContent.innerHTML = htmlOutput;
+                explContent.innerHTML = historyHTML;
                 btn.disabled = false;
-                btn.innerHTML = `اشرح وتعمق في الإجابة 💡`;
+                btn.innerHTML = `ابحث واشرح من كتاب التاريخ 💡`;
             }, 800);
-        }
-
-        function startQuiz(count) {
-            const resBox = document.getElementById('quizResult');
-            const quizTitle = document.getElementById('quizTitle');
-            const quizText = document.getElementById('quizText');
-
-            resBox.style.display = 'block';
-            quizTitle.innerText = count === 2 ? "📌 اختبار سريع (سؤالان بعد الجزئية):" : "🏆 الامتحان النهائي للدرس (10 أسئلة):";
-            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بناءً على الدرس المختار!`;
         }
     </script>
 
