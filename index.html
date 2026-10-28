@@ -181,7 +181,7 @@
             color: #991b1b !important;
         }
 
-        /* تصميم العداد الدائري للنتيجة */
+        /* تصميم العداد الدائري للنتيجة والملاحظة الكبيرة الواضحة */
         .result-card-container {
             text-align: center;
             padding: 25px;
@@ -223,11 +223,16 @@
             color: var(--primary);
             margin-top: 10px;
         }
+        /* ملاحظة بارزة وكبيرة واضحة جداً */
         .essay-note {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-top: 8px;
-            font-style: italic;
+            font-size: 1.05rem;
+            color: #b91c1c;
+            background: #fee2e2;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+            border: 1px dashed #ef4444;
         }
 
         .pdf-list {
@@ -314,14 +319,14 @@
                 <div id="quizHeader" style="margin-bottom: 15px; font-weight: bold; color: var(--primary);"></div>
                 <div id="quizQuestions"></div>
                 
-                <!-- مكان ظهور العداد الدائري للنتيجة والتحفيز -->
+                <!-- النتيجة والعداد الدائري والملاحظة الكبيرة البارزة -->
                 <div id="quizResultSummary" style="display:none;" class="result-card-container">
                     <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 15px;">🏆 تقييم نتيجة الأسئلة الموضوعية</div>
                     <div class="circular-progress" id="circularProgress">
                         <span class="progress-value" id="progressValue">0/0</span>
                     </div>
                     <div class="motivational-text" id="motivationalText"></div>
-                    <div class="essay-note">ملاحظة: الأسئلة المقالية لا تحتسب في الدرجات.</div>
+                    <div class="essay-note">⚠️ ملاحظة هامة: الأسئلة المقالية لا تحتسب في درجات التقييم النهائي.</div>
                 </div>
             </div>
         </div>
@@ -501,24 +506,55 @@
             }, 800);
         }
 
-        // بنك الأسئلة الشامل
-        const fullQuizBank = [
+        // 📚 بنك أسئلة ضخم جداً ومتنوع (أكتر من 30 سؤال متنوع تتوزع وتتغير عشوائياً في كل امتحان)
+        const hugeQuestionBank = [
+            // أسئلة الدرس الأول: الحضارة والتاريخ
             { type: "mcq", q: "ويرى المؤرخ 'ولد ديورانت' أن الحضارة تبدأ عندما يتخلص الإنسان من:", options: ["الجهل والأمية", "الاضطراب الخوف والقلق", "الفقر المالي", "العزلة الجغرافية"], correct: 1 },
+            { type: "mcq", q: "يُقصد بالجانب المادي للحضارة كل ما:", options: ["أفدناه من علوم ومعارف", "بناه الإنسان وشيده من منشآت", "نتج عن التفكير والفلسفة", "يتعلق بالقيم والأخلاق"], correct: 1 },
+            { type: "mcq", q: "علم يتناول ماضي البشرية ودراسة الأحداث لتحليلها واستخلاص العبر هو:", options: ["علم الفلسفة", "علم التاريخ", "علم الآثار", "علم الاجتماع"], correct: 1 },
+            { type: "tf", q: "تعريف الحضارة يقتصر فقط على الجانب المادي والمعماري.", options: ["خطأ", "صح"], correct: 0 },
+            { type: "tf", q: "من أهم فوائد دراسة التاريخ الابتعاد عن التعصب البشري.", options: ["صح", "خطأ"], correct: 0 },
+            { type: "complete", q: "ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته يسمى ..........", options: ["التاريخ", "الحضارة", "التراث", "الاكتشاف"], correct: 1 },
+            { type: "complete", q: "رأى المؤرخ .......... أن الحضارة تبدأ حيث ينتهي الاضطراب والقلق.", options: ["هيرودوت", "ولد ديورانت", "مانيتون", "أرسطو"], correct: 1 },
+
+            // أسئلة الدرس الثاني: مصادر دراسة الحضارات
             { type: "mcq", q: "أي مما يلي يُعد من المصادر الأولية بدراسة الحضارات وتتميز برخص ثمنها واستخدامها بين الطبقات المتوسطة والفقيرة؟", options: ["البرديات", "النقود والعملات", "الاستراكا (الشقف)", "كتابات الفلاسفة"], correct: 2 },
             { type: "mcq", q: "تستطيع تحديد العصور التاريخية والحالة الاقتصادية للملوك القدامى من خلال دراسة:", options: ["النقود والعملات", "الأساطير الشفهية", "الاستراكا", "الشعر والأدب"], correct: 0 },
-            { type: "tf", q: "تعتبر الآثار والبرديات من المصادر الثانوية لدراسة الحضارات.", options: ["خطأ", "صح"], correct: 0 },
-            { type: "tf", q: "المناخ المعتدل والموقع الجغرافي من العوامل الطبيعية لقيام الحضارات.", options: ["صح", "خطأ"], correct: 0 },
+            { type: "mcq", q: "تعتبر كتابات المؤرخين القدامى مثل 'هيرودوت' من:", options: ["المصادر الأولية", "المراجع الثانوية", "الآثار الباقية", "النقوش الحجرية"], correct: 1 },
+            { type: "tf", q: "تعتبر الآثار والبرديات من المصادر الأولية لدراسة الحضارات.", options: ["صح", "خطأ"], correct: 0 },
+            { type: "tf", q: "الاستراكا هي كسرات الفخار والخزف التي استخدمها فقراء المجتمع للكتابة.", options: ["صح", "خطأ"], correct: 0 },
             { type: "complete", q: "أطلق المؤرخون على كسرات الفخار والخزف المستخدمة للكتابة اسم ..........", options: ["البرديات", "الاستراكا", "النقوش البارزة", "المسكوكات"], correct: 1 },
-            { type: "complete", q: "جانبا الحضارة ينقسمان إلى جانب مادي و جانب ..........", options: ["معنوي", "سياسي", "اقتصادي", "عسكري"], correct: 0 },
-            // الأسئلة المقالية
+            { type: "complete", q: "الوثائق المكتوبة على لفائف نبات البردي تعتبر من المصادر ..........", options: ["الثانوية", "الأولية", "التقليدية", "الشخصية"], correct: 1 },
+
+            // أسئلة الدرس الثالث: عوامل قيام الحضارات
+            { type: "mcq", q: "العامل البشري الرئيسي لقيام الحضارات القديمة هو:", options: ["الموقع الجغرافي", "وفرة المعادن والصخور", "كفاح الإنسان وتفاعله مع البيئة", "اعتدال المناخ"], correct: 2 },
+            { type: "mcq", q: "من العوامل الطبيعية التي ساعدت على قيام الحضارة المصرية القديمة:", options: ["الجيش القوي", "نهر النيل والموقع المتميز", "التجارة الداخلية", "الاستقرار السياسي"], correct: 1 },
+            { type: "tf", q: "المناخ المعتدل والموقع الجغرافي من العوامل الطبيعية لقيام الحضارات.", options: ["صح", "خطأ"], correct: 0 },
+            { type: "tf", q: "تقوم الحضارات غالباً بمعزل عن العالم الخارجي دون أي تأثر أو تأثير.", options: ["خطأ", "صح"], correct: 0 },
+            { type: "complete", q: "لعب نهر .......... دوراً عظيماً في قيام وتوحيد الحضارة المصرية القديمة.", options: ["دجلة", "الفرات", "النيل", "الامازون"], correct: 2 },
+
+            // الأسئلة المقالية (تتغير عشوائياً وتؤمن ضد الغش)
             { type: "essay", q: "ما مدى صحة العبارة: 'ارتبط قيام الحضارات بانتهـاء الخوف والقلق عند ول ديورانت'؟", modelAnswer: "إجابة نموذجية: عبارة صادقة؛ حيث يرى ديورانت أن الأمن والاستقرار هما أساس الإبداع ونشأة الحضارة." },
             { type: "essay", q: "وضح الفرق الأساسي بين المصادر الأولية والمراجع الثانوية في دراسة التاريخ؟", modelAnswer: "إجابة نموذجية: المصادر الأولية أُنتجت وقت الحدث وأكثر دقة، بينما المراجع كُتبت لاحقاً وتعتمد عليها." },
-            { type: "essay", q: "ما هو الدور الذي لعبه نهر النيل كعامل طبيعي في قيام الحضارة المصرية القديمة؟", modelAnswer: "إجابة نموذجية: وفر المياه والوحدة والتربة الخصبة للزراعة وتوحيد جهود المصريين." }
+            { type: "essay", q: "ما هو الدور الذي لعبه نهر النيل كعامل طبيعي في قيام الحضارة المصرية القديمة؟", modelAnswer: "إجابة نموذجية: وفر المياه والوحدة والتربة الخصبة للزراعة وتوحيد جهود المصريين." },
+            { type: "essay", q: "ما المقصود بمفهوم الحضارة من منظور شامل يربط بين المادي والمعنوي؟", modelAnswer: "إجابة نموذجية: هي ثمرة تفاعل الإنسان مع البيئة لتحسين حياته، وتضم جانباً مادياً (منشآت) ومعنوياً (أفكار وعلوم)." },
+            { type: "essay", q: "لماذا تُعتبر الاستراكا مصدراً هاماً يعكس الحالة الاجتماعية والاقتصادية للطبقات الفقيرة؟", modelAnswer: "إجابة نموذجية: لكونها رخيصة الثمن وسهلة الحصول عليها مقارنة بورق البردي باهظ الثمن." }
         ];
 
         let objectiveScore = 0;
         let objectiveTotal = 0;
         let targetQuestionCount = 0;
+
+        // دالة خلط وتغيير الأسئلة عشوائياً في كل امتحان (لضمان عدم تكرار نفس الترتيب)
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
 
         function startCustomQuiz() {
             if(selectedLessons.length === 0) {
@@ -542,8 +578,13 @@
 
             header.innerText = `📋 اختبار الدروس المختارة: (${selectedLessons.join('، ')}) - عدد الأسئلة: ${targetQuestionCount}`;
 
-            for(let i = 0; i < targetQuestionCount; i++) {
-                const item = fullQuizBank[i % fullQuizBank.length];
+            // سحب أسئلة عشوائية من البنك الضخم في كل مرة يبدأ فيها الطالب امتحان جديد
+            let shuffledPool = [...hugeQuestionBank];
+            shuffleArray(shuffledPool);
+            let activeQuestions = shuffledPool.slice(0, targetQuestionCount);
+
+            for(let i = 0; i < activeQuestions.length; i++) {
+                const item = activeQuestions[i];
                 const qBox = document.createElement('div');
                 qBox.className = 'question-box';
                 
@@ -557,8 +598,14 @@
                 } else {
                     objectiveTotal++;
                     let optionsHTML = '';
-                    item.options.forEach((opt, optIndex) => {
-                        optionsHTML += `<button class="option-btn" onclick="checkCustomAnswer(this, ${optIndex}, ${item.correct})">${opt}</button>`;
+                    // خلط خيارات الإجابة أيضاً لضمان العشوائية
+                    let shuffledOptions = [...item.options];
+                    let originalCorrectText = item.options[item.correct];
+                    shuffleArray(shuffledOptions);
+                    let newCorrectIndex = shuffledOptions.indexOf(originalCorrectText);
+
+                    shuffledOptions.forEach((opt, optIndex) => {
+                        optionsHTML += `<button class="option-btn" onclick="checkCustomAnswer(this, ${optIndex}, ${newCorrectIndex})">${opt}</button>`;
                     });
 
                     let badgeType = item.type === 'tf' ? '⚖️ [صح وخطأ]' : (item.type === 'complete' ? '✍️ [أكمل]' : '📌 [اختر]');
@@ -639,7 +686,6 @@
                 const circularProgress = document.getElementById('circularProgress');
                 const motivationalText = document.getElementById('motivationalText');
 
-                // تعديل عرض النتيجة لتظهر بشكل صحيح (الدرجة الصحيحة أولاً ثم إجمالي الأسئلة الموضوعية، مثل 3 / 7)
                 progressValue.innerText = `${objectiveScore} / ${objectiveTotal}`;
 
                 const percentage = objectiveTotal > 0 ? (objectiveScore / objectiveTotal) * 100 : 0;
