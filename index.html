@@ -102,7 +102,7 @@
             margin-bottom: 8px;
         }
 
-        /* أزرار اختيار الدروس المتعددة (تحديد متعدد) */
+        /* أزرار اختيار الدروس المتعددة */
         .lessons-grid {
             display: flex;
             gap: 10px;
@@ -239,7 +239,7 @@
             </div>
         </div>
 
-        <!-- قسم الاختبارات المعدل -->
+        <!-- قسم الاختبارات الذكي والمؤمن -->
         <div class="card">
             <h3>📝 بنك الأسئلة والاختبارات التفاعلية</h3>
             <p>اختر درساً واحداً أو عدة دروس معاً:</p>
@@ -443,35 +443,38 @@
             }, 800);
         }
 
-        // بنك الأسئلة الشامل (اختر، صح وخطأ، أكمل، وأسئلة مقالي بمربع فارغ للتصحيح الذاتي)
+        // بنك الأسئلة الشامل (بكل الدرجات وأنواع الأسئلة)
         const fullQuizBank = [
-            { type: "mcq", q: "ويرى المؤرخ 'ولد ديورانت' أن الحضارة تبدأ عندما يتخلص الإنسان من:", options: ["الجهل والأمية", "الاضطراب الخوف والقلق", "الفقر المالي", "العزلة الجغرافية"], correct: 1 },
-            { type: "mcq", q: "أي مما يلي يُعد من المصادر الأولية بدراسة الحضارات وتتميز برخص ثمنها واستخدامها بين الطبقات المتوسطة والفقيرة؟", options: ["البرديات", "النقود والعملات", "الاستراكا (الشقف)", "كتابات الفلاسفة"], correct: 2 },
-            { type: "mcq", q: "تستطيع تحديد العصور التاريخية والحالة الاقتصادية للملوك القدامى من خلال دراسة:", options: ["النقود والعملات", "الأساطير الشفهية", "الاستراكا", "الشعر والأدب"], correct: 0 },
-            { type: "tf", q: "تعتبر الآثار والبرديات من المصادر الثانوية لدراسة الحضارات.", options: ["خطأ", "صح"], correct: 0 },
-            { type: "tf", q: "المناخ المعتدل والموقع الجغرافي من العوامل الطبيعية لقيام الحضارات.", options: ["صح", "خطأ"], correct: 0 },
-            { type: "complete", q: "أطلق المؤرخون على كسرات الفخار والخزف المستخدمة للكتابة اسم ..........", options: ["البرديات", "الاستراكا", "النقوش البارزة", "المسكوكات"], correct: 1 },
-            { type: "complete", q: "جانبا الحضارة ينقسمان إلى جانب مادي و جانب ..........", options: ["معنوي", "سياسي", "اقتصادي", "عسكري"], correct: 0 },
-            // الأسئلة المقالي (مربع كتابة فارغ + زر عرض الإجابة النموذجية)
+            { type: "mcq", q: "ويرى المؤرخ 'ولد ديورانت' أن الحضارة تبدأ عندما يتخلص الإنسان من:", options: ["الجهل والأمية", "الاضطراب الخوف والقلق", "الفقر المالي", "العزلة الجغرافية"], correct: 1, score: 1 },
+            { type: "mcq", q: "أي مما يلي يُعد من المصادر الأولية بدراسة الحضارات وتتميز برخص ثمنها واستخدامها بين الطبقات المتوسطة والفقيرة؟", options: ["البرديات", "النقود والعملات", "الاستراكا (الشقف)", "كتابات الفلاسفة"], correct: 2, score: 1 },
+            { type: "mcq", q: "تستطيع تحديد العصور التاريخية والحالة الاقتصادية للملوك القدامى من خلال دراسة:", options: ["النقود والعملات", "الأساطير الشفهية", "الاستراكا", "الشعر والأدب"], correct: 0, score: 1 },
+            { type: "tf", q: "تعتبر الآثار والبرديات من المصادر الثانوية لدراسة الحضارات.", options: ["خطأ", "صح"], correct: 0, score: 1 },
+            { type: "tf", q: "المناخ المعتدل والموقع الجغرافي من العوامل الطبيعية لقيام الحضارات.", options: ["صح", "خطأ"], correct: 0, score: 1 },
+            { type: "complete", q: "أطلق المؤرخون على كسرات الفخار والخزف المستخدمة للكتابة اسم ..........", options: ["البرديات", "الاستراكا", "النقوش البارزة", "المسكوكات"], correct: 1, score: 1 },
+            { type: "complete", q: "جانبا الحضارة ينقسمان إلى جانب مادي و جانب ..........", options: ["معنوي", "سياسي", "اقتصادي", "عسكري"], correct: 0, score: 1 },
+            // الأسئلة المقالية (مع حماية زر الإجابة وقفل الصندوق بعد الفتح)
             { 
                 type: "essay", 
                 q: "ما مدى صحة العبارة: 'ارتبط قيام الحضارات بانتهـاء الخوف والقلق عند ول ديورانت'؟", 
-                modelAnswer: "إجابة نموذجية: عبارة صادقة؛ حيث يرى ديورانت أن الأمن والاستقرار هما أساس الإبداع ونشأة الحضارة." 
+                modelAnswer: "إجابة نموذجية: عبارة صادقة؛ حيث يرى ديورانت أن الأمن والاستقرار هما أساس الإبداع ونشأة الحضارة.",
+                score: 1 
             },
             { 
                 type: "essay", 
                 q: "وضح الفرق الأساسي بين المصادر الأولية والمراجع الثانوية في دراسة التاريخ؟", 
-                modelAnswer: "إجابة نموذجية: المصادر الأولية أُنتجت وقت الحدث وأكثر دقة، بينما المراجع كُتبت لاحقاً وتعتمد عليها." 
+                modelAnswer: "إجابة نموذجية: المصادر الأولية أُنتجت وقت الحدث وأكثر دقة، بينما المراجع كُتبت لاحقاً وتعتمد عليها.",
+                score: 1 
             },
             { 
                 type: "essay", 
                 q: "ما هو الدور الذي لعبه نهر النيل كعامل طبيعي في قيام الحضارة المصرية القديمة؟", 
-                modelAnswer: "إجابة نموذجية: وفر المياه والوحدة والتربة الخصبة للزراعة وتوحيد جهود المصريين." 
+                modelAnswer: "إجابة نموذجية: وفر المياه والوحدة والتربة الخصبة للزراعة وتوحيد جهود المصريين.",
+                score: 1 
             }
         ];
 
-        let currentScore = 0;
-        let totalAnswered = 0;
+        let totalScore = 0;
+        let maxScore = 0;
         let targetQuestionCount = 0;
 
         function startCustomQuiz() {
@@ -491,10 +494,10 @@
             container.style.display = 'block';
             summary.style.display = 'none';
             questionsDiv.innerHTML = '';
-            currentScore = 0;
-            totalAnswered = 0;
+            totalScore = 0;
+            maxScore = targetQuestionCount; // كل سؤال بدرجة
 
-            header.innerText = `📋 اختبار الدروس المكتارة: (${selectedLessons.join('، ')}) - عدد الأسئلة: ${targetQuestionCount}`;
+            header.innerText = `📋 اختبار الدروس المختارة: (${selectedLessons.join('، ')}) - عدد الأسئلة: ${targetQuestionCount} (لكل سؤال درجة واحدة)`;
 
             for(let i = 0; i < targetQuestionCount; i++) {
                 const item = fullQuizBank[i % fullQuizBank.length];
@@ -503,9 +506,9 @@
                 
                 if(item.type === 'essay') {
                     qBox.innerHTML = `
-                        <div class="question-title">س${i+1} 📝 [سؤال مقالي]: ${item.q}</div>
-                        <textarea placeholder="اكتب إجابتك هنا..." style="margin-bottom: 10px;"></textarea>
-                        <button onclick="showEssayAnswer(this, \`${item.modelAnswer}\`)">عرض الإجابة النموذجية للتصحيح 💡</button>
+                        <div class="question-title">س${i+1} 📝 [سؤال مقالي - ${item.score} درجة]: ${item.q}</div>
+                        <textarea class="essay-input" placeholder="اكتب إجابتك هنا..." oninput="handleEssayInput(this)" style="margin-bottom: 10px;"></textarea>
+                        <button class="essay-btn" disabled style="background-color: #94a3b8; cursor: not-allowed;" onclick="revealEssayAnswer(this, \`${item.modelAnswer}\`)">عرض الإجابة النموذجية للتصحيح 💡</button>
                         <div class="essay-answer-box" style="display:none; margin-top:10px; padding:10px; background:#e2e8f0; border-radius:6px; font-weight:bold; color:var(--primary);"></div>
                     `;
                 } else {
@@ -517,7 +520,7 @@
                     let badgeType = item.type === 'tf' ? '⚖️ [صح وخطأ]' : (item.type === 'complete' ? '✍️ [أكمل]' : '📌 [اختر]');
 
                     qBox.innerHTML = `
-                        <div class="question-title">س${i+1} ${badgeType}: ${item.q}</div>
+                        <div class="question-title">س${i+1} ${badgeType} - [${item.score} درجة]: ${item.q}</div>
                         <div>${optionsHTML}</div>
                     `;
                 }
@@ -526,12 +529,40 @@
             }
         }
 
-        function showEssayAnswer(btn, modelAnswer) {
-            const answerBox = btn.nextElementSibling;
+        // تفعيل زر الإجابة النموذجية فقط عند الكتابة في الصندوق
+        function handleEssayInput(textarea) {
+            const btn = textarea.parentElement.querySelector('.essay-btn');
+            if(textarea.value.trim().length > 0) {
+                btn.disabled = false;
+                btn.style.backgroundColor = 'var(--secondary)';
+                btn.style.cursor = 'pointer';
+            } else {
+                btn.disabled = true;
+                btn.style.backgroundColor = '#94a3b8';
+                btn.style.cursor = 'not-allowed';
+            }
+        }
+
+        // عرض الإجابة وقفل صندوق الكتابة تماماً لمنع الغش
+        function revealEssayAnswer(btn, modelAnswer) {
+            const parent = btn.parentElement;
+            const textarea = parent.querySelector('.essay-input');
+            const answerBox = parent.querySelector('.essay-answer-box');
+
+            // قفل صندوق الكتابة نهائياً
+            textarea.disabled = true;
+            textarea.style.backgroundColor = '#f1f5f9';
+
+            // إظهار الإجابة النموذجية
             answerBox.style.display = 'block';
             answerBox.innerHTML = modelAnswer;
+
+            // تعطيل الزر نهائياً بعد الفتح
             btn.disabled = true;
             btn.style.backgroundColor = '#64748b';
+            btn.style.cursor = 'not-allowed';
+
+            checkQuizCompletion();
         }
 
         function checkCustomAnswer(btn, selectedOpt, correctOpt) {
@@ -542,18 +573,32 @@
 
             if(selectedOpt === correctOpt) {
                 btn.classList.add('correct');
-                currentScore++;
+                totalScore += 1; // إضافة درجة للسؤال الصحيح
             } else {
                 btn.classList.add('wrong');
                 buttons[correctOpt].classList.add('correct');
             }
 
-            totalAnswered++;
+            checkQuizCompletion();
+        }
 
-            if(totalAnswered >= targetQuestionCount - 3) { // تقدير بعد حل الأسئلة الموضوعية
+        // فحص اكتمال الاختبار وحساب الدرجات الكلية
+        function checkQuizCompletion() {
+            const allQuestions = document.querySelectorAll('.question-box');
+            let answeredCount = 0;
+
+            allQuestions.forEach(q => {
+                const isMcqDone = q.querySelector('.option-btn.correct, .option-btn.wrong');
+                const isEssayDone = q.querySelector('.essay-answer-box') && q.querySelector('.essay-answer-box').style.display === 'block';
+                if(isMcqDone || isEssayDone) {
+                    answeredCount++;
+                }
+            });
+
+            if(answeredCount === targetQuestionCount) {
                 const summary = document.getElementById('quizResultSummary');
                 summary.style.display = 'block';
-                summary.innerHTML = `🎉 استمر يا بطل! أتممت حل الأسئلة الموضوعية بنجاح وراجع الأسئلة المقالية لتكتمل مراجعتك.`;
+                summary.innerHTML = `🎉 انتهى الاختبار بنجاح! مجموع درجاتك في الأسئلة الموضوعية: <b>${totalScore} من ${maxScore}</b> (عاش يا بطل، وازن إجاباتك المقالية مع النماذج بدقة!)`;
             }
         }
     </script>
