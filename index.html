@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BODXA Student - منصة أولى ثانوي</title>
+    <title>BODXA Student - البوابة الرئيسية</title>
     <style>
         :root {
             --primary: #1e3a8a;
@@ -23,6 +23,102 @@
             direction: rtl;
             text-align: right;
         }
+
+        /* --- تصميم صفحة البداية (اختر السنة الدراسية) --- */
+        #welcomeScreen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+        .welcome-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            border-top: 6px solid var(--secondary);
+        }
+        .welcome-card h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        .welcome-card .sub-title {
+            color: #64748b;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .welcome-card h2 {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        .select-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        .select-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        .select-group select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 2px solid #cbd5e1;
+            font-family: inherit;
+            font-size: 1.1rem;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .select-group select:focus {
+            border-color: var(--secondary);
+            outline: none;
+            background: white;
+        }
+        .enter-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+            transition: transform 0.2s;
+        }
+        .enter-btn:hover {
+            transform: translateY(-2px);
+        }
+        .alert-msg {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+        .alert-error {
+            background: #fee2e2;
+            color: var(--danger);
+            border: 1px solid #f87171;
+        }
+
+        /* --- تصميم المنصة الداخلية (أولى ثانوي) --- */
+        #mainPlatform {
+            display: none; /* مخفية حتى يتم اختيار أولى ثانوي */
+            max-width: 800px;
+            margin: 0 auto;
+        }
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -31,14 +127,26 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             margin-bottom: 30px;
+            position: relative;
         }
         header h1 { margin: 0; font-size: 2.2rem; }
         header p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.9; }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
+        
+        .back-home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
         }
+        .back-home-btn:hover { background: rgba(255,255,255,0.4); }
+
         .card {
             background: white;
             padding: 25px;
@@ -59,7 +167,7 @@
             resize: vertical;
             min-height: 90px;
         }
-        button {
+        .action-btn {
             background-color: var(--secondary);
             color: white;
             border: none;
@@ -69,7 +177,7 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        button:hover { background-color: var(--primary); }
+        .action-btn:hover { background-color: var(--primary); }
         
         .output-box {
             background: #f1f5f9;
@@ -94,15 +202,9 @@
             border-bottom: 2px solid #f1f5f9;
             padding-bottom: 5px;
         }
-        .explain-section ul {
-            margin: 5px 0;
-            padding-right: 20px;
-        }
-        .explain-section li {
-            margin-bottom: 8px;
-        }
+        .explain-section ul { margin: 5px 0; padding-right: 20px; }
+        .explain-section li { margin-bottom: 8px; }
 
-        /* أزرار اختيار الدروس المتعددة */
         .lessons-grid {
             display: flex;
             gap: 10px;
@@ -165,23 +267,10 @@
             font-size: 0.95rem;
             transition: all 0.2s ease;
         }
-        .option-btn:hover {
-            background: #e2e8f0;
-            color: var(--primary);
-        }
-        .option-btn.correct {
-            background-color: #d1fae5 !important;
-            border-color: var(--success) !important;
-            color: #065f46 !important;
-            font-weight: bold;
-        }
-        .option-btn.wrong {
-            background-color: #fee2e2 !important;
-            border-color: var(--danger) !important;
-            color: #991b1b !important;
-        }
+        .option-btn:hover { background: #e2e8f0; color: var(--primary); }
+        .option-btn.correct { background-color: #d1fae5 !important; border-color: var(--success) !important; color: #065f46 !important; font-weight: bold; }
+        .option-btn.wrong { background-color: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
 
-        /* تصميم العداد الدائري والملاحظة الكبيرة */
         .result-card-container {
             text-align: center;
             padding: 25px;
@@ -234,10 +323,7 @@
             border: 1px dashed #ef4444;
         }
 
-        .pdf-list {
-            list-style: none;
-            padding: 0;
-        }
+        .pdf-list { list-style: none; padding: 0; }
         .pdf-list li {
             background: #f8fafc;
             margin: 10px 0;
@@ -273,8 +359,41 @@
 </head>
 <body>
 
-    <div class="container">
+    <!-- 🌟 شاشة البداية الرئيسية (اختيار السنة الدراسية) -->
+    <div id="welcomeScreen">
+        <div class="welcome-card">
+            <h1>BODXA Student</h1>
+            <div class="sub-title">مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة والاختبارات</div>
+            <h2>BODXA Student يرحب بكم</h2>
+            
+            <div class="select-group">
+                <label for="gradeSelector">اختر السنة الدراسية:</label>
+                <select id="gradeSelector">
+                    <option value="" disabled selected>-- اضغط لاختيار السنة الدراسية --</option>
+                    <option value="1_primary">أولى ابتدائي</option>
+                    <option value="2_primary">ثانية ابتدائي</option>
+                    <option value="3_primary">ثالثة ابتدائي</option>
+                    <option value="4_primary">رابعة ابتدائي</option>
+                    <option value="5_primary">خامسة ابتدائي</option>
+                    <option value="6_primary">سادس ابتدائي</option>
+                    <option value="1_prep">أولى إعدادي</option>
+                    <option value="2_prep">ثانية إعدادي</option>
+                    <option value="3_prep">ثالثة إعدادي</option>
+                    <option value="1_secondary">أولى ثانوي</option>
+                    <option value="2_secondary">ثانية ثانوي</option>
+                    <option value="3_secondary">ثالثة ثانوي</option>
+                </select>
+            </div>
+
+            <button class="enter-btn" onclick="checkGradeSelection()">دخول المنصة 🚀</button>
+            <div id="alertMessage" class="alert-msg alert-error"></div>
+        </div>
+    </div>
+
+    <!-- 🚀 المنصة الداخلية (أولى ثانوي - التي قمنا بتطويرها) -->
+    <div id="mainPlatform">
         <header>
+            <button class="back-home-btn" onclick="returnToHome()">⬅️ تغيير السنة</button>
             <h1>🚀 BODXA Student</h1>
             <p>مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة، واختبارات أولى ثانوي</p>
         </header>
@@ -284,7 +403,7 @@
             <h3>📖 المعلم الذكي</h3>
             <label for="topic">اكتب اسم الدرس:</label>
             <textarea id="topic" placeholder="اكتب هنا عنوان الدرس..."></textarea>
-            <button id="explainBtn" onclick="startExplain()">اشرح وتعمق في الإجابة 💡</button>
+            <button class="action-btn" id="explainBtn" onclick="startExplain()">اشرح وتعمق في الإجابة 💡</button>
             
             <div id="explanationResult" class="output-box" style="display:none;">
                 <h4 id="explainTitle">🤖 المعلم الذكي يشرح:</h4>
@@ -297,7 +416,6 @@
             <h3>📝 بنك الأسئلة والاختبارات التفاعلية</h3>
             <p>اختر درساً واحداً أو عدة دروس معاً:</p>
             
-            <!-- أزرار اختيار الدروس (تحديد متعدد) -->
             <div class="lessons-grid">
                 <div class="lesson-chip" onclick="toggleLesson(this, 'الحضارة والتاريخ')">الحضارة والتاريخ</div>
                 <div class="lesson-chip" onclick="toggleLesson(this, 'مصادر دراسة الحضارات')">مصادر دراسة الحضارات</div>
@@ -305,20 +423,19 @@
             </div>
 
             <div class="quiz-config">
-                <label for="questionCount">عدد الأسئلة الموضوعية (الحد الأدنى 10):</label>
+                <label for="questionCount">عدد الأسئلة الموضوعية:</label>
                 <select id="questionCount">
                     <option value="10" selected>10 أسئلة</option>
                     <option value="15">15 سؤالاً</option>
                     <option value="20">20 سؤالاً</option>
                 </select>
-                <button onclick="startCustomQuiz()" style="background-color: var(--accent);">ابدأ الاختبار 🎯</button>
+                <button class="action-btn" onclick="startCustomQuiz()" style="background-color: var(--accent);">ابدأ الاختبار 🎯</button>
             </div>
 
             <div id="quizContainer" style="display:none;" class="quiz-card">
                 <div id="quizHeader" style="margin-bottom: 15px; font-weight: bold; color: var(--primary);"></div>
                 <div id="quizQuestions"></div>
                 
-                <!-- النتيجة والعداد الدائري والملاحظة الكبيرة البارزة -->
                 <div id="quizResultSummary" style="display:none;" class="result-card-container">
                     <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 15px;">🏆 تقييم نتيجة الأسئلة الموضوعية</div>
                     <div class="circular-progress" id="circularProgress">
@@ -363,7 +480,43 @@
         </div>
     </div>
 
+    <!-- سكربت التحكم في الصفحات والمنصة -->
     <script>
+        // التحقق من السنة الدراسية المختارة
+        function checkGradeSelection() {
+            const selector = document.getElementById('gradeSelector');
+            const alertMsg = document.getElementById('alertMessage');
+            const selectedValue = selector.value;
+
+            if (!selectedValue) {
+                alertMsg.style.display = 'block';
+                alertMsg.innerText = '⚠️ من فضلك اختر سنة دراسية أولاً!';
+                return;
+            }
+
+            if (selectedValue === '1_secondary') {
+                // لو اختار أولى ثانوي، نخفي شاشة الترحيب ونظهر المنصة
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('mainPlatform').style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // أي سنة أخرى تظهر الرسالة المطلوبة
+                alertMsg.style.display = 'block';
+                alertMsg.className = 'alert-msg alert-error';
+                alertMsg.innerText = 'عذراً، لم تتوفر المناهج الخاصة بهذه السنة الآن، ستتوفر قريباً.';
+            }
+        }
+
+        // العودة لشاشة اختيار السنة
+        function returnToHome() {
+            document.getElementById('mainPlatform').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'flex';
+            document.getElementById('alertMessage').style.display = 'none';
+            document.getElementById('gradeSelector').value = "";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- أكواد منصة أولى ثانوي (شرح، بنك أسئلة، عشوائي، مقالي) ---
         let selectedLessons = [];
 
         function toggleLesson(element, lessonName) {
@@ -395,174 +548,63 @@
 
             setTimeout(() => {
                 let historyHTML = "";
-
                 if(query.includes("الحضارة والتاريخ") || query.includes("تعريف الحضارة") || (query.includes("الحضارة") && !query.includes("عوامل"))) {
                     historyHTML = `
                         <div class="explain-section">
                             <h4>1. مفهوم الحضارة</h4>
                             <ul>
-                                <li><strong>التعريف:</strong> هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض، سواء كان هذا المجهود <strong>ماديًّا</strong> أو <strong>معنويًّا</strong>، وذلك بهدف تعمير الكون الذي يحيط به.</li>
-                                <li><strong>جانبا الحضارة:</strong>
-                                    <ul>
-                                        <li><strong>الجانب المادي:</strong> يشمل كل ما بناه الإنسان وشيده (مثل: المباني، العمارة، والمنشآت).</li>
-                                        <li><strong>الجانب المعنوي:</strong> يشمل الأفكار، العلوم، الآداب، والفنون والقيم الأخلاقية.</li>
-                                    </ul>
-                                </li>
+                                <li><strong>التعريف:</strong> هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض، سواء كان هذا المجهود ماديًّا أو معنويًّا.</li>
+                                <li><strong>جانبا الحضارة:</strong> مادي (منشآت) ومعنوي (أفكار وعلوم وفنون).</li>
                             </ul>
                         </div>
                         <div class="explain-section">
-                            <h4>2. رؤية المؤرخ "ولد ديورانت" للحضارة</h4>
+                            <h4>2. رؤية المؤرخ "ولد ديورانت"</h4>
                             <ul>
-                                <li><strong>رأيه:</strong> ربط نشأة الحضارة بانتهـاء الاضطراب والخوف والقلق.</li>
-                                <li><strong>التفصيل:</strong> يرى "ولد ديورانت" أن الحضارة تبدأ حيث ينتهي الاضطراب والقلق؛ لأنه عندما يتحقق للإنسان <strong>الأمن والاستقرار</strong>، تتطلع نفسه للإبداع والإنشاء والتطور الثقافي والمادي.</li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>3. مفهوم علم التاريخ</h4>
-                            <ul>
-                                <li><strong>التعريف:</strong> هو علم يتناول ماضي البشرية ودراسة الأحداث لتحليلها واستخلاص العبر والدروس.</li>
-                                <li><strong>أهمية دراسة التاريخ:</strong>
-                                    <ul>
-                                        <li>استخلاص العبر والدروس من تاريخ الأمم السابقة.</li>
-                                        <li>إبراز قدوة الشخصيات التاريخية الصالحة للاقتداء بها.</li>
-                                        <li>الشعور بالمسؤولية تجاه الحفاظ على مكاسب المجتمع.</li>
-                                        <li>الابتعاد عن التعصب؛ فالإنسانية لم تقم على أمة واحدة أو حضارة واحدة فقط، بل تضافرت وتكاملت فيها جهود كل الأمم والشعوب.</li>
-                                    </ul>
-                                </li>
+                                <li>يرى أن الحضارة تبدأ حيث ينتهي الاضطراب والقلق؛ فالأمن والاستقرار هما أساس الإبداع.</li>
                             </ul>
                         </div>
                     `;
                 } else if(query.includes("مصادر") || query.includes("دراسة الحضارات")) {
                     historyHTML = `
                         <div class="explain-section">
-                            <h4>1. مفهوم مصادر دراسة الحضارات</h4>
+                            <h4>1. مصادر دراسة الحضارات</h4>
                             <ul>
-                                <li><strong>التعريف:</strong> هي كل ما يُعتمد عليه في معرفة التاريخ وتدوينه، وتُقسم إلى قسمين رئيسيين لضمان دقة المعلومة التاريخية.</li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>2. المصادر الأولية (الأثرية)</h4>
-                            <ul>
-                                <li><strong>التعريف:</strong> كل ما أُنتج في زمن وقوع الحدث التاريخي، وتتميز بأنها الأكثر دقة وثقة.</li>
-                                <li><strong>أبرز أمثلتها:</strong>
-                                    <ul>
-                                        <li><strong>الآثار:</strong> الباقية على سطح الأرض (مثل الأهرامات والمعابد).</li>
-                                        <li><strong>النقوش:</strong> رسوم أو كتابات مدونة على مواد صلبة (أعتاب، صخور، جدران).</li>
-                                        <li><strong>البرديات:</strong> وثائق مكتوبة على لفائف ورق البردي (مثل برديات إيبرس الطبية).</li>
-                                        <li><strong>الاستراكا (الشقف):</strong> كسرات الفخار والخزف التي كانت تُستخدم للكتابة عليها لسهولتها ورخص ثمنها بين الطبقات المتوسطة والفقيرة.</li>
-                                        <li><strong>العملات والنقود:</strong> قطع معدنية تحمل خاتماً من السلطة العامة لضمان وزنها ونقائها، وتفيد في تحديد العصور التاريخية والحالة الاقتصادية.</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>3. المراجع الثانوية (المصادر التقليدية)</h4>
-                            <ul>
-                                <li><strong>التعريف:</strong> المؤلفات التي كُتبت بعد مرور فترات زمنية على وقوع الحدث، وتعتمد في كتابتها على المصادر الأولية والأبحاث.</li>
-                                <li><strong>أبرز أمثلتها:</strong> كتابات المؤرخين القدامى (مثل هيرودوت ومانيتون)، والفلاسفة، والشعر والأساطير التي تعكس الحالة الثقافية.</li>
+                                <li><strong>المصادر الأولية:</strong> أُنتجت وقت الحدث مثل (الآثار، النقوش، البرديات، الاستراكا، والعملات).</li>
+                                <li><strong>المراجع الثانوية:</strong> مؤلفات كُتبت بعد مرور فترات زمنية وتعتمد على المصادر الأولية.</li>
                             </ul>
                         </div>
                     `;
                 } else if(query.includes("عوامل") || query.includes("قيام الحضارات")) {
                     historyHTML = `
                         <div class="explain-section">
-                            <h4>1. تمهيد ومقدمة الدرس</h4>
+                            <h4>1. العوامل الطبيعية والبشرية</h4>
                             <ul>
-                                <li><strong>الفكرة الرئيسية:</strong> لم تقم أي حضارة بمعزل عن العالم، بل تضافرت مجموعة من العوامل الطبيعية والبشرية لإنتاج حضارات كبرى مثل الحضارة المصرية القديمة وبلاد العراق وفينيقيا.</li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>2. العوامل الطبيعية (الجغرافية والمناخية)</h4>
-                            <ul>
-                                <li><strong>الموقع الجغرافية المتميز:</strong> يمنح الدولة اتصالاً بالعالم التجاري والحضاري (مثل موقع مصر المتوسط بين قارات العالم القديم).</li>
-                                <li><strong>المناخ المعتدل:</strong> يساعد على نشاط الإنسان ودفع عجلة الإنتاج والبناء (مقارنة بالمناخات المتطرفة حاراً أو بارداً).</li>
-                                <li><strong>الأنهار والأمطار:</strong> توفر المياه العذبة واستقرار الزراعة (مثل نهر النيل في مصر الذي وحّد جهود أبنائها).</li>
-                                <li><strong>الثروات المعدنية:</strong> وجود صخور ومعادن متنوعة تساعد على قيام الصناعات والأدوات.</li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>3. العوامل البشرية</h4>
-                            <ul>
-                                <li><strong>الإنسان المجتهد:</strong> رغبة الإنسان القوية في تطويع البيئة واستغلال مواردها لخدمة مجتمعه وتعمير الكون.</li>
-                                <li><strong>الجهود المشتركة:</strong> تضامن أفراد المجتمع ووحدتهم كان أساس قيام أعظم الحضارات القديمة.</li>
+                                <li>الموقع الجغرافي المتميز، المناخ المعتدل، الأنهار (مثل نهر النيل)، والثروات المعدنية، بجانب كفاح الإنسان.</li>
                             </ul>
                         </div>
                     `;
                 } else {
-                    historyHTML = `
-                        <div class="explain-section">
-                            <h4>📖 تنبيه من المعلم الذكي</h4>
-                            <ul>
-                                <li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي.</li>
-                            </ul>
-                        </div>
-                    `;
+                    historyHTML = `<div class="explain-section"><h4>📖 تنبيه</h4><ul><li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي.</li></ul></div>`;
                 }
-
                 explContent.innerHTML = historyHTML;
                 btn.disabled = false;
                 btn.innerHTML = `اشرح وتعمق في الإجابة 💡`;
             }, 800);
         }
 
-        // 📚 بنك الأسئلة الشامل مفصولاً إلى أسئلة موضوعية وأسئلة مقالية
         const objectiveQuestionBank = [
-            // أسئلة الدرس الثالث
             { type: "mcq", q: "أثر وجود الجنا دل جنوب نهر النيل بمصر إيجابيا في بعض فترات العصور القديمة على ...........", options: ["اتعاش حركة التجارة في الجنوب.", "التواصل الحضاري بين مصر ووسط أفريقيا.", "تحقيق الأمن القومي لمصر.", "سهولة حركة التجارة الخارجية."], correct: 2 },
             { type: "mcq", q: "أي من القيم التالية اكتسبها المصريين القدماء من نهر النيل وساهمت في الحفاظ على موردهم؟", options: ["التكافل.", "التضامن.", "التواصل مع الآخرين.", "التكامل."], correct: 1 },
-            { type: "mcq", q: "نستنتج من تحليل الخريطة المقابلة أن: العامل المشترك في قيام كل من حضارتي مصر الفرعونية وبلاد العراق القديم هو ...........", options: ["الإشراف على نفس المسطح المائي.", "الموقع كملتقى القارات العالم القديم.", "انتشار البيئات الفيضية.", "الانعزال عن الحضارات المجاوراة."], correct: 2 },
-            { type: "mcq", q: "تظهر الآثار الإيجابية لنهر النيل على الحضارة المصرية في المجال الاجتماعي من خلال ...........", options: ["دوره في تنشيط التجارة الخارجية.", "دوره في تنوع المحاصيل الزراعية.", "تأثيره على التواصل والتماسك بين المصريين.", "وجود الجنا دل التي تعد درع واقي لمصر جنوبا."], correct: 2 },
-            { type: "mcq", q: "ساعد نهر النيل على تحقيق التكامل والتكافل بين المصريين القدماء من خلال ...........", options: ["انحداره من الجنوب إلى الشمال.", "اهتمام المصريين بالتواصل الحضاري.", "توحيد الجهود لمواجهة الفيضان.", "وجود الجنا دل في مجراه."], correct: 0 },
-            { type: "mcq", q: "يعد التواصل أحد سمات الحضارات ويؤدى إلى ...........", options: ["توحيد الهوية الثقافية.", "التطور الإبداعي في كل المجالات.", "طغيان حضارة على أخرى.", "اندماج الحضارات."], correct: 1 },
-            { type: "mcq", q: "لعب المناخ دورا مكملا لدور نهر النيل في قيام الحضارة المصرية القديمة من خلال ...........", options: ["تنشيط حركة التجارة الداخلية.", "حماية آثار مصر من الاندثار.", "تحقيق الاستقرار الداخلي.", "حماية الأمن القومي المصري."], correct: 1 },
-            { type: "mcq", q: "أي مما يأتي ساهم في تحقيق الامتزاج بين المصريين؟", options: ["المناخ المعتدل.", "نهر النيل.", "جنا دل النيل الجنوبية.", "الثروة المعدنية."], correct: 1 },
-            { type: "mcq", q: "أولي خطوات بناء الحضارة المصرية القديمة بدأت عندما قام المصري القديم بـ ...........", options: ["استخراج الثروات المعدنية.", "التواصل مع الحضارات الأخري.", "استثمار نهر النيل.", "بناء الأهرامات."], correct: 2 },
-            { type: "mcq", q: "ساعد وجود نهر النيل الذي ساعد على تعزيز التواصل الفكري والمادي بين المصريين، نستدل من العبارة السابقة أن المصري استغل اندفاع مياه نهر النيل للاتجاه من مدينة ...........", options: ["أسوان لمنف.", "طيبة لأصول.", "منف لطيبة.", "منف لأسموان."], correct: 0 },
-            { type: "mcq", q: "يعد العامل الأساسي الذي ساعد على تعزيز التواصل الفكري والمادي بين حضارات الشرق القديم من خلال دراستنا نستدل أن العبارة السابقة يقصد بها ...........", options: ["وفره الثروات المعدنية.", "طبيعة الحدود السياسية.", "الموقع الجغرافي.", "التنوع المناخي."], correct: 2 },
-            { type: "mcq", q: "ساهمت الثروات المعدنية في قيام الحضارة المصرية من خلال ...........", options: ["تنوع استخدامها.", "تصديرها للدول المجاورة.", "تصنيع العملات.", "تسليح الجيش وتدريبه."], correct: 0 },
-            { type: "mcq", q: "مثلما كان لنهر النيل أهمية اقتصادية كانت له أهمية ...........", options: ["أدبية.", "أمنية.", "نفسية.", "فكرية."], correct: 1 },
-            { type: "mcq", q: "اتفق كل من الموقع الجغرافي ونهر النيل في تأثيرهما علي قيام الحضارة المصرية القديمة من حيث ...........", options: ["الوحدة والتضامن.", "التواصل الحضاري.", "تحقيق الأمن والاستقرار.", "نشاط الانسان المصري القديم."], correct: 0 },
-            { type: "mcq", q: "تعد من العوامل التي ساعدت على قيام الحضارة المصرية القديمة ووفرة المصادر الأولية لدراسة التاريخ ...........", options: ["التواصل الحضاري.", "وفره المعادن والصخور.", "الموقع الجغرافي.", "جفاف المناخ."], correct: 2 },
-            { type: "mcq", q: "من عوامل ازدهار التجارة الداخلية في مصر الفرعونية ...........", options: ["اعتتدال المناخ.", "اختراع العملة.", "تنوع المحاصيل.", "الموقع الجغرافي."], correct: 2 },
-            { type: "mcq", q: "العامل الرئيسي المشترك في قيام حضارات العالم القديم ...........", options: ["جفاف المناخ.", "الموقع البحري.", "الأرض السهلية.", "الثروة البشرية."], correct: 3 },
-            // أسئلة الدرس الأول
             { type: "mcq", q: "رغم تبادل الشعوب لتراتها الحضاري فإن كل حضارة حافظت علي ...........", options: ["نظامها السياسي.", "وضعها الاقتصادي.", "طابعها الأيدلوجي.", "قوتها العسكرية."], correct: 2 },
             { type: "mcq", q: "كان الدافع الأكثر تأثيراً في قيام حركة الاستعمار دفاعاً ...........", options: ["اجتماعياً.", "ثقافياً.", "اقتصادياً.", "علمياً."], correct: 2 },
-            { type: "mcq", q: "حدد أي أنماط السكان الآتية تعد الأقل إسهاماً في تطور الحضارات الإنسانية ...........", options: ["البدو الرحل.", "أهل الحضر.", "أهل الريف.", "سكان السواحل."], correct: 0 },
-            { type: "mcq", q: "«تواصل الأمم والحضارات علي مر العصور وتتأثر ببعضها عن طريق الأخذ والعطاء».. في ضوء العبارة السابقة: من أهم ما يجب الحفاظ عليه عند التواصل الحضاري ...........", options: ["الأنشطة الاقتصادية ونظم الإدارة.", "طرق المعمار والإنشاء.", "الفنون والآداب.", "الثقافة والعقيدة."], correct: 3 },
-            { type: "mcq", q: "تجددت دماء الحضارة في مصر وبلاد العراق خلال العصور الوسطى بفضل ...........", options: ["الكشوف الجغرافية.", "الثورة الصناعية.", "التواصل الحضاري.", "الفتح الإسلامي."], correct: 3 },
-            { type: "mcq", q: "يعد أول ظهور للحضارات العظمى بالغرب في ...........", options: ["بلاد اليونان.", "بلاد الأندلس.", "الإمبراطورية الرومانية الغربية.", "الدولة البيزنطية."], correct: 2 },
-            { type: "mcq", q: "حدد اي من الاتي يعبر عن أحد مظاهر الحضارة التي نشأت في العصور الوسطى ...........", options: ["معبدا أبو سمبل.", "الجامع الأزهر.", "برج إيفل.", "أهرامات الجيزة."], correct: 1 },
-            { type: "mcq", q: "كانت نقطة الالتقاء بين العصور الوسطى والعصور الحديثة أحد صور ...........", options: ["الفتوحات الإسلامية.", "النهضة الأوروبية.", "الاستعمار الأوروبي.", "الإقطاع في أوروبا."], correct: 2 },
-            { type: "mcq", q: "تمثل العنصر الرئيسي المحرك للأحداث خلال العصور الحديثة في ...........", options: ["قيام الثورة الصناعية.", "حركة الكشوف الجغرافية.", "قيام حركة الاستعمار.", "ظهور النهضة الأوروبية."], correct: 1 },
-            { type: "mcq", q: "تظهر العلاقة بين العصور الحديثة والتاريخ المعاصر من خلال ربط بين ...........", options: ["حركة الاستعمار الأوروبي وقيام الحروب العالمية.", "الثورة الصناعية وحركة التحرر من الاستعمار.", "الكشوف الجغرافية واستكشاف الكواكب الأخرى.", "حركة الاستعمار الأوروبي والثورة المعلوماتية."], correct: 1 },
-            { type: "mcq", q: "يتمثل القاسم المشترك بين مفهومي الحضارة والتاريخ في ...........", options: ["النشاط البشري.", "ارتباط نشأتهما باختراع الكتابة.", "الاستقرار والأمن.", "إبرازهم للقدوات الصالحة."], correct: 0 },
-            { type: "mcq", q: "قام محمد علي بالتخلص من المماليك في مذبحة القلعة عام 1811م.. ينتمي الحدث السابق إلى ...........", options: ["العصور القديمة.", "العصور الوسطى.", "العصور الحديثة.", "التاريخ المعاصر."], correct: 2 },
-            { type: "mcq", q: "أثر قيام الثورة الصناعية في أوروبا بشكل واضح على ظهور أحد سلبيات العصور الحديثة وهو ...........", options: ["الحروب العالمية.", "استغلال موارد البيئة.", "الاستعمار الأوروبي.", "تفشي الأمراض الخطيرة."], correct: 2 },
-            { type: "mcq", q: "تعد الحملة الفرنسية على مصر عام 1798م من أهم ملامح ...........", options: ["العصور القديمة.", "العصور الوسطى.", "العصور الحديثة.", "التاريخ المعاصر."], correct: 2 },
-            // أسئلة الدرس الثاني
             { type: "mcq", q: "هناك دولتان الأولى تستخدم العملة الذهبية والثانية تستخدم العملة الفضية وحدث حصار اقتصادي لكل منهما. من خلال دراستك للنقود والمسكوكات تتوقع أي منهما سوف يتغلب علي ذلك الحصار؟", options: ["الدولة الأولى.", "الدولة الثانية.", "الأولى والثانية.", "سقوط كل منهما."], correct: 0 },
-            { type: "mcq", q: "من خلال دراسة حجر بالرمو يمكن التعرف علي اهم اعمال ...........", options: ["خفرع.", "سنوسرت الثالث.", "إخناتون.", "رمسيس الثاني."], correct: 1 },
-            { type: "mcq", q: "كان ملوك مصر يصورون أنفسهم بمظهر القوة والشدة، ويظهر ذلك من خلال ...........", options: ["قائمة أبيدوس.", "حجر بالرمو.", "صلاية نعرمر.", "الأوستراكا."], correct: 2 },
-            { type: "mcq", q: "ترجع الملكية العلمية لكتاب « تححيص الأخبار » إلي احد مؤرخي قارة ...........", options: ["أسيا.", "أفريقيا.", "أوروبا.", "أمريكا الشمالية."], correct: 2 },
-            { type: "mcq", q: "«كانت الصخور هي المادة الخصبة التي ساهمت في حفظ التراث القديم».. أي من المصادر التالية لا ينطبق عليها العبارة السابقة؟", options: ["حجر بالرمو.", "لوحة أبيدوس.", "صلاية نعرمر.", "الإلياذة والأوديسة."], correct: 3 },
-            { type: "mcq", q: "يتمثل العامل المشترك بين حجر بالرمو وصلاية نعرمر في ...........", options: ["وصف المعابد والأهرامات.", "نوع النقوش المدونة عليهما.", "التأريخ للأسرة الفرعونية الأولى.", "أسماء الملوك المدونة بهما."], correct: 1 },
-            { type: "mcq", q: "حدد أي من مصادر دراسة الحضارات الآتية تضمنت معلومات عن بعض الجوانب الطبيعية والبشرية للحضارة الفرعونية ...........", options: ["الأساطير.", "الأوستراكا.", "المسكوكات.", "كتابات المؤرخين."], correct: 3 },
-            { type: "mcq", q: "أي من الشخصيات التالية توصف كتاباته بأنها أحد المصادر المحلية لدراسة التاريخ المصري القديم؟", options: ["هيرودوت.", "مانيتون.", "سقراط.", "هوميروس."], correct: 1 },
-            { type: "mcq", q: "«تعتبر المصادر الأولية من مصادر توثيق المعلومات التاريخية وسردها». تؤكد العبارة السابقة على ...........", options: ["دور التاريخ في سرد الروايات والقصص.", "الحفاظ على الآثار المصرية.", "الدقة في تناول الأخبار.", "سهولة توافر المصادر الأولية وكثرتها."], correct: 2 },
-            { type: "mcq", q: "أي من المصادر الأولية الآتية غير مستفاد منها في دراسة تاريخ مصر الفرعوني؟", options: ["التمائم.", "العملات.", "بردية إيبرس.", "حجر بالرمو."], correct: 1 },
-            { type: "mcq", q: "أي من المصادر الآتية يعد القاسم المشترك في دراسة حضارات بلاد الشرق القديم؟", options: ["حجر بالرمو.", "كتابات الفلاسفة.", "النقود والمسكوكات.", "الأساطير."], correct: 3 },
-            { type: "mcq", q: "تميزت الأوستراكا عن غيرها من المصادر الأولية لدراسات الحضارات في أنها كانت ...........", options: ["مستخدمة من كل الفئات العمرية.", "تتميز بالدقة وسهولة الحصول عليها.", "بمثابة سجل منظم للأحداث السياسية.", "معاصرة لأحداث وقت وقوعها."], correct: 1 }
+            { type: "mcq", q: "من خلال دراسة حجر بالرمو يمكن التعرف علي اهم اعمال ...........", options: ["خفرع.", "سنوسرت الثالث.", "إخناتون.", "رمسيس الثاني."], correct: 1 }
         ];
 
-        // بنك الأسئلة المقالية (يثبت 3 منها عشوائياً في كل امتحان)
         const essayQuestionBank = [
             { type: "essay", q: "«تسير مصر حاليا بخطى واضحة للحراك بركب الحضارة».. ما مقترحاتك لاستكمال هذا الهدف؟", modelAnswer: "إجابة نموذجية: الاهتمام بالتعليم التكنولوجي، تشجيع الابتكار والبحث العلمي، وتعزيز الشراكات الاقتصادية الإقليمية والدولية." },
             { type: "essay", q: "الاستقرار والابتكار من عوامل نشأة الحضارات.. فسر ذلك.", modelAnswer: "إجابة نموذجية: الأمن والاستقرار يمنحان الإنسان الفرصة لتفجير طاقاته الإبداعية والابتكار في شتى المجالات المادية والمعنوية." },
-            { type: "essay", q: "استنتج: أهم القيم التي يمكن أخذها من قول الإمام أبو حنيفة النعمان: «من قرأ التاريخ زاد عقله».", modelAnswer: "إجابة نموذجية: استخلاص العبر والدروس، الاستفادة من تجارب الأمم السابقة، وتوسيع مدارك الفهم البشري." },
-            { type: "essay", q: "أثبت صحة العبارة التالية تاريخيا: أحدثت العصور التاريخية الحديثة طفرة ظاهرة في حياة البشرية.", modelAnswer: "إجابة نموذجية: من خلال قيام الثورة الصناعية، الكشوف الجغرافية الكبرى، وتطور وسائل التواصل والعلوم الحديثة." },
-            { type: "essay", q: "ما العلاقة بين: دراسة التاريخ، والحضارة؟", modelAnswer: "إجابة نموذجية: التاريخ هو السجل الذي يحفظ تفاعل الإنسان مع بيئته (الحضارة)، وكل منهما يستهدف تعمير الكون وفهم الماضي." },
-            { type: "essay", q: "«دراسة التاريخ تؤدى إلى تنمية الشعور بالمسؤولية».. في ضوء العبارة السابقة، وضح: كيف يمكن الاستفادة من ذلك لتحقيق تنمية سياحية في مصر؟", modelAnswer: "إجابة نموذجية: المحافظة على الآثار والتراث الوطني، وغرس الانتماء لدى الأجيال الجديدة لحماية مقدرات الوطن السياحية." }
+            { type: "essay", q: "استنتج: أهم القيم التي يمكن أخذها من قول الإمام أبو حنيفة النعمان: «من قرأ التاريخ زاد عقله».", modelAnswer: "إجابة نموذجية: استخلاص العبر والدروس، الاستفادة من تجارب الأمم السابقة، وتوسيع مدارك الفهم البشري." }
         ];
 
         let objectiveScore = 0;
@@ -601,19 +643,13 @@
 
             header.innerText = `📋 اختبار الدروس المختارة: (${selectedLessons.join('، ')}) - الأسئلة الموضوعية: ${targetQuestionCount} + 3 أسئلة مقالية`;
 
-            // سحب الأسئلة الموضوعية عشوائياً
             let shuffledObjective = [...objectiveQuestionBank];
             shuffleArray(shuffledObjective);
-            let activeObjective = shuffledObjective.slice(0, targetQuestionCount);
+            let activeObjective = shuffledObjective.slice(0, Math.min(targetQuestionCount, shuffledObjective.length));
 
-            // سحب 3 أسئلة مقالية عشوائياً وثابتة في كل امتحان
-            let shuffledEssay = [...essayQuestionBank];
-            shuffleArray(shuffledEssay);
-            let activeEssay = shuffledEssay.slice(0, 3);
+            let activeEssay = [...essayQuestionBank]; // الأخذ بالـ 3 أسئلة المقالية
 
-            // دمج الأسئلة (الموضوعية والمقالية 3) معاً وعرضها
             let combinedQuestions = [...activeObjective, ...activeEssay];
-            // خلط الترتيب لتبدو الأسئلة منوعة
             shuffleArray(combinedQuestions);
 
             let totalQuizItems = combinedQuestions.length;
@@ -641,18 +677,15 @@
                         optionsHTML += `<button class="option-btn" onclick="checkCustomAnswer(this, ${optIndex}, ${newCorrectIndex})">${opt}</button>`;
                     });
 
-                    let badgeType = item.type === 'tf' ? '⚖️ [صح وخطأ]' : (item.type === 'complete' ? '✍️ [أكمل]' : '📌 [اختر]');
-
+                    let badgeType = item.type === 'tf' ? '⚖️ [صح وخطأ]' : '📌 [اختر]';
                     qBox.innerHTML = `
                         <div class="question-title">س${i+1} ${badgeType}: ${item.q}</div>
                         <div>${optionsHTML}</div>
                     `;
                 }
-
                 questionsDiv.appendChild(qBox);
             });
 
-            // تحديث الإجمالي الكلي المطلوب حله (الموضوعية + 3 مقالي)
             window.currentTotalQuizItems = totalQuizItems;
         }
 
@@ -688,7 +721,6 @@
         function checkCustomAnswer(btn, selectedOpt, correctOpt) {
             const parent = btn.parentElement;
             const buttons = parent.querySelectorAll('.option-btn');
-            
             buttons.forEach(b => b.onclick = null);
 
             if(selectedOpt === correctOpt) {
@@ -698,7 +730,6 @@
                 btn.classList.add('wrong');
                 buttons[correctOpt].classList.add('correct');
             }
-
             checkQuizCompletion();
         }
 
@@ -709,9 +740,7 @@
             allQuestions.forEach(q => {
                 const isMcqDone = q.querySelector('.option-btn.correct, .option-btn.wrong');
                 const isEssayDone = q.querySelector('.essay-answer-box') && q.querySelector('.essay-answer-box').style.display === 'block';
-                if(isMcqDone || isEssayDone) {
-                    answeredCount++;
-                }
+                if(isMcqDone || isEssayDone) { answeredCount++; }
             });
 
             if(answeredCount === window.currentTotalQuizItems) {
@@ -729,21 +758,15 @@
                 circularProgress.style.background = `conic-gradient(var(--secondary) ${deg}deg, #cbd5e1 ${deg}deg)`;
 
                 let message = "";
-                if(percentage === 100) {
-                    message = "🌟 بطل الأبطال! درجة نهائية ممتازة، استمر في هذا الإبداع!";
-                } else if(percentage >= 80) {
-                    message = "🔥 مستواك ممتاز جداً، بتبذل مجهود رائع واصل!";
-                } else if(percentage >= 50) {
-                    message = "👍 مستواك جيد، لكن تحتاج تدريب ومراجعة بسيطة لتكون الأفضل.";
-                } else {
-                    message = "⚠️ مستواك يحتاج تدريباً كبيراً ومراجعة دروسك مرة أخرى بعناية.";
-                }
+                if(percentage === 100) { message = "🌟 بطل الأبطال! درجة نهائية ممتازة، استمر في هذا الإبداع!"; }
+                else if(percentage >= 80) { message = "🔥 مستواك ممتاز جداً، بتبذل مجهود رائع واصل!"; }
+                else if(percentage >= 50) { message = "👍 مستواك جيد، لكن تحتاج تدريب ومراجعة بسيطة لتكون الأفضل."; }
+                else { message = "⚠️ مستواك يحتاج تدريباً كبيراً ومراجعة دروسك مرة أخرى بعناية."; }
 
                 motivationalText.innerText = message;
                 summary.scrollIntoView({ behavior: 'smooth' });
             }
         }
     </script>
-
 </body>
 </html>
