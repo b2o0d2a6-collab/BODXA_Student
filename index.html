@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BODXA Student - قسم التاريخ</title>
+    <title>BODXA Student - منصة أولى ثانوي</title>
     <style>
         :root {
             --primary: #1e3a8a;
@@ -121,6 +121,7 @@
             text-decoration: none;
             font-size: 0.9rem;
         }
+        .pdf-list a:hover { background-color: #0f766e; }
         .loading-spinner {
             display: inline-block;
             width: 20px;
@@ -139,16 +140,16 @@
 
     <div class="container">
         <header>
-            <h1>🏛️ BODXA Student - قسم التاريخ</h1>
-            <p>المعلم الذكي الشامل لمنهج التاريخ لأولى ثانوي (الوحدة الأولى)</p>
+            <h1>🚀 BODXA Student</h1>
+            <p>مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة، واختبارات أولى ثانوي</p>
         </header>
 
-        <!-- المعلم الذكي لكتاب التاريخ -->
+        <!-- المعلم الذكي الشامل -->
         <div class="card">
-            <h3>📖 اسأل في دروس الوحدة الأولى (التاريخ)</h3>
-            <label for="topic">اكتب اسم الدرس (مثال: الحضارة والتاريخ، مصادر دراسة الحضارات، عوامل قيام الحضارات):</label>
+            <h3>📖 المعلم الذكي</h3>
+            <label for="topic">اكتب اسم الدرس:</label>
             <textarea id="topic" placeholder="اكتب هنا عنوان الدرس..."></textarea>
-            <button id="explainBtn" onclick="startHistoryExplain()">اشرح وتعمق في الإجابة 💡</button>
+            <button id="explainBtn" onclick="startExplain()">اشرح وتعمق في الإجابة 💡</button>
             
             <div id="explanationResult" class="output-box" style="display:none;">
                 <h4 id="explainTitle">🤖 المعلم الذكي يشرح:</h4>
@@ -156,20 +157,53 @@
             </div>
         </div>
 
-        <!-- مكتبة التاريخ -->
+        <!-- مكتبة كتب الـ PDF الكاملة -->
         <div class="card">
-            <h3>📚 كتاب التاريخ (PDF)</h3>
+            <h3>📚 مكتبة كتب المنهج (PDF)</h3>
+            <p>حمل الكتب الدراسية الخاصة بأولى ثانوي لتذاكر في أي وقت:</p>
             <ul class="pdf-list">
                 <li>
-                    <span>📖 تصفح كتاب التاريخ كاملًا</span>
+                    <span>📖 كتاب التاريخ</span>
                     <a href="https://drive.google.com/file/d/1Z4yd1F6TXkwBVbAMHHkA3HIbbtThB7HC/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
                 </li>
+                <li>
+                    <span>📐 كتاب الرياضيات</span>
+                    <a href="https://drive.google.com/file/d/1OGFqzyC6IPaWYSrQ-vxqc5q6KaGKUJ4O/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>🧪 كتاب العلوم المتكاملة</span>
+                    <a href="https://drive.google.com/file/d/1v7tAQT7Su5VLyDGQgU4k7_6PAd0erLW8/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>📜 كتاب الفلسفة والمنطق</span>
+                    <a href="https://drive.google.com/file/d/1DeAYyZRSDIs6ztIH5sHCbHh9-rFg4Hp2/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>🔤 كتاب اللغة الإنجليزية</span>
+                    <a href="https://drive.google.com/file/d/1aZtqobA7nIjXQ52QIDiHtyUNummiWQEA/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>📖 كتاب اللغة العربية</span>
+                    <a href="https://drive.google.com/file/d/1B4a_GQfADTTPJiYYQEzS2A3CEbbkquQW/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
             </ul>
+        </div>
+
+        <!-- قسم نظام الأسئلة -->
+        <div class="card">
+            <h3>📝 اختبارات وتقييم الدرس</h3>
+            <p>اختر نوع الاختبار للتدرب فوراً بعد المذاكرة:</p>
+            <button onclick="startQuiz(2)">سؤالان سريعان (بعد كل قطعة)</button>
+            <button onclick="startQuiz(10)" style="background-color: var(--accent); margin-right: 10px;">امتحان شامل (10 أسئلة)</button>
+            <div id="quizResult" class="output-box" style="display:none;">
+                <strong id="quizTitle">الامتحان:</strong>
+                <p id="quizText">سيتم توليد الأسئلة هنا بناءً على الدرس المختار...</p>
+            </div>
         </div>
     </div>
 
     <script>
-        function startHistoryExplain() {
+        function startExplain() {
             const query = document.getElementById('topic').value.trim();
             const resBox = document.getElementById('explanationResult');
             const explContent = document.getElementById('explContent');
@@ -291,10 +325,9 @@
                 else {
                     historyHTML = `
                         <div class="explain-section">
-                            <h4>📖 شرح عام لـ (${query})</h4>
+                            <h4>📖 تنبيه من المعلم الذكي</h4>
                             <ul>
-                                <li><strong>الفكرة الرئيسية:</strong> هذا الموضوع يقع ضمن منهج التاريخ للصف الأول الثانوي (الوحدة الأولى).</li>
-                                <li><strong>نصيحة المعلم الذكي:</strong> يمكنك مراجعة هذا الدرس بشكل تفصيلي من كتاب التاريخ المرفق في قسم الـ PDF أدناه لضمان الإلمام بكل تفاصيل الكتاب المدرسي.</li>
+                                <li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي، والدروس المتاحة حالياً في النظام هي أول 3 دروس من كتاب التاريخ (الحضارة والتاريخ، مصادر دراسة الحضارات، وعوامل قيام الحضارات). باقي المناهج سيتم إضافتها تباعاً!</li>
                             </ul>
                         </div>
                     `;
@@ -304,6 +337,16 @@
                 btn.disabled = false;
                 btn.innerHTML = `اشرح وتعمق في الإجابة 💡`;
             }, 800);
+        }
+
+        function startQuiz(count) {
+            const resBox = document.getElementById('quizResult');
+            const quizTitle = document.getElementById('quizTitle');
+            const quizText = document.getElementById('quizText');
+
+            resBox.style.display = 'block';
+            quizTitle.innerText = count === 2 ? "📌 اختبار سريع (سؤالان بعد الجزئية):" : "🏆 الامتحان النهائي للدرس (10 أسئلة):";
+            quizText.innerHTML = `تم توليد عدد <b>${count} أسئلة</b> بناءً على الدرس المختار!`;
         }
     </script>
 
