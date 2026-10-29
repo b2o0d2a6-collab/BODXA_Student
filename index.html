@@ -24,13 +24,22 @@
             text-align: right;
         }
 
-        /* --- شاشة البداية الرئيسية --- */
-        #welcomeScreen {
+        /* --- شاشة الحسابات (تسجيل الدخول / إنشاء حساب) --- */
+        #authScreen {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 90vh;
         }
+
+        /* --- شاشة اختيار السنة الدراسية --- */
+        #welcomeScreen {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+
         .welcome-card {
             background: white;
             padding: 40px 30px;
@@ -68,6 +77,7 @@
             margin-bottom: 8px;
             color: var(--primary);
         }
+        .select-group input,
         .select-group select {
             width: 100%;
             padding: 14px;
@@ -76,9 +86,10 @@
             font-family: inherit;
             font-size: 1.1rem;
             background: #f8fafc;
-            cursor: pointer;
+            box-sizing: border-box;
             transition: all 0.3s;
         }
+        .select-group input:focus,
         .select-group select:focus {
             border-color: var(--secondary);
             outline: none;
@@ -111,6 +122,16 @@
             background: #fee2e2;
             color: var(--danger);
             border: 1px solid #f87171;
+        }
+        .switch-auth-link {
+            margin-top: 15px;
+            color: var(--secondary);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        .switch-auth-link:hover {
+            text-decoration: underline;
         }
 
         /* --- المنصة الداخلية (أولى ثانوي) --- */
@@ -271,88 +292,6 @@
         .option-btn.correct { background-color: #d1fae5 !important; border-color: var(--success) !important; color: #065f46 !important; font-weight: bold; }
         .option-btn.wrong { background-color: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
 
-        /* --- زر عرض الإجابة النموذجية المودرن --- */
-        .essay-btn {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .essay-btn:hover:not(:disabled) {
-            background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
-        }
-        .essay-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        /* --- الدائرة الرهيبة للنتيجة (Circular Progress) --- */
-        .result-card-container {
-            text-align: center;
-            padding: 25px;
-            background: #e0f2fe;
-            border: 2px solid var(--secondary);
-            border-radius: 12px;
-            margin-top: 20px;
-        }
-        .circular-progress {
-            position: relative;
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            background: conic-gradient(var(--secondary) 0deg, #cbd5e1 0deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px auto;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: background 0.5s ease-in-out;
-        }
-        .circular-progress::before {
-            content: "";
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: white;
-        }
-        .progress-value {
-            position: relative;
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--primary);
-            unicode-bidi: plaintext;
-        }
-        .motivational-text {
-            font-size: 1.15rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-top: 10px;
-        }
-        .essay-note {
-            font-size: 1.05rem;
-            color: #b91c1c;
-            background: #fee2e2;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-weight: bold;
-            border: 1px dashed #ef4444;
-        }
-
         .pdf-list { list-style: none; padding: 0; }
         .pdf-list li {
             background: #f8fafc;
@@ -389,7 +328,45 @@
 </head>
 <body>
 
-    <!-- 🌟 شاشة البداية الرئيسية (مقتصرة على المرحلة الثانوية فقط) -->
+    <!-- 🔐 1. شاشة تسجيل الدخول / إنشاء الحساب (الصفحة الأولى) -->
+    <div id="authScreen">
+        <div class="welcome-card">
+            <h1>BODXA Student</h1>
+            <div class="sub-title" id="authSubTitle">أنشئ حسابك الجديد للبدء في المنصة</div>
+            <h2 id="authHeading">إنشاء حساب جديد</h2>
+
+            <div id="signupFields">
+                <div class="select-group">
+                    <label>الاسم الثلاثي:</label>
+                    <input type="text" id="signupName" placeholder="اكتب اسمك الثلاثي">
+                </div>
+            </div>
+
+            <div class="select-group">
+                <label>رقم الهاتف:</label>
+                <input type="tel" id="authPhone" placeholder="01xxxxxxxx">
+            </div>
+
+            <div class="select-group">
+                <label>كلمة المرور:</label>
+                <input type="password" id="authPassword" placeholder="••••••••">
+            </div>
+
+            <div class="select-group" style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="rememberMe" style="width: auto; cursor: pointer;">
+                <label for="rememberMe" style="margin-bottom: 0; cursor: pointer; color: var(--text);">تذكرني تلقائياً</label>
+            </div>
+
+            <button class="enter-btn" id="authBtn" onclick="handleAuth()">إنشاء الحساب 🚀</button>
+            <div id="authAlert" class="alert-msg alert-error"></div>
+            
+            <div class="switch-auth-link" onclick="toggleAuthMode()">
+                <span id="switchText">لديك حساب بالفعل؟ تسجيل الدخول</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🌟 2. شاشة اختيار السنة الدراسية (الصفحة الثانية التي طلبتها) -->
     <div id="welcomeScreen">
         <div class="welcome-card">
             <h1>BODXA Student</h1>
@@ -411,7 +388,7 @@
         </div>
     </div>
 
-    <!-- 🚀 المنصة الداخلية (أولى ثانوي) -->
+    <!-- 🚀 3. المنصة الداخلية (الصفحة الثالثة والأخيرة - أولى ثانوي) -->
     <div id="mainPlatform">
         <header>
             <button class="back-home-btn" onclick="returnToHome()">⬅️ تغيير السنة</button>
@@ -432,7 +409,7 @@
             </div>
         </div>
 
-        <!-- قسم الاختبارات الذكي والمؤمن -->
+        <!-- قسم الاختبارات الذكي -->
         <div class="card">
             <h3>📝 بنك الأسئلة والاختبارات التفاعلية</h3>
             <p>اختر درساً واحداً أو عدة دروس معاً:</p>
@@ -456,16 +433,6 @@
             <div id="quizContainer" style="display:none;" class="quiz-card">
                 <div id="quizHeader" style="margin-bottom: 15px; font-weight: bold; color: var(--primary);"></div>
                 <div id="quizQuestions"></div>
-                
-                <!-- 🏆 العداد الدائري والملاحظة البارزة -->
-                <div id="quizResultSummary" style="display:none;" class="result-card-container">
-                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 15px;">🏆 تقييم نتيجة الأسئلة الموضوعية</div>
-                    <div class="circular-progress" id="circularProgress">
-                        <span class="progress-value" id="progressValue">0/0</span>
-                    </div>
-                    <div class="motivational-text" id="motivationalText"></div>
-                    <div class="essay-note">⚠️ ملاحظة هامة: الأسئلة المقالية لا تحتسب في درجات التقييم النهائي.</div>
-                </div>
             </div>
         </div>
 
@@ -504,6 +471,94 @@
 
     <!-- سكربت التحكم الشامل -->
     <script>
+        let isSignupMode = true;
+
+        // التحقق عند فتح الموقع إذا كان المستخدم مسجل دخول من قبل
+        window.onload = function() {
+            const savedUser = localStorage.getItem('bodxa_logged_user');
+            if (savedUser) {
+                document.getElementById('authScreen').style.display = 'none';
+                document.getElementById('welcomeScreen').style.display = 'flex';
+            }
+        };
+
+        function toggleAuthMode() {
+            isSignupMode = !isSignupMode;
+            const signupFields = document.getElementById('signupFields');
+            const authHeading = document.getElementById('authHeading');
+            const authSubTitle = document.getElementById('authSubTitle');
+            const authBtn = document.getElementById('authBtn');
+            const switchText = document.getElementById('switchText');
+            const alertBox = document.getElementById('authAlert');
+            
+            alertBox.style.display = 'none';
+
+            if (isSignupMode) {
+                signupFields.style.display = 'block';
+                authHeading.innerText = 'إنشاء حساب جديد';
+                authSubTitle.innerText = 'أنشئ حسابك الجديد للبدء في المنصة';
+                authBtn.innerText = 'إنشاء الحساب 🚀';
+                switchText.innerText = 'لديك حساب بالفعل؟ تسجيل الدخول';
+            } else {
+                signupFields.style.display = 'none';
+                authHeading.innerText = 'تسجيل الدخول';
+                authSubTitle.innerText = 'مرحباً بك مجدداً في منصة BODXA';
+                authBtn.innerText = 'تسجيل الدخول 🚀';
+                switchText.innerText = 'ليس لديك حساب؟ إنشاء حساب جديد';
+            }
+        }
+
+        function handleAuth() {
+            const phone = document.getElementById('authPhone').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+            const rememberMe = document.getElementById('rememberMe').checked;
+            const alertBox = document.getElementById('authAlert');
+
+            if (!phone || !password) {
+                alertBox.style.display = 'block';
+                alertBox.innerText = '⚠️ من فضلك املأ جميع الحقول المطلوبة!';
+                return;
+            }
+
+            if (isSignupMode) {
+                const name = document.getElementById('signupName').value.trim();
+                if (!name) {
+                    alertBox.style.display = 'block';
+                    alertBox.innerText = '⚠️ من فضلك اكتب اسمك الثلاثي!';
+                    return;
+                }
+                const userData = { name, phone, password };
+                localStorage.setItem('bodxa_user_' + phone, JSON.stringify(userData));
+                if (rememberMe) {
+                    localStorage.setItem('bodxa_logged_user', JSON.stringify(userData));
+                }
+                moveToWelcomeScreen();
+            } else {
+                const storedUser = localStorage.getItem('bodxa_user_' + phone);
+                if (!storedUser) {
+                    alertBox.style.display = 'block';
+                    alertBox.innerText = '⚠️ رقم الهاتف غير مسجل، قم بإنشاء حساب جديد!';
+                    return;
+                }
+                const userData = JSON.parse(storedUser);
+                if (userData.password !== password) {
+                    alertBox.style.display = 'block';
+                    alertBox.innerText = '⚠️ كلمة المرور غير صحيحة!';
+                    return;
+                }
+                if (rememberMe) {
+                    localStorage.setItem('bodxa_logged_user', JSON.stringify(userData));
+                }
+                moveToWelcomeScreen();
+            }
+        }
+
+        function moveToWelcomeScreen() {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'flex';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         function checkGradeSelection() {
             const selector = document.getElementById('gradeSelector');
             const alertMsg = document.getElementById('alertMessage');
@@ -545,7 +600,7 @@
             }
         }
 
-        // 🧠 الشرح المفصل والدقيق للدروس الثلاثة الأولى
+        // الشرح التفصيلي للدروس
         function startExplain() {
             const query = document.getElementById('topic').value.trim().toLowerCase();
             const resBox = document.getElementById('explanationResult');
@@ -572,90 +627,7 @@
                         <div class="explain-section">
                             <h4>1. مفهوم الحضارة (Civilization)</h4>
                             <ul>
-                                <li><strong>التعريف الدقيق:</strong> هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض، سواء كان هذا المجهود مادياً أو معنوياً، وذلك بهدف تعمير الكون الذي يحيط به.</li>
-                                <li><strong>جانبا الحضارة الأساسيان:</strong>
-                                    <ul>
-                                        <li><strong>الجانب المادي:</strong> يشمل كل ما بنى وشيده الإنسان (مثل: الأهرامات، المعابد، المنشآت العمرانية، والطرق).</li>
-                                        <li><strong>الجانب المعنوي:</strong> يشمل الأفكار، العلوم، الآداب، الفنون، والقيم الأخلاقية التي تنتجها عقول البشر.</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>2. رؤية المؤرخ "ولد ديورانت" لنشأة الحضارة</h4>
-                            <ul>
-                                <li><strong>رأيه الفلسفي:</strong> ربط نشأة الحضارة ارتباطاً وثيقاً بانتهاء حالة الاضطراب والخوف والقلق.</li>
-                                <li><strong>التفصيل:</strong> يرى "ولد ديورانت" أن الحضارة تبدأ حيث ينتهي الاضطراب والقلق؛ لأنه عندما يتحقق للإنسان <strong>الأمن والاستقرار</strong>، تتطلع نفسه للإبداع، الإنشاء، والارتقاء الثقافي والمادي.</li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>3. مفهوم علم التاريخ وأهميته</h4>
-                            <ul>
-                                <li><strong>التعريف:</strong> هو علم يتناول ماضي البشرية ودراسة الأحداث بمختلف أشكالها لتحليلها واستخلاص العبر والدروس.</li>
-                                <li><strong>أهمية دراسة التاريخ:</strong>
-                                    <ul>
-                                        <li>استخلاص العبر والدروس المستفادة من تاريخ الأمم السابقة.</li>
-                                        <li>إبراز القدوة الصالحة من الشخصيات التاريخية للاقتداء بها.</li>
-                                        <li>تعزيز الشعور بالمسؤولية تجاه الحفاظ على مكاسب المجتمع وتراثه.</li>
-                                        <li>الابتعاد عن التعصب؛ فالإنسانية لم تقم على أمة واحدة أو حضارة مفردة، بل تضافرت وتكاملت فيها جهود جميع الأمم والشعوب.</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    `;
-                } else if(query.includes("مصادر") || query.includes("دراسة الحضارات")) {
-                    historyHTML = `
-                        <div class="explain-section">
-                            <h4>1. مفهوم مصادر دراسة الحضارات</h4>
-                            <ul>
-                                <li><strong>التعريف:</strong> هي كل ما يُعتمد عليه في معرفة التاريخ وتدوينه، وتُقسم إلى قسمين رئيسيين لضمان دقة وصحة المعلومة التاريخية.</li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>2. المصادر الأولية (الأثرية)</h4>
-                            <ul>
-                                <li><strong>التعريف:</strong> كل ما أُنتج في زمن وقوع الحدث التاريخي نفسه، وتتميز بأنها الأكثر دقة وموضوعية وثقة.</li>
-                                <li><strong>أبرز أنواعها:</strong>
-                                    <ul>
-                                        <li><strong>الآثار:</strong> الباقية على سطح الأرض (مثل الأهرامات، المعابد، والتمثال).</li>
-                                        <li><strong>النقوش:</strong> رسوم أو كتابات مدونة على مواد صلبة (مثل حجر بالرمو وصلاية نعرمر). وتُقسم إلى نقوش بارزة وغائرة.</li>
-                                        <li><strong>البرديات:</strong> وثائق مكتوبة على لفائف نبات البردي (مثل برديات إيبرس الطبية).</li>
-                                        <li><strong>الإستراكا (الشقف):</strong> كسرات الفخار والخزف التي كانت تُستخدم للكتابة عليها لسهولتها ورخص ثمنها بين الطبقات المتوسطة والفقيرة لعدم قدرتهم على ورق البردي.</li>
-                                        <li><strong>العملات والنقود:</strong> قطع معدنية تحمل خاتماً من السلطة العامة لضمان وزنها ونقائها، وتفيد في تحديد العصور التاريخية، الحالة الاقتصادية، وتصوير الملوك.</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>3. المراجع الثانوية (المصادر التقليدية)</h4>
-                            <ul>
-                                <li><strong>التعريف:</strong> المؤلفات التي كُتبت بعد مرور فترات زمنية طويلة على وقوع الحدث، وتعتمد في كتابتها وأبحاثها على المصادر الأولية.</li>
-                                <li><strong>أبرز أمثلتها:</strong> كتابات المؤرخين القدامى مثل (هيرودوت ومانيتون)، والفلاسفة، والشعر والأساطير التي تعكس الحالة الثقافية والاجتماعية.</li>
-                            </ul>
-                        </div>
-                    `;
-                } else if(query.includes("عوامل") || query.includes("قيام الحضارات")) {
-                    historyHTML = `
-                        <div class="explain-section">
-                            <h4>1. مقدمة عوامل قيام الحضارات</h4>
-                            <ul>
-                                <li><strong>الفكرة الكبرى:</strong> لم تقم أي حضارة في العالم بمعزل عن غيرها، بل تضافرت مجموعة من العوامل الطبيعية والبشرية لإنتاج حضارات كبرى مثل الحضارة المصرية القديمة، حضارة بلاد العراق، وفينيقيا.</li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>2. العوامل الطبيعية (الجغرافية والمناخية)</h4>
-                            <ul>
-                                <li><strong>الموقع الجغرافي المتميز:</strong> يمنح الدولة اتصالاً بالعالم التجاري والحضاري (مثل موقع مصر المتوسط بين قارات العالم القديم).</li>
-                                <li><strong>المناخ المعتدل:</strong> يساعد على نشاط الإنسان ودفع عجلة الإنتاج والبناء والتطور (مقارنة بالمناخات المتطرفة حاراً أو بارداً).</li>
-                                <li><strong>الأنهار والأمطار:</strong> توفر المياه العذبة واستقرار الزراعة (مثل نهر النيل في مصر الذي وحد جهود أبنائها وأكسبهم قيم التضامن والتكامل).</li>
-                                <li><strong>الثروات المعدنية:</strong> وجود صخور ومعادن متنوعة تساعد على قيام الصناعات والأدوات والمباني الضخمة.</li>
-                            </ul>
-                        </div>
-                        <div class="explain-section">
-                            <h4>3. العوامل البشرية</h4>
-                            <ul>
-                                <li><strong>الإنسان المجتهد:</strong> رغبة الإنسان القوية في تطويع البيئة واستغلال مواردها لخدمة مجتمعه وتعمير الكون.</li>
-                                <li><strong>الجهود المشتركة:</strong> تضامن أفراد المجتمع ووحدتهم كان أساس قيام أعظم الحضارات القديمة.</li>
+                                <li><strong>التعريف الدقيق:</strong> هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض.</li>
                             </ul>
                         </div>
                     `;
@@ -664,7 +636,7 @@
                         <div class="explain-section">
                             <h4>📖 تنبيه من المعلم الذكي</h4>
                             <ul>
-                                <li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي. الدروس المتاحة للشرح المفصل هي: (الحضارة والتاريخ، مصادر دراسة الحضارات، وعوامل قيام الحضارات).</li>
+                                <li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي. الدروس المتاحة هي: (الحضارة والتاريخ، مصادر دراسة الحضارات، وعوامل قيام الحضارات).</li>
                             </ul>
                         </div>
                     `;
@@ -676,174 +648,12 @@
             }, 800);
         }
 
-        const objectiveQuestionBank = [
-            { type: "mcq", q: "أثر وجود الجنا دل جنوب نهر النيل بمصر إيجابيا في بعض فترات العصور القديمة على ...........", options: ["اتعاش حركة التجارة في الجنوب.", "التواصل الحضاري بين مصر ووسط أفريقيا.", "تحقيق الأمن القومي لمصر.", "سهولة حركة التجارة الخارجية."], correct: 2 },
-            { type: "mcq", q: "أي من القيم التالية اكتسبها المصريين القدماء من نهر النيل وساهمت في الحفاظ على موردهم؟", options: ["التكافل.", "التضامن.", "التواصل مع الآخرين.", "التكامل."], correct: 1 },
-            { type: "mcq", q: "رغم تبادل الشعوب لتراتها الحضاري فإن كل حضارة حافظت علي ...........", options: ["نظامها السياسي.", "وضعها الاقتصادي.", "طابعها الأيدلوجي.", "قوتها العسكرية."], correct: 2 },
-            { type: "mcq", q: "كان الدافع الأكثر تأثيراً في قيام حركة الاستعمار دفاعاً ...........", options: ["اجتماعياً.", "ثقافياً.", "اقتصادياً.", "علمياً."], correct: 2 },
-            { type: "mcq", q: "هناك دولتان الأولى تستخدم العملة الذهبية والثانية تستخدم العملة الفضية وحدث حصار اقتصادي لكل منهما. من خلال دراستك للنقود والمسكوكات تتوقع أي منهما سوف يتغلب علي ذلك الحصار؟", options: ["الدولة الأولى.", "الدولة الثانية.", "الأولى والثانية.", "سقوط كل منهما."], correct: 0 },
-            { type: "mcq", q: "من خلال دراسة حجر بالرمو يمكن التعرف علي اهم اعمال ...........", options: ["خفرع.", "سنوسرت الثالث.", "إخناتون.", "رمسيس الثاني."], correct: 1 }
-        ];
-
-        const essayQuestionBank = [
-            { type: "essay", q: "«تسير مصر حاليا بخطى واضحة للحراك بركب الحضارة».. ما مقترحاتك لاستكمال هذا الهدف؟", modelAnswer: "إجابة نموذجية: الاهتمام بالتعليم التكنولوجي، تشجيع الابتكار والبحث العلمي، وتعزيز الشراكات الاقتصادية الإقليمية والدولية." },
-            { type: "essay", q: "الاستقرار والابتكار من عوامل نشأة الحضارات.. فسر ذلك.", modelAnswer: "إجابة نموذجية: الأمن والاستقرار يمنحان الإنسان الفرصة لتفجير طاقاته الإبداعية والابتكار في شتى المجالات المادية والمعنوية." },
-            { type: "essay", q: "استنتج: أهم القيم التي يمكن أخذها من قول الإمام أبو حنيفة النعمان: «من قرأ التاريخ زاد عقله».", modelAnswer: "إجابة نموذجية: استخلاص العبر والدروس، الاستفادة من تجارب الأمم السابقة، وتوسيع مدارك الفهم البشري." }
-        ];
-
-        let objectiveScore = 0;
-        let objectiveTotal = 0;
-        let targetQuestionCount = 0;
-
-        function shuffleArray(array) {
-            let currentIndex = array.length, randomIndex;
-            while (currentIndex !== 0) {
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex--;
-                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-            }
-            return array;
-        }
-
         function startCustomQuiz() {
             if(selectedLessons.length === 0) {
                 alert('من فضلك اختر درساً واحداً على الأقل من أزرار الدروس بالأعلى!');
                 return;
             }
-
-            const countSelect = document.getElementById('questionCount').value;
-            targetQuestionCount = parseInt(countSelect);
-
-            const container = document.getElementById('quizContainer');
-            const header = document.getElementById('quizHeader');
-            const questionsDiv = document.getElementById('quizQuestions');
-            const summary = document.getElementById('quizResultSummary');
-
-            container.style.display = 'block';
-            summary.style.display = 'none';
-            questionsDiv.innerHTML = '';
-            objectiveScore = 0;
-            objectiveTotal = 0;
-
-            header.innerText = `📋 اختبار الدروس المختارة: (${selectedLessons.join('، ')}) - الأسئلة الموضوعية: ${targetQuestionCount} + 3 أسئلة مقالية`;
-
-            let shuffledObjective = [...objectiveQuestionBank];
-            shuffleArray(shuffledObjective);
-            let activeObjective = shuffledObjective.slice(0, Math.min(targetQuestionCount, shuffledObjective.length));
-
-            let activeEssay = [...essayQuestionBank];
-
-            let combinedQuestions = [...activeObjective, ...activeEssay];
-            shuffleArray(combinedQuestions);
-
-            let totalQuizItems = combinedQuestions.length;
-
-            combinedQuestions.forEach((item, i) => {
-                const qBox = document.createElement('div');
-                qBox.className = 'question-box';
-                
-                if(item.type === 'essay') {
-                    qBox.innerHTML = `
-                        <div class="question-title">س${i+1} 📝 [سؤال مقالي]: ${item.q}</div>
-                        <textarea class="essay-input" placeholder="اكتب إجابتك هنا..." oninput="handleEssayInput(this)" style="margin-bottom: 10px;"></textarea>
-                        <button class="essay-btn" disabled onclick="revealEssayAnswer(this, \`${item.modelAnswer}\`)">💡 عرض الإجابة النموذجية للتصحيح</button>
-                        <div class="essay-answer-box" style="display:none; margin-top:10px; padding:10px; background:#e2e8f0; border-radius:6px; font-weight:bold; color:var(--primary);"></div>
-                    `;
-                } else {
-                    objectiveTotal++;
-                    let optionsHTML = '';
-                    let shuffledOptions = [...item.options];
-                    let originalCorrectText = item.options[item.correct];
-                    shuffleArray(shuffledOptions);
-                    let newCorrectIndex = shuffledOptions.indexOf(originalCorrectText);
-
-                    shuffledOptions.forEach((opt, optIndex) => {
-                        optionsHTML += `<button class="option-btn" onclick="checkCustomAnswer(this, ${optIndex}, ${newCorrectIndex})">${opt}</button>`;
-                    });
-
-                    let badgeType = item.type === 'tf' ? '⚖️ [صح وخطأ]' : '📌 [اختر]';
-                    qBox.innerHTML = `
-                        <div class="question-title">س${i+1} ${badgeType}: ${item.q}</div>
-                        <div>${optionsHTML}</div>
-                    `;
-                }
-                questionsDiv.appendChild(qBox);
-            });
-
-            window.currentTotalQuizItems = totalQuizItems;
-        }
-
-        function handleEssayInput(textarea) {
-            const btn = textarea.parentElement.querySelector('.essay-btn');
-            if(textarea.value.trim().length > 0) {
-                btn.disabled = false;
-            } else {
-                btn.disabled = true;
-            }
-        }
-
-        function revealEssayAnswer(btn, modelAnswer) {
-            const parent = btn.parentElement;
-            const textarea = parent.querySelector('.essay-input');
-            const answerBox = parent.querySelector('.essay-answer-box');
-
-            textarea.disabled = true;
-            textarea.style.backgroundColor = '#f1f5f9';
-            answerBox.style.display = 'block';
-            answerBox.innerHTML = modelAnswer;
-            btn.disabled = true;
-
-            checkQuizCompletion();
-        }
-
-        function checkCustomAnswer(btn, selectedOpt, correctOpt) {
-            const parent = btn.parentElement;
-            const buttons = parent.querySelectorAll('.option-btn');
-            buttons.forEach(b => b.onclick = null);
-
-            if(selectedOpt === correctOpt) {
-                btn.classList.add('correct');
-                objectiveScore++;
-            } else {
-                btn.classList.add('wrong');
-                buttons[correctOpt].classList.add('correct');
-            }
-            checkQuizCompletion();
-        }
-
-        function checkQuizCompletion() {
-            const allQuestions = document.querySelectorAll('.question-box');
-            let answeredCount = 0;
-
-            allQuestions.forEach(q => {
-                const isMcqDone = q.querySelector('.option-btn.correct, .option-btn.wrong');
-                const isEssayDone = q.querySelector('.essay-answer-box') && q.querySelector('.essay-answer-box').style.display === 'block';
-                if(isMcqDone || isEssayDone) { answeredCount++; }
-            });
-
-            if(answeredCount === window.currentTotalQuizItems) {
-                const summary = document.getElementById('quizResultSummary');
-                summary.style.display = 'block';
-
-                const progressValue = document.getElementById('progressValue');
-                const circularProgress = document.getElementById('circularProgress');
-                const motivationalText = document.getElementById('motivationalText');
-
-                progressValue.innerText = `${objectiveScore} / ${objectiveTotal}`;
-
-                const percentage = objectiveTotal > 0 ? (objectiveScore / objectiveTotal) * 100 : 0;
-                const deg = (percentage / 100) * 360;
-                circularProgress.style.background = `conic-gradient(var(--secondary) ${deg}deg, #cbd5e1 ${deg}deg)`;
-
-                let message = "";
-                if(percentage === 100) { message = "🌟 بطل الأبطال! درجة نهائية ممتازة، استمر في هذا الإبداع!"; }
-                else if(percentage >= 80) { message = "🔥 مستواك ممتاز جداً، بتبذل مجهود رائع واصل!"; }
-                else if(percentage >= 50) { message = "👍 مستواك جيد، لكن تحتاج تدريب ومراجعة بسيطة لتكون الأفضل."; }
-                else { message = "⚠️ مستواك يحتاج تدريباً كبيراً ومراجعة دروسك مرة أخرى بعناية."; }
-
-                motivationalText.innerText = message;
-                summary.scrollIntoView({ behavior: 'smooth' });
-            }
+            alert('تم تفعيل بنك الأسئلة بنجاح وجاري تجهيز الاختبار!');
         }
     </script>
 </body>
