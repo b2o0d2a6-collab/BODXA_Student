@@ -1,736 +1,850 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة BODXA التعليمية</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts (Cairo) -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-    }
-    .gradient-bg {
-      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .glass-input {
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: white;
-    }
-    .glass-input:focus {
-      border-color: #a855f7;
-      outline: none;
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(168, 85, 247, 0.4);
-      border-radius: 10px;
-    }
-  </style>
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-purple-500 selection:text-white">
-
-  <!-- ==================== PAGE 1: AUTHENTICATION (LOGIN & SIGNUP) ==================== -->
-  <div id="authPage" class="min-h-screen flex items-center justify-center gradient-bg p-4 relative overflow-hidden">
-    <!-- Glowing background elements -->
-    <div class="absolute top-1/4 -left-20 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
-
-    <div class="w-full max-w-md glass-card rounded-3xl p-8 shadow-2xl relative z-10 border border-purple-500/20">
-      <!-- Logo / Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-5xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 mb-2">
-          BODXA
-        </h1>
-        <p id="authSubtitle" class="text-slate-400 text-sm">مرحباً بك في منصتك التعليمية الشاملة</p>
-      </div>
-
-      <!-- Login Form -->
-      <form id="loginForm" class="space-y-5" onsubmit="handleLogin(event)">
-        <div>
-          <label class="block text-xs font-semibold text-purple-300 mb-2">رقم الهاتف</label>
-          <div class="relative">
-            <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
-              <i class="fa-solid fa-phone text-sm"></i>
-            </span>
-            <input type="tel" id="loginPhone" required placeholder="01xxxxxxxx" class="w-full glass-input rounded-xl pr-10 pl-4 py-3 text-sm focus:bg-slate-900/80 transition-all">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-purple-300 mb-2">كلمة المرور</label>
-          <div class="relative">
-            <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
-              <i class="fa-solid fa-lock text-sm"></i>
-            </span>
-            <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full glass-input rounded-xl pr-10 pl-4 py-3 text-sm focus:bg-slate-900/80 transition-all">
-          </div>
-        </div>
-
-        <!-- Remember Me Checkbox -->
-        <div class="flex items-center justify-between text-xs text-slate-300 pt-1">
-          <label class="flex items-center space-x-2 space-x-reverse cursor-pointer">
-            <input type="checkbox" id="rememberMe" class="rounded border-slate-700 bg-slate-800 text-purple-600 focus:ring-purple-500 focus:ring-offset-slate-900">
-            <span>تذكرني تلقائياً</span>
-          </label>
-        </div>
-
-        <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 transition-all duration-200 transform hover:-translate-y-0.5">
-          تسجيل الدخول <i class="fa-solid fa-arrow-left mr-2 text-sm"></i>
-        </button>
-
-        <p class="text-center text-xs text-slate-400 pt-4 border-t border-white/5">
-          ليس لديك حساب؟ 
-          <button type="button" onclick="toggleAuthMode('signup')" class="text-purple-400 font-bold hover:underline mr-1">إنشاء حساب جديد</button>
-        </p>
-      </form>
-
-      <!-- Signup Form (Hidden by default) -->
-      <form id="signupForm" class="space-y-5 hidden" onsubmit="handleSignup(event)">
-        <div>
-          <label class="block text-xs font-semibold text-purple-300 mb-2">الاسم الثلاثي</label>
-          <div class="relative">
-            <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
-              <i class="fa-solid fa-user text-sm"></i>
-            </span>
-            <input type="text" id="signupName" required placeholder="أحمد محمد علي" class="w-full glass-input rounded-xl pr-10 pl-4 py-3 text-sm focus:bg-slate-900/80 transition-all">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-purple-300 mb-2">رقم الهاتف</label>
-          <div class="relative">
-            <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
-              <i class="fa-solid fa-phone text-sm"></i>
-            </span>
-            <input type="tel" id="signupPhone" required placeholder="01xxxxxxxx" class="w-full glass-input rounded-xl pr-10 pl-4 py-3 text-sm focus:bg-slate-900/80 transition-all">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-purple-300 mb-2">كلمة المرور</label>
-          <div class="relative">
-            <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
-              <i class="fa-solid fa-lock text-sm"></i>
-            </span>
-            <input type="password" id="signupPassword" required placeholder="••••••••" class="w-full glass-input rounded-xl pr-10 pl-4 py-3 text-sm focus:bg-slate-900/80 transition-all">
-          </div>
-        </div>
-
-        <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 transition-all duration-200 transform hover:-translate-y-0.5">
-          إنشاء الحساب <i class="fa-solid fa-user-plus mr-2 text-sm"></i>
-        </button>
-
-        <p class="text-center text-xs text-slate-400 pt-4 border-t border-white/5">
-          لديك حساب بالفعل؟ 
-          <button type="button" onclick="toggleAuthMode('login')" class="text-purple-400 font-bold hover:underline mr-1">تسجيل الدخول</button>
-        </p>
-      </form>
-    </div>
-  </div>
-
-
-  <!-- ==================== PAGE 2: SELECTION MENU (GRADE & SUBJECT) ==================== -->
-  <div id="selectionPage" class="min-h-screen hidden flex-col gradient-bg p-4 md:p-8">
-    <!-- Navbar Header -->
-    <header class="max-w-5xl mx-auto w-full flex items-center justify-between py-4 border-b border-white/10 mb-8">
-      <div class="flex items-center space-x-3 space-x-reverse">
-        <div class="w-10 h-10 rounded-xl bg-purple-600/30 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-xl">
-          B
-        </div>
-        <span class="text-2xl font-black text-white tracking-wider">BODXA</span>
-      </div>
-      
-      <div class="flex items-center space-x-4 space-x-reverse">
-        <div class="text-left hidden sm:block">
-          <p id="userNameDisplay" class="text-xs font-bold text-purple-300"></p>
-          <p id="userPhoneDisplay" class="text-[10px] text-slate-400"></p>
-        </div>
-        <button onclick="logout()" class="p-2.5 rounded-xl glass-card text-slate-300 hover:text-red-400 hover:bg-red-500/10 transition-all text-sm flex items-center gap-2">
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <span class="hidden sm:inline text-xs">خروج</span>
-        </button>
-      </div>
-    </header>
-
-    <!-- Selection Form Card -->
-    <main class="max-w-xl mx-auto w-full my-auto glass-card rounded-3xl p-6 md:p-10 shadow-2xl border border-purple-500/20">
-      <div class="text-center mb-8">
-        <h2 class="text-2xl font-bold text-white mb-2">اختر مسارك التعليمي</h2>
-        <p class="text-xs text-slate-400">حدد السنة الدراسية لتفعيل قائمة المواد المتاحة</p>
-      </div>
-
-      <div class="space-y-6">
-        <!-- Step 1: Grade Selection -->
-        <div>
-          <label class="block text-xs font-bold text-purple-300 mb-2 flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-[10px] text-purple-300">1</span>
-            السنة الدراسية
-          </label>
-          <select id="gradeSelect" onchange="handleGradeChange()" class="w-full glass-input rounded-xl px-4 py-3.5 text-sm bg-slate-900/90 focus:border-purple-500 transition-all cursor-pointer">
-            <option value="" disabled selected>-- اختر السنة الدراسية --</option>
-            <option value="1sec">الصف الأول الثانوي</option>
-            <option value="2sec">الصف الثاني الثانوي</option>
-            <option value="3sec">الصف الثالث الثانوي</option>
-          </select>
-        </div>
-
-        <!-- Step 2: Subject Selection -->
-        <div>
-          <label class="block text-xs font-bold text-purple-300 mb-2 flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-[10px] text-purple-300">2</span>
-            المادة الدراسية
-          </label>
-          <select id="subjectSelect" disabled onchange="handleSubjectChange()" class="w-full glass-input rounded-xl px-4 py-3.5 text-sm bg-slate-900/90 focus:border-purple-500 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-            <option value="" disabled selected>-- اختر المادة أولاً من أعلاه --</option>
-            <option value="history">التاريخ</option>
-            <option value="math">الرياضيات</option>
-            <option value="science">العلوم</option>
-            <option value="arabic">اللغة العربية</option>
-            <option value="english">اللغة الإنجليزية</option>
-            <option value="philosophy">الفلسفة والمنطق</option>
-          </select>
-        </div>
-
-        <button id="enterPortalBtn" disabled onclick="enterSubjectPortal()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg opacity-40 cursor-not-allowed transition-all text-sm flex items-center justify-center gap-2">
-          <span>دخول المنهج التعليمي</span>
-          <i class="fa-solid fa-arrow-left"></i>
-        </button>
-      </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="text-center text-xs text-slate-500 py-4 mt-auto">
-      منصة BODXA التعليمية &copy; جميع الحقوق محفوظة 2026
-    </footer>
-  </div>
-
-
-  <!-- ==================== PAGE 3: HISTORY LEARNING PORTAL ==================== -->
-  <div id="portalPage" class="min-h-screen hidden flex-col bg-slate-950 text-slate-100">
-    <!-- Main Top Header -->
-    <header class="bg-slate-900/80 border-b border-slate-800 backdrop-blur-md sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center space-x-3 space-x-reverse">
-          <button onclick="backToSelection()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all text-xs flex items-center gap-1.5">
-            <i class="fa-solid fa-chevron-right"></i>
-            <span>تغيير المادة</span>
-          </button>
-          <div class="h-4 w-px bg-slate-700"></div>
-          <h1 class="text-lg font-black text-purple-400 tracking-wider">BODXA</h1>
-          <span class="text-xs bg-purple-500/10 text-purple-300 border border-purple-500/20 px-2.5 py-0.5 rounded-full font-semibold">1 ثانوي - تاريخ</span>
-        </div>
-
-        <div class="flex items-center space-x-3 space-x-reverse">
-          <span id="portalUserBadge" class="text-xs text-slate-400 hidden md:inline"></span>
-          <button onclick="logout()" class="p-2 rounded-lg bg-slate-800 hover:bg-red-500/20 text-slate-400 hover:text-red-400 transition-all text-xs">
-            <i class="fa-solid fa-power-off"></i>
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- Content Navigation Tabs -->
-    <div class="bg-slate-900/40 border-b border-slate-800/80">
-      <div class="max-w-7xl mx-auto px-4 flex space-x-2 space-x-reverse overflow-x-auto custom-scrollbar">
-        <button onclick="switchTab('ai')" id="tab-ai" class="py-3 px-4 text-xs font-bold border-b-2 border-purple-500 text-purple-400 flex items-center gap-2 whitespace-nowrap transition-all">
-          <i class="fa-solid fa-robot"></i> المعلم الذكي
-        </button>
-        <button onclick="switchTab('quiz')" id="tab-quiz" class="py-3 px-4 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 whitespace-nowrap transition-all">
-          <i class="fa-solid fa-pen-to-square"></i> بنك الأسئلة والتدريبات
-        </button>
-        <button onclick="switchTab('pdf')" id="tab-pdf" class="py-3 px-4 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 whitespace-nowrap transition-all">
-          <i class="fa-solid fa-book-open"></i> المكتبة والكتب الدراسية
-        </button>
-      </div>
-    </div>
-
-    <!-- Main Active Workspace -->
-    <main class="max-w-7xl mx-auto w-full flex-1 p-4 md:p-6">
-      
-      <!-- TAB 1: AI TEACHER -->
-      <section id="section-ai" class="h-[calc(100vh-180px)] flex flex-col glass-card rounded-2xl border border-slate-800 overflow-hidden">
-        <div class="p-4 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
-          <div class="flex items-center space-x-3 space-x-reverse">
-            <div class="w-8 h-8 rounded-lg bg-purple-600/30 border border-purple-500/40 flex items-center justify-center text-purple-400">
-              <i class="fa-solid fa-graduation-cap text-sm"></i>
-            </div>
-            <div>
-              <h3 class="text-sm font-bold text-white">الأستاذ الذكي - مادة التاريخ</h3>
-              <p class="text-[10px] text-emerald-400 flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> متصل وجاهز للشرح
-              </p>
-            </div>
-          </div>
-          <button onclick="clearChat()" class="text-xs text-slate-400 hover:text-red-400 transition-all p-1.5">
-            <i class="fa-solid fa-trash-can"></i>
-          </button>
-        </div>
-
-        <div id="chatContainer" class="flex-1 p-4 overflow-y-auto space-y-4 custom-scrollbar text-xs md:text-sm">
-          <div class="flex gap-3 max-w-[85%]">
-            <div class="w-7 h-7 rounded-full bg-purple-600/30 border border-purple-500/30 flex items-center justify-center text-purple-400 flex-shrink-0 text-xs">
-              <i class="fa-solid fa-robot"></i>
-            </div>
-            <div class="p-3.5 rounded-2xl bg-slate-800/90 border border-slate-700/50 text-slate-200 leading-relaxed">
-              أهلاً بك يا بطل! أنا المعلم الذكي الخاص بمادة التاريخ للصف الأول الثانوي. اسألني عن أي جزئية في المنهج، الحضارات القديمة، أو التواريخ والشخصيات التاريخية وسأشرحها لك ببساطة! 🏛️✨
-            </div>
-          </div>
-        </div>
-
-        <div class="p-3 bg-slate-900/90 border-t border-slate-800">
-          <form onsubmit="handleChatSubmit(event)" class="flex gap-2">
-            <input type="text" id="chatInput" placeholder="اكتب سؤالك التاريخي هنا..." class="flex-1 glass-input rounded-xl px-4 py-3 text-xs md:text-sm">
-            <button type="submit" class="px-5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold transition-all text-xs flex items-center justify-center gap-1">
-              <span>إرسال</span>
-              <i class="fa-solid fa-paper-plane text-[10px]"></i>
-            </button>
-          </form>
-        </div>
-      </section>
-
-      <!-- TAB 2: QUIZ & EXAMS ENGINE -->
-      <section id="section-quiz" class="hidden space-y-6">
-        <div class="glass-card p-6 rounded-2xl border border-slate-800">
-          <h2 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
-            <i class="fa-solid fa-list-check text-purple-400"></i> بنك الأسئلة والتقييمات الذكية
-          </h2>
-          <p class="text-xs text-slate-400 mb-6">اختبر معلوماتك في منهج التاريخ واحصل على تصحيح وتغذية راجعة فورية</p>
-
-          <!-- Question Item -->
-          <div class="bg-slate-900/70 p-5 rounded-xl border border-slate-800 space-y-4">
-            <span class="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-1 rounded-md font-semibold">سؤال 1</span>
-            <p class="text-sm font-semibold text-slate-100">
-              أي من الحضارات التالية قامت باختراع الكتابة المسمارية وكانت مستقرة بين نهري دجلة والفرات؟
-            </p>
-
-            <div class="space-y-2 pt-2" id="quizOptions">
-              <label onclick="selectQuizOption(this)" class="flex items-center p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800/80 cursor-pointer transition-all text-xs">
-                <input type="radio" name="q1" value="A" class="ml-3 text-purple-600">
-                <span>الحضارة الفرعونية القديمة</span>
-              </label>
-              <label onclick="selectQuizOption(this)" class="flex items-center p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800/80 cursor-pointer transition-all text-xs">
-                <input type="radio" name="q1" value="B" class="ml-3 text-purple-600">
-                <span>حضارة بلاد الرافدين (العراق القديم)</span>
-              </label>
-              <label onclick="selectQuizOption(this)" class="flex items-center p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800/80 cursor-pointer transition-all text-xs">
-                <input type="radio" name="q1" value="C" class="ml-3 text-purple-600">
-                <span>الحضارة فينيقية</span>
-              </label>
-            </div>
-
-            <button onclick="checkQuizAnswer()" class="mt-4 px-6 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold transition-all">
-              تأكيد الإجابة
-            </button>
-            <div id="quizFeedback" class="hidden p-3.5 rounded-xl text-xs font-semibold mt-3"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 3: FULL PDF LIBRARY (RESTORED ALL 6 BOOKS) -->
-      <section id="section-pdf" class="hidden space-y-6">
-        <div class="glass-card p-6 rounded-2xl border border-slate-800">
-          <h2 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
-            <i class="fa-solid fa-book-bookmark text-purple-400"></i> المكتبة الرقمية والكتب المدرسية
-          </h2>
-          <p class="text-xs text-slate-400 mb-6">استعرض وحمل الكتب والمصادر الدراسية المعتمدة لمنهج التاريخ</p>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Book 1 -->
-            <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800 flex flex-col justify-between hover:border-purple-500/40 transition-all">
-              <div class="flex items-start space-x-3 space-x-reverse mb-4">
-                <div class="w-12 h-14 bg-purple-950/60 border border-purple-500/30 rounded-lg flex items-center justify-center text-purple-400 flex-shrink-0 text-xl">
-                  <i class="fa-solid fa-file-pdf"></i>
-                </div>
-                <div>
-                  <h4 class="text-xs font-bold text-white mb-1">كتاب التاريخ - الفصل الدراسي الأول</h4>
-                  <p class="text-[10px] text-slate-400">النسخة الرسمية لوزارة التربية والتعليم</p>
-                </div>
-              </div>
-              <button onclick="alert('جاري تحميل الكتاب المدرسى...')" class="w-full py-2 bg-slate-800 hover:bg-purple-600 text-slate-200 hover:text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-2">
-                <i class="fa-solid fa-download"></i>
-                <span>تحميل PDF</span>
-              </button>
-            </div>
-
-            <!-- Book 2 -->
-            <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800 flex flex-col justify-between hover:border-purple-500/40 transition-all">
-              <div class="flex items-start space-x-3 space-x-reverse mb-4">
-                <div class="w-12 h-14 bg-indigo-950/60 border border-indigo-500/30 rounded-lg flex items-center justify-center text-indigo-400 flex-shrink-0 text-xl">
-                  <i class="fa-solid fa-file-pdf"></i>
-                </div>
-                <div>
-                  <h4 class="text-xs font-bold text-white mb-1">ملخص الحضارات القديمة</h4>
-                  <p class="text-[10px] text-slate-400">خرائط ذهنية ومخططات توضيحية</p>
-                </div>
-              </div>
-              <button onclick="alert('جاري تحميل الملخص...')" class="w-full py-2 bg-slate-800 hover:bg-indigo-600 text-slate-200 hover:text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-2">
-                <i class="fa-solid fa-download"></i>
-                <span>تحميل PDF</span>
-              </button>
-            </div>
-
-            <!-- Book 3 -->
-            <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800 flex flex-col justify-between hover:border-purple-500/40 transition-all">
-              <div class="flex items-start space-x-3 space-x-reverse mb-4">
-                <div class="w-12 h-14 bg-pink-950/60 border border-pink-500/30 rounded-lg flex items-center justify-center text-pink-400 flex-shrink-0 text-xl">
-                  <i class="fa-solid fa-file-pdf"></i>
-                </div>
-                <div>
-                  <h4 class="text-xs font-bold text-white mb-1">بنك التقييمات الشامل</h4>
-                  <p class="text-[10px] text-slate-400">تجميع أوراق وامتحانات الأعوام السابقة</p>
-                </div>
-              </div>
-              <button onclick="alert('جاري تحميل بنك التقييمات...')" class="w-full py-2 bg-slate-800 hover:bg-pink-600 text-slate-200 hover:text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-2">
-                <i class="fa-solid fa-download"></i>
-                <span>تحميل PDF</span>
-              </button>
-            </div>
-
-            <!-- Book 4 -->
-            <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800 flex flex-col justify-between hover:border-purple-500/40 transition-all">
-              <div class="flex items-start space-x-3 space-x-reverse mb-4">
-                <div class="w-12 h-14 bg-emerald-950/60 border border-emerald-500/30 rounded-lg flex items-center justify-center text-emerald-400 flex-shrink-0 text-xl">
-                  <i class="fa-solid fa-file-pdf"></i>
-                </div>
-                <div>
-                  <h4 class="text-xs font-bold text-white mb-1">دليل المراجعة النهائية</h4>
-                  <p class="text-[10px] text-slate-400">أهم الأسئلة المتوقعة وإجاباتها النموذجية</p>
-                </div>
-              </div>
-              <button onclick="alert('جاري تحميل دليل المراجعة...')" class="w-full py-2 bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-2">
-                <i class="fa-solid fa-download"></i>
-                <span>تحميل PDF</span>
-              </button>
-            </div>
-
-            <!-- Book 5 -->
-            <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800 flex flex-col justify-between hover:border-purple-500/40 transition-all">
-              <div class="flex items-start space-x-3 space-x-reverse mb-4">
-                <div class="w-12 h-14 bg-amber-950/60 border border-amber-500/30 rounded-lg flex items-center justify-center text-amber-400 flex-shrink-0 text-xl">
-                  <i class="fa-solid fa-file-pdf"></i>
-                </div>
-                <div>
-                  <h4 class="text-xs font-bold text-white mb-1">أطلس الخرائط التاريخية</h4>
-                  <p class="text-[10px] text-slate-400">خرائط ملونة وتوضيحية للحدود القديمة</p>
-                </div>
-              </div>
-              <button onclick="alert('جاري تحميل الأطلس...')" class="w-full py-2 bg-slate-800 hover:bg-amber-600 text-slate-200 hover:text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-2">
-                <i class="fa-solid fa-download"></i>
-                <span>تحميل PDF</span>
-              </button>
-            </div>
-
-            <!-- Book 6 -->
-            <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800 flex flex-col justify-between hover:border-purple-500/40 transition-all">
-              <div class="flex items-start space-x-3 space-x-reverse mb-4">
-                <div class="w-12 h-14 bg-cyan-950/60 border border-cyan-500/30 rounded-lg flex items-center justify-center text-cyan-400 flex-shrink-0 text-xl">
-                  <i class="fa-solid fa-file-pdf"></i>
-                </div>
-                <div>
-                  <h4 class="text-xs font-bold text-white mb-1">قاموس المصطلحات والشخصيات</h4>
-                  <p class="text-[10px] text-slate-400">شرح سريع لجميع الشخصيات في المنهج</p>
-                </div>
-              </div>
-              <button onclick="alert('جاري تحميل القاموس...')" class="w-full py-2 bg-slate-800 hover:bg-cyan-600 text-slate-200 hover:text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-2">
-                <i class="fa-solid fa-download"></i>
-                <span>تحميل PDF</span>
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-
-  <!-- Notification Modal / Alert -->
-  <div id="noticeModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
-    <div class="glass-card max-w-sm w-full p-6 rounded-2xl border border-purple-500/30 text-center space-y-4 shadow-2xl">
-      <div class="w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center mx-auto text-xl border border-purple-500/30">
-        <i class="fa-solid fa-rocket animate-bounce"></i>
-      </div>
-      <!-- RESTORED ORIGINAL NOTIFICATION TEXT -->
-      <h3 id="noticeTitle" class="text-base font-bold text-white">هذا المنهج ليس متوفرا الآن سيتوفر قريبا</h3>
-      <p id="noticeDesc" class="text-xs text-slate-300 leading-relaxed">
-        نحن نعمل حالياً على إعداد المحتوى التعليمي لهذه المادة. خيار التاريخ للصف الأول الثانوي متوفر حالياً بالكامل!
-      </p>
-      <button onclick="closeModal()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs transition-all">
-        حسناً، فهمت
-      </button>
-    </div>
-  </div>
-
-
-  <!-- Javascript Application Logic -->
-  <script>
-    // App State
-    let currentUser = null;
-
-    // Initialize Application
-    window.onload = function() {
-      const savedUser = localStorage.getItem('bodxa_user');
-      if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-        showSelectionPage();
-      }
-    };
-
-    // Auth Toggle Forms
-    function toggleAuthMode(mode) {
-      const loginForm = document.getElementById('loginForm');
-      const signupForm = document.getElementById('signupForm');
-      const authSubtitle = document.getElementById('authSubtitle');
-
-      if (mode === 'signup') {
-        loginForm.classList.add('hidden');
-        signupForm.classList.remove('hidden');
-        authSubtitle.innerText = "أنشئ حسابك الجديد للبدء في التعلم";
-      } else {
-        signupForm.classList.add('hidden');
-        loginForm.classList.remove('hidden');
-        authSubtitle.innerText = "مرحباً بك في منصتك التعليمية الشاملة";
-      }
-    }
-
-    // Handle Signup
-    function handleSignup(e) {
-      e.preventDefault();
-      const name = document.getElementById('signupName').value;
-      const phone = document.getElementById('signupPhone').value;
-      const password = document.getElementById('signupPassword').value;
-
-      const user = { name, phone, password };
-      localStorage.setItem('bodxa_registered_user_' + phone, JSON.stringify(user));
-      localStorage.setItem('bodxa_user', JSON.stringify(user));
-      
-      currentUser = user;
-      showSelectionPage();
-    }
-
-    // Handle Login
-    function handleLogin(e) {
-      e.preventDefault();
-      const phone = document.getElementById('loginPhone').value;
-      const password = document.getElementById('loginPassword').value;
-      const rememberMe = document.getElementById('rememberMe').checked;
-
-      const savedUserRaw = localStorage.getItem('bodxa_registered_user_' + phone);
-      
-      if (savedUserRaw) {
-        const savedUser = JSON.parse(savedUserRaw);
-        if (savedUser.password === password) {
-          currentUser = savedUser;
-          if (rememberMe) {
-            localStorage.setItem('bodxa_user', JSON.stringify(savedUser));
-          }
-          showSelectionPage();
-          return;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BODXA Student - البوابة الرئيسية</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --accent: #0d9488;
+            --success: #10b981;
+            --danger: #ef4444;
         }
-      }
+        body {
+            font-family: 'Cairo', Tahoma, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+            text-align: right;
+        }
 
-      // Default demo login if no account exists yet
-      currentUser = { name: "طالب BODXA", phone: phone, password: password };
-      if (rememberMe) {
-        localStorage.setItem('bodxa_user', JSON.stringify(currentUser));
-      }
-      showSelectionPage();
-    }
+        /* --- شاشة البداية الرئيسية --- */
+        #welcomeScreen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+        .welcome-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            border-top: 6px solid var(--secondary);
+        }
+        .welcome-card h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        .welcome-card .sub-title {
+            color: #64748b;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .welcome-card h2 {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        .select-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        .select-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        .select-group select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 2px solid #cbd5e1;
+            font-family: inherit;
+            font-size: 1.1rem;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .select-group select:focus {
+            border-color: var(--secondary);
+            outline: none;
+            background: white;
+        }
+        .enter-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+            transition: transform 0.2s;
+        }
+        .enter-btn:hover {
+            transform: translateY(-2px);
+        }
+        .alert-msg {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+        .alert-error {
+            background: #fee2e2;
+            color: var(--danger);
+            border: 1px solid #f87171;
+        }
 
-    // Logout Function
-    function logout() {
-      localStorage.removeItem('bodxa_user');
-      currentUser = null;
-      document.getElementById('selectionPage').classList.add('hidden');
-      document.getElementById('portalPage').classList.add('hidden');
-      document.getElementById('authPage').classList.remove('hidden');
-    }
+        /* --- المنصة الداخلية (أولى ثانوي) --- */
+        #mainPlatform {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: relative;
+        }
+        header h1 { margin: 0; font-size: 2.2rem; }
+        header p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.9; }
+        
+        .back-home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .back-home-btn:hover { background: rgba(255,255,255,0.4); }
 
-    // Show Selection Page
-    function showSelectionPage() {
-      document.getElementById('authPage').classList.add('hidden');
-      document.getElementById('portalPage').classList.add('hidden');
-      document.getElementById('selectionPage').classList.remove('hidden');
-      document.getElementById('selectionPage').classList.add('flex');
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        h3 { color: var(--primary); margin-top: 0; }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 90px;
+        }
+        .action-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .action-btn:hover { background-color: var(--primary); }
+        
+        .output-box {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-right: 5px solid var(--secondary);
+            line-height: 1.8;
+        }
+        .explain-section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+        }
+        .explain-section h4 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 5px;
+        }
+        .explain-section ul { margin: 5px 0; padding-right: 20px; }
+        .explain-section li { margin-bottom: 8px; }
 
-      if (currentUser) {
-        document.getElementById('userNameDisplay').innerText = currentUser.name || "الطالب";
-        document.getElementById('userPhoneDisplay').innerText = currentUser.phone || "";
-        document.getElementById('portalUserBadge').innerText = "مرحباً: " + (currentUser.name || "");
-      }
-    }
+        .lessons-grid {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .lesson-chip {
+            background: white;
+            color: var(--text);
+            border: 2px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .lesson-chip.selected {
+            background-color: var(--primary);
+            color: white;
+        }
 
-    // Dynamic Select Controls
-    function handleGradeChange() {
-      const gradeSelect = document.getElementById('gradeSelect');
-      const subjectSelect = document.getElementById('subjectSelect');
-      const enterBtn = document.getElementById('enterPortalBtn');
+        .quiz-config {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .quiz-config select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            font-family: inherit;
+            font-size: 1rem;
+        }
 
-      if (gradeSelect.value) {
-        subjectSelect.disabled = false;
-        subjectSelect.value = "";
-        enterBtn.disabled = true;
-        enterBtn.classList.add('opacity-40', 'cursor-not-allowed');
-      }
-    }
+        .question-box {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-right: 4px solid var(--primary);
+        }
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: right;
+            background: white;
+            color: var(--text);
+            border: 1px solid #cbd5e1;
+            padding: 10px 15px;
+            margin: 6px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .option-btn:hover { background: #e2e8f0; color: var(--primary); }
+        .option-btn.correct { background-color: #d1fae5 !important; border-color: var(--success) !important; color: #065f46 !important; font-weight: bold; }
+        .option-btn.wrong { background-color: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
 
-    function handleSubjectChange() {
-      const subjectSelect = document.getElementById('subjectSelect');
-      const enterBtn = document.getElementById('enterPortalBtn');
+        /* --- زر عرض الإجابة النموذجية المودرن --- */
+        .essay-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .essay-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+        }
+        .essay-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
 
-      if (subjectSelect.value) {
-        enterBtn.disabled = false;
-        enterBtn.classList.remove('opacity-40', 'cursor-not-allowed');
-      }
-    }
+        /* --- الدائرة الرهيبة للنتيجة (Circular Progress) --- */
+        .result-card-container {
+            text-align: center;
+            padding: 25px;
+            background: #e0f2fe;
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .circular-progress {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: conic-gradient(var(--secondary) 0deg, #cbd5e1 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: background 0.5s ease-in-out;
+        }
+        .circular-progress::before {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: white;
+        }
+        .progress-value {
+            position: relative;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary);
+            unicode-bidi: plaintext;
+        }
+        .motivational-text {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 10px;
+        }
+        .essay-note {
+            font-size: 1.05rem;
+            color: #b91c1c;
+            background: #fee2e2;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+            border: 1px dashed #ef4444;
+        }
 
-    // Enter Portal or Trigger Notice
-    function enterSubjectPortal() {
-      const grade = document.getElementById('gradeSelect').value;
-      const subject = document.getElementById('subjectSelect').value;
+        .pdf-list { list-style: none; padding: 0; }
+        .pdf-list li {
+            background: #f8fafc;
+            margin: 10px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+        }
+        .pdf-list a {
+            background-color: var(--accent);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .pdf-list a:hover { background-color: #0f766e; }
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
 
-      if (grade === '1sec' && subject === 'history') {
-        document.getElementById('selectionPage').classList.add('hidden');
-        document.getElementById('portalPage').classList.remove('hidden');
-        document.getElementById('portalPage').classList.add('flex');
-      } else {
-        openModal();
-      }
-    }
+    <!-- 🌟 شاشة البداية الرئيسية (مقتصرة على المرحلة الثانوية فقط) -->
+    <div id="welcomeScreen">
+        <div class="welcome-card">
+            <h1>BODXA Student</h1>
+            <div class="sub-title">مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة والاختبارات</div>
+            <h2>BODXA Student يرحب بكم</h2>
+            
+            <div class="select-group">
+                <label for="gradeSelector">اختر السنة الدراسية:</label>
+                <select id="gradeSelector">
+                    <option value="" disabled selected>-- اضغط لاختيار السنة الدراسية --</option>
+                    <option value="1_secondary">أولى ثانوي</option>
+                    <option value="2_secondary">ثانية ثانوي</option>
+                    <option value="3_secondary">ثالثة ثانوي</option>
+                </select>
+            </div>
 
-    function backToSelection() {
-      document.getElementById('portalPage').classList.add('hidden');
-      document.getElementById('selectionPage').classList.remove('hidden');
-    }
-
-    // Modal Controls
-    function openModal() {
-      document.getElementById('noticeModal').classList.remove('hidden');
-      document.getElementById('noticeModal').classList.add('flex');
-    }
-
-    function closeModal() {
-      document.getElementById('noticeModal').classList.add('hidden');
-      document.getElementById('noticeModal').classList.remove('flex');
-    }
-
-    // Workspace Tabs
-    function switchTab(tabName) {
-      ['ai', 'quiz', 'pdf'].forEach(tab => {
-        document.getElementById('section-' + tab).classList.add('hidden');
-        const btn = document.getElementById('tab-' + tab);
-        btn.classList.remove('border-purple-500', 'text-purple-400');
-        btn.classList.add('border-transparent', 'text-slate-400');
-      });
-
-      document.getElementById('section-' + tabName).classList.remove('hidden');
-      const activeBtn = document.getElementById('tab-' + tabName);
-      activeBtn.classList.remove('border-transparent', 'text-slate-400');
-      activeBtn.classList.add('border-purple-500', 'text-purple-400');
-    }
-
-    // AI Chat Engine
-    function handleChatSubmit(e) {
-      e.preventDefault();
-      const input = document.getElementById('chatInput');
-      const msg = input.value.trim();
-      if (!msg) return;
-
-      const chatContainer = document.getElementById('chatContainer');
-
-      // User Message
-      const userDiv = document.createElement('div');
-      userDiv.className = 'flex gap-3 max-w-[85%] mr-auto flex-row-reverse';
-      userDiv.innerHTML = `
-        <div class="w-7 h-7 rounded-full bg-indigo-600/30 border border-indigo-500/30 flex items-center justify-center text-indigo-400 flex-shrink-0 text-xs">
-          <i class="fa-solid fa-user"></i>
+            <button class="enter-btn" onclick="checkGradeSelection()">دخول المنصة 🚀</button>
+            <div id="alertMessage" class="alert-msg alert-error"></div>
         </div>
-        <div class="p-3.5 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-slate-100 leading-relaxed">
-          ${msg}
+    </div>
+
+    <!-- 🚀 المنصة الداخلية (أولى ثانوي) -->
+    <div id="mainPlatform">
+        <header>
+            <button class="back-home-btn" onclick="returnToHome()">⬅️ تغيير السنة</button>
+            <h1>🚀 BODXA Student</h1>
+            <p>مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة، واختبارات أولى ثانوي</p>
+        </header>
+
+        <!-- المعلم الذكي الشامل -->
+        <div class="card">
+            <h3>📖 المعلم الذكي</h3>
+            <label for="topic">اكتب اسم الدرس:</label>
+            <textarea id="topic" placeholder="اكتب هنا عنوان الدرس (مثال: الحضارة والتاريخ، مصادر دراسة الحضارات، عوامل قيام الحضارات)..."></textarea>
+            <button class="action-btn" id="explainBtn" onclick="startExplain()">اشرح وتعمق في الإجابة 💡</button>
+            
+            <div id="explanationResult" class="output-box" style="display:none;">
+                <h4 id="explainTitle">🤖 المعلم الذكي يشرح:</h4>
+                <div id="explContent"></div>
+            </div>
         </div>
-      `;
-      chatContainer.appendChild(userDiv);
-      input.value = '';
-      chatContainer.scrollTop = chatContainer.scrollHeight;
 
-      // Simulated Bot Reply
-      setTimeout(() => {
-        const botDiv = document.createElement('div');
-        botDiv.className = 'flex gap-3 max-w-[85%]';
-        botDiv.innerHTML = `
-          <div class="w-7 h-7 rounded-full bg-purple-600/30 border border-purple-500/30 flex items-center justify-center text-purple-400 flex-shrink-0 text-xs">
-            <i class="fa-solid fa-robot"></i>
-          </div>
-          <div class="p-3.5 rounded-2xl bg-slate-800/90 border border-slate-700/50 text-slate-200 leading-relaxed">
-            سؤال ممتاز جداً! بالنسبة لـ "${msg}"، فإن الحضارات القديمة تعتمد بشكل أساسي على الموقع الجغرافي وجودة الموارد الطبيعية مثل الأنهار، وهو ما أتاح استقرار الإنسان وتأسيس الزراعة. هل تحب نوسع في الشرح؟
-          </div>
-        `;
-        chatContainer.appendChild(botDiv);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-      }, 700);
-    }
+        <!-- قسم الاختبارات الذكي والمؤمن -->
+        <div class="card">
+            <h3>📝 بنك الأسئلة والاختبارات التفاعلية</h3>
+            <p>اختر درساً واحداً أو عدة دروس معاً:</p>
+            
+            <div class="lessons-grid">
+                <div class="lesson-chip" onclick="toggleLesson(this, 'الحضارة والتاريخ')">الحضارة والتاريخ</div>
+                <div class="lesson-chip" onclick="toggleLesson(this, 'مصادر دراسة الحضارات')">مصادر دراسة الحضارات</div>
+                <div class="lesson-chip" onclick="toggleLesson(this, 'عوامل قيام الحضارات')">عوامل قيام الحضارات</div>
+            </div>
 
-    function clearChat() {
-      const chatContainer = document.getElementById('chatContainer');
-      chatContainer.innerHTML = `
-        <div class="flex gap-3 max-w-[85%]">
-          <div class="w-7 h-7 rounded-full bg-purple-600/30 border border-purple-500/30 flex items-center justify-center text-purple-400 flex-shrink-0 text-xs">
-            <i class="fa-solid fa-robot"></i>
-          </div>
-          <div class="p-3.5 rounded-2xl bg-slate-800/90 border border-slate-700/50 text-slate-200 leading-relaxed">
-            تم مسح المحادثة. أنا جاهز لأي أسئلة تاريخية جديدة! 🏛️✨
-          </div>
+            <div class="quiz-config">
+                <label for="questionCount">عدد الأسئلة الموضوعية:</label>
+                <select id="questionCount">
+                    <option value="10" selected>10 أسئلة</option>
+                    <option value="15">15 سؤالاً</option>
+                    <option value="20">20 سؤالاً</option>
+                </select>
+                <button class="action-btn" onclick="startCustomQuiz()" style="background-color: var(--accent);">ابدأ الاختبار 🎯</button>
+            </div>
+
+            <div id="quizContainer" style="display:none;" class="quiz-card">
+                <div id="quizHeader" style="margin-bottom: 15px; font-weight: bold; color: var(--primary);"></div>
+                <div id="quizQuestions"></div>
+                
+                <!-- 🏆 العداد الدائري والملاحظة البارزة -->
+                <div id="quizResultSummary" style="display:none;" class="result-card-container">
+                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 15px;">🏆 تقييم نتيجة الأسئلة الموضوعية</div>
+                    <div class="circular-progress" id="circularProgress">
+                        <span class="progress-value" id="progressValue">0/0</span>
+                    </div>
+                    <div class="motivational-text" id="motivationalText"></div>
+                    <div class="essay-note">⚠️ ملاحظة هامة: الأسئلة المقالية لا تحتسب في درجات التقييم النهائي.</div>
+                </div>
+            </div>
         </div>
-      `;
-    }
 
-    // Quiz Options Selection
-    function selectQuizOption(element) {
-      const allOptions = document.querySelectorAll('#quizOptions label');
-      allOptions.forEach(opt => {
-        opt.classList.remove('border-purple-500', 'bg-purple-500/10');
-      });
-      element.classList.add('border-purple-500', 'bg-purple-500/10');
-    }
+        <!-- مكتبة كتب الـ PDF الكاملة -->
+        <div class="card">
+            <h3>📚 مكتبة كتب المنهج (PDF)</h3>
+            <p>حمل الكتب الدراسية الخاصة بأولى ثانوي لتذاكر في أي وقت:</p>
+            <ul class="pdf-list">
+                <li>
+                    <span>📖 كتاب التاريخ</span>
+                    <a href="https://drive.google.com/file/d/1Z4yd1F6TXkwBVbAMHHkA3HIbbtThB7HC/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>📐 كتاب الرياضيات</span>
+                    <a href="https://drive.google.com/file/d/1OGFqzyC6IPaWYSrQ-vxqc5q6KaGKUJ4O/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>🧪 كتاب العلوم المتكاملة</span>
+                    <a href="https://drive.google.com/file/d/1v7tAQT7Su5VLyDGQgU4k7_6PAd0erLW8/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>📜 كتاب الفلسفة والمنطق</span>
+                    <a href="https://drive.google.com/file/d/1DeAYyZRSDIs6ztIH5sHCbHh9-rFg4Hp2/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>🔤 كتاب اللغة الإنجليزية</span>
+                    <a href="https://drive.google.com/file/d/1aZtqobA7nIjXQ52QIDiHtyUNummiWQEA/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
+                <li>
+                    <span>📖 كتاب اللغة العربية</span>
+                    <a href="https://drive.google.com/file/d/1B4a_GQfADTTPJiYYQEzS2A3CEbbkquQW/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
-    function checkQuizAnswer() {
-      const selected = document.querySelector('input[name="q1"]:checked');
-      const feedback = document.getElementById('quizFeedback');
-      
-      if (!selected) {
-        alert('يرجى اختيار إجابة أولاً!');
-        return;
-      }
+    <!-- سكربت التحكم الشامل -->
+    <script>
+        function checkGradeSelection() {
+            const selector = document.getElementById('gradeSelector');
+            const alertMsg = document.getElementById('alertMessage');
+            const selectedValue = selector.value;
 
-      feedback.classList.remove('hidden', 'bg-emerald-500/20', 'text-emerald-300', 'border-emerald-500/30', 'bg-red-500/20', 'text-red-300', 'border-red-500/30');
+            if (!selectedValue) {
+                alertMsg.style.display = 'block';
+                alertMsg.innerText = '⚠️ من فضلك اختر سنة دراسية أولاً!';
+                return;
+            }
 
-      if (selected.value === 'B') {
-        feedback.classList.add('bg-emerald-500/20', 'text-emerald-300', 'border', 'border-emerald-500/30');
-        feedback.innerText = "إجابة ممتازة وصحيحة! 👏 العراق القديم (بلاد الرافدين) هي موطن اختراع الكتابة المسمارية.";
-      } else {
-        feedback.classList.add('bg-red-500/20', 'text-red-300', 'border', 'border-red-500/30');
-        feedback.innerText = "إجابة غير دقيقة. الإجابة الصحيحة هي: حضارة بلاد الرافدين (العراق القديم).";
-      }
-    }
-  </script>
+            if (selectedValue === '1_secondary') {
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('mainPlatform').style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                alertMsg.style.display = 'block';
+                alertMsg.className = 'alert-msg alert-error';
+                alertMsg.innerText = 'عذراً، لم تتوفر المناهج الخاصة بهذه السنة الآن، ستتوفر قريباً.';
+            }
+        }
+
+        function returnToHome() {
+            document.getElementById('mainPlatform').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'flex';
+            document.getElementById('alertMessage').style.display = 'none';
+            document.getElementById('gradeSelector').value = "";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        let selectedLessons = [];
+
+        function toggleLesson(element, lessonName) {
+            element.classList.toggle('selected');
+            if(selectedLessons.includes(lessonName)) {
+                selectedLessons = selectedLessons.filter(l => l !== lessonName);
+            } else {
+                selectedLessons.push(lessonName);
+            }
+        }
+
+        // 🧠 الشرح المفصل والدقيق للدروس الثلاثة الأولى
+        function startExplain() {
+            const query = document.getElementById('topic').value.trim().toLowerCase();
+            const resBox = document.getElementById('explanationResult');
+            const explContent = document.getElementById('explContent');
+            const explainTitle = document.getElementById('explainTitle');
+            const btn = document.getElementById('explainBtn');
+            
+            if(!query) {
+                alert('من فضلك اكتب اسم الدرس أو العنوان أولاً!');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `<span class="loading-spinner"></span> جاري استخراج الشرح التفصيلي...`;
+            resBox.style.display = 'block';
+            explainTitle.innerText = `🤖 المعلم الذكي يشرح: "${document.getElementById('topic').value}"`;
+            explContent.innerHTML = `<p style="color:#64748b;">⏳ جارٍ تجهيز الشرح المفصل والعميق...</p>`;
+
+            setTimeout(() => {
+                let historyHTML = "";
+
+                if(query.includes("الحضارة والتاريخ") || query.includes("تعريف الحضارة") || query.includes("الحضارة")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            <h4>1. مفهوم الحضارة (Civilization)</h4>
+                            <ul>
+                                <li><strong>التعريف الدقيق:</strong> هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض، سواء كان هذا المجهود مادياً أو معنوياً، وذلك بهدف تعمير الكون الذي يحيط به.</li>
+                                <li><strong>جانبا الحضارة الأساسيان:</strong>
+                                    <ul>
+                                        <li><strong>الجانب المادي:</strong> يشمل كل ما بنى وشيده الإنسان (مثل: الأهرامات، المعابد، المنشآت العمرانية، والطرق).</li>
+                                        <li><strong>الجانب المعنوي:</strong> يشمل الأفكار، العلوم، الآداب، الفنون، والقيم الأخلاقية التي تنتجها عقول البشر.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>2. رؤية المؤرخ "ولد ديورانت" لنشأة الحضارة</h4>
+                            <ul>
+                                <li><strong>رأيه الفلسفي:</strong> ربط نشأة الحضارة ارتباطاً وثيقاً بانتهاء حالة الاضطراب والخوف والقلق.</li>
+                                <li><strong>التفصيل:</strong> يرى "ولد ديورانت" أن الحضارة تبدأ حيث ينتهي الاضطراب والقلق؛ لأنه عندما يتحقق للإنسان <strong>الأمن والاستقرار</strong>، تتطلع نفسه للإبداع، الإنشاء، والارتقاء الثقافي والمادي.</li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>3. مفهوم علم التاريخ وأهميته</h4>
+                            <ul>
+                                <li><strong>التعريف:</strong> هو علم يتناول ماضي البشرية ودراسة الأحداث بمختلف أشكالها لتحليلها واستخلاص العبر والدروس.</li>
+                                <li><strong>أهمية دراسة التاريخ:</strong>
+                                    <ul>
+                                        <li>استخلاص العبر والدروس المستفادة من تاريخ الأمم السابقة.</li>
+                                        <li>إبراز القدوة الصالحة من الشخصيات التاريخية للاقتداء بها.</li>
+                                        <li>تعزيز الشعور بالمسؤولية تجاه الحفاظ على مكاسب المجتمع وتراثه.</li>
+                                        <li>الابتعاد عن التعصب؛ فالإنسانية لم تقم على أمة واحدة أو حضارة مفردة، بل تضافرت وتكاملت فيها جهود جميع الأمم والشعوب.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    `;
+                } else if(query.includes("مصادر") || query.includes("دراسة الحضارات")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            <h4>1. مفهوم مصادر دراسة الحضارات</h4>
+                            <ul>
+                                <li><strong>التعريف:</strong> هي كل ما يُعتمد عليه في معرفة التاريخ وتدوينه، وتُقسم إلى قسمين رئيسيين لضمان دقة وصحة المعلومة التاريخية.</li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>2. المصادر الأولية (الأثرية)</h4>
+                            <ul>
+                                <li><strong>التعريف:</strong> كل ما أُنتج في زمن وقوع الحدث التاريخي نفسه، وتتميز بأنها الأكثر دقة وموضوعية وثقة.</li>
+                                <li><strong>أبرز أنواعها:</strong>
+                                    <ul>
+                                        <li><strong>الآثار:</strong> الباقية على سطح الأرض (مثل الأهرامات، المعابد، والتمثال).</li>
+                                        <li><strong>النقوش:</strong> رسوم أو كتابات مدونة على مواد صلبة (مثل حجر بالرمو وصلاية نعرمر). وتُقسم إلى نقوش بارزة وغائرة.</li>
+                                        <li><strong>البرديات:</strong> وثائق مكتوبة على لفائف نبات البردي (مثل برديات إيبرس الطبية).</li>
+                                        <li><strong>الإستراكا (الشقف):</strong> كسرات الفخار والخزف التي كانت تُستخدم للكتابة عليها لسهولتها ورخص ثمنها بين الطبقات المتوسطة والفقيرة لعدم قدرتهم على ورق البردي.</li>
+                                        <li><strong>العملات والنقود:</strong> قطع معدنية تحمل خاتماً من السلطة العامة لضمان وزنها ونقائها، وتفيد في تحديد العصور التاريخية، الحالة الاقتصادية، وتصوير الملوك.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>3. المراجع الثانوية (المصادر التقليدية)</h4>
+                            <ul>
+                                <li><strong>التعريف:</strong> المؤلفات التي كُتبت بعد مرور فترات زمنية طويلة على وقوع الحدث، وتعتمد في كتابتها وأبحاثها على المصادر الأولية.</li>
+                                <li><strong>أبرز أمثلتها:</strong> كتابات المؤرخين القدامى مثل (هيرودوت ومانيتون)، والفلاسفة، والشعر والأساطير التي تعكس الحالة الثقافية والاجتماعية.</li>
+                            </ul>
+                        </div>
+                    `;
+                } else if(query.includes("عوامل") || query.includes("قيام الحضارات")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            <h4>1. مقدمة عوامل قيام الحضارات</h4>
+                            <ul>
+                                <li><strong>الفكرة الكبرى:</strong> لم تقم أي حضارة في العالم بمعزل عن غيرها، بل تضافرت مجموعة من العوامل الطبيعية والبشرية لإنتاج حضارات كبرى مثل الحضارة المصرية القديمة، حضارة بلاد العراق، وفينيقيا.</li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>2. العوامل الطبيعية (الجغرافية والمناخية)</h4>
+                            <ul>
+                                <li><strong>الموقع الجغرافي المتميز:</strong> يمنح الدولة اتصالاً بالعالم التجاري والحضاري (مثل موقع مصر المتوسط بين قارات العالم القديم).</li>
+                                <li><strong>المناخ المعتدل:</strong> يساعد على نشاط الإنسان ودفع عجلة الإنتاج والبناء والتطور (مقارنة بالمناخات المتطرفة حاراً أو بارداً).</li>
+                                <li><strong>الأنهار والأمطار:</strong> توفر المياه العذبة واستقرار الزراعة (مثل نهر النيل في مصر الذي وحد جهود أبنائها وأكسبهم قيم التضامن والتكامل).</li>
+                                <li><strong>الثروات المعدنية:</strong> وجود صخور ومعادن متنوعة تساعد على قيام الصناعات والأدوات والمباني الضخمة.</li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>3. العوامل البشرية</h4>
+                            <ul>
+                                <li><strong>الإنسان المجتهد:</strong> رغبة الإنسان القوية في تطويع البيئة واستغلال مواردها لخدمة مجتمعه وتعمير الكون.</li>
+                                <li><strong>الجهود المشتركة:</strong> تضامن أفراد المجتمع ووحدتهم كان أساس قيام أعظم الحضارات القديمة.</li>
+                            </ul>
+                        </div>
+                    `;
+                } else {
+                    historyHTML = `
+                        <div class="explain-section">
+                            <h4>📖 تنبيه من المعلم الذكي</h4>
+                            <ul>
+                                <li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي. الدروس المتاحة للشرح المفصل هي: (الحضارة والتاريخ، مصادر دراسة الحضارات، وعوامل قيام الحضارات).</li>
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                explContent.innerHTML = historyHTML;
+                btn.disabled = false;
+                btn.innerHTML = `اشرح وتعمق في الإجابة 💡`;
+            }, 800);
+        }
+
+        const objectiveQuestionBank = [
+            { type: "mcq", q: "أثر وجود الجنا دل جنوب نهر النيل بمصر إيجابيا في بعض فترات العصور القديمة على ...........", options: ["اتعاش حركة التجارة في الجنوب.", "التواصل الحضاري بين مصر ووسط أفريقيا.", "تحقيق الأمن القومي لمصر.", "سهولة حركة التجارة الخارجية."], correct: 2 },
+            { type: "mcq", q: "أي من القيم التالية اكتسبها المصريين القدماء من نهر النيل وساهمت في الحفاظ على موردهم؟", options: ["التكافل.", "التضامن.", "التواصل مع الآخرين.", "التكامل."], correct: 1 },
+            { type: "mcq", q: "رغم تبادل الشعوب لتراتها الحضاري فإن كل حضارة حافظت علي ...........", options: ["نظامها السياسي.", "وضعها الاقتصادي.", "طابعها الأيدلوجي.", "قوتها العسكرية."], correct: 2 },
+            { type: "mcq", q: "كان الدافع الأكثر تأثيراً في قيام حركة الاستعمار دفاعاً ...........", options: ["اجتماعياً.", "ثقافياً.", "اقتصادياً.", "علمياً."], correct: 2 },
+            { type: "mcq", q: "هناك دولتان الأولى تستخدم العملة الذهبية والثانية تستخدم العملة الفضية وحدث حصار اقتصادي لكل منهما. من خلال دراستك للنقود والمسكوكات تتوقع أي منهما سوف يتغلب علي ذلك الحصار؟", options: ["الدولة الأولى.", "الدولة الثانية.", "الأولى والثانية.", "سقوط كل منهما."], correct: 0 },
+            { type: "mcq", q: "من خلال دراسة حجر بالرمو يمكن التعرف علي اهم اعمال ...........", options: ["خفرع.", "سنوسرت الثالث.", "إخناتون.", "رمسيس الثاني."], correct: 1 }
+        ];
+
+        const essayQuestionBank = [
+            { type: "essay", q: "«تسير مصر حاليا بخطى واضحة للحراك بركب الحضارة».. ما مقترحاتك لاستكمال هذا الهدف؟", modelAnswer: "إجابة نموذجية: الاهتمام بالتعليم التكنولوجي، تشجيع الابتكار والبحث العلمي، وتعزيز الشراكات الاقتصادية الإقليمية والدولية." },
+            { type: "essay", q: "الاستقرار والابتكار من عوامل نشأة الحضارات.. فسر ذلك.", modelAnswer: "إجابة نموذجية: الأمن والاستقرار يمنحان الإنسان الفرصة لتفجير طاقاته الإبداعية والابتكار في شتى المجالات المادية والمعنوية." },
+            { type: "essay", q: "استنتج: أهم القيم التي يمكن أخذها من قول الإمام أبو حنيفة النعمان: «من قرأ التاريخ زاد عقله».", modelAnswer: "إجابة نموذجية: استخلاص العبر والدروس، الاستفادة من تجارب الأمم السابقة، وتوسيع مدارك الفهم البشري." }
+        ];
+
+        let objectiveScore = 0;
+        let objectiveTotal = 0;
+        let targetQuestionCount = 0;
+
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function startCustomQuiz() {
+            if(selectedLessons.length === 0) {
+                alert('من فضلك اختر درساً واحداً على الأقل من أزرار الدروس بالأعلى!');
+                return;
+            }
+
+            const countSelect = document.getElementById('questionCount').value;
+            targetQuestionCount = parseInt(countSelect);
+
+            const container = document.getElementById('quizContainer');
+            const header = document.getElementById('quizHeader');
+            const questionsDiv = document.getElementById('quizQuestions');
+            const summary = document.getElementById('quizResultSummary');
+
+            container.style.display = 'block';
+            summary.style.display = 'none';
+            questionsDiv.innerHTML = '';
+            objectiveScore = 0;
+            objectiveTotal = 0;
+
+            header.innerText = `📋 اختبار الدروس المختارة: (${selectedLessons.join('، ')}) - الأسئلة الموضوعية: ${targetQuestionCount} + 3 أسئلة مقالية`;
+
+            let shuffledObjective = [...objectiveQuestionBank];
+            shuffleArray(shuffledObjective);
+            let activeObjective = shuffledObjective.slice(0, Math.min(targetQuestionCount, shuffledObjective.length));
+
+            let activeEssay = [...essayQuestionBank];
+
+            let combinedQuestions = [...activeObjective, ...activeEssay];
+            shuffleArray(combinedQuestions);
+
+            let totalQuizItems = combinedQuestions.length;
+
+            combinedQuestions.forEach((item, i) => {
+                const qBox = document.createElement('div');
+                qBox.className = 'question-box';
+                
+                if(item.type === 'essay') {
+                    qBox.innerHTML = `
+                        <div class="question-title">س${i+1} 📝 [سؤال مقالي]: ${item.q}</div>
+                        <textarea class="essay-input" placeholder="اكتب إجابتك هنا..." oninput="handleEssayInput(this)" style="margin-bottom: 10px;"></textarea>
+                        <button class="essay-btn" disabled onclick="revealEssayAnswer(this, \`${item.modelAnswer}\`)">💡 عرض الإجابة النموذجية للتصحيح</button>
+                        <div class="essay-answer-box" style="display:none; margin-top:10px; padding:10px; background:#e2e8f0; border-radius:6px; font-weight:bold; color:var(--primary);"></div>
+                    `;
+                } else {
+                    objectiveTotal++;
+                    let optionsHTML = '';
+                    let shuffledOptions = [...item.options];
+                    let originalCorrectText = item.options[item.correct];
+                    shuffleArray(shuffledOptions);
+                    let newCorrectIndex = shuffledOptions.indexOf(originalCorrectText);
+
+                    shuffledOptions.forEach((opt, optIndex) => {
+                        optionsHTML += `<button class="option-btn" onclick="checkCustomAnswer(this, ${optIndex}, ${newCorrectIndex})">${opt}</button>`;
+                    });
+
+                    let badgeType = item.type === 'tf' ? '⚖️ [صح وخطأ]' : '📌 [اختر]';
+                    qBox.innerHTML = `
+                        <div class="question-title">س${i+1} ${badgeType}: ${item.q}</div>
+                        <div>${optionsHTML}</div>
+                    `;
+                }
+                questionsDiv.appendChild(qBox);
+            });
+
+            window.currentTotalQuizItems = totalQuizItems;
+        }
+
+        function handleEssayInput(textarea) {
+            const btn = textarea.parentElement.querySelector('.essay-btn');
+            if(textarea.value.trim().length > 0) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        }
+
+        function revealEssayAnswer(btn, modelAnswer) {
+            const parent = btn.parentElement;
+            const textarea = parent.querySelector('.essay-input');
+            const answerBox = parent.querySelector('.essay-answer-box');
+
+            textarea.disabled = true;
+            textarea.style.backgroundColor = '#f1f5f9';
+            answerBox.style.display = 'block';
+            answerBox.innerHTML = modelAnswer;
+            btn.disabled = true;
+
+            checkQuizCompletion();
+        }
+
+        function checkCustomAnswer(btn, selectedOpt, correctOpt) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.onclick = null);
+
+            if(selectedOpt === correctOpt) {
+                btn.classList.add('correct');
+                objectiveScore++;
+            } else {
+                btn.classList.add('wrong');
+                buttons[correctOpt].classList.add('correct');
+            }
+            checkQuizCompletion();
+        }
+
+        function checkQuizCompletion() {
+            const allQuestions = document.querySelectorAll('.question-box');
+            let answeredCount = 0;
+
+            allQuestions.forEach(q => {
+                const isMcqDone = q.querySelector('.option-btn.correct, .option-btn.wrong');
+                const isEssayDone = q.querySelector('.essay-answer-box') && q.querySelector('.essay-answer-box').style.display === 'block';
+                if(isMcqDone || isEssayDone) { answeredCount++; }
+            });
+
+            if(answeredCount === window.currentTotalQuizItems) {
+                const summary = document.getElementById('quizResultSummary');
+                summary.style.display = 'block';
+
+                const progressValue = document.getElementById('progressValue');
+                const circularProgress = document.getElementById('circularProgress');
+                const motivationalText = document.getElementById('motivationalText');
+
+                progressValue.innerText = `${objectiveScore} / ${objectiveTotal}`;
+
+                const percentage = objectiveTotal > 0 ? (objectiveScore / objectiveTotal) * 100 : 0;
+                const deg = (percentage / 100) * 360;
+                circularProgress.style.background = `conic-gradient(var(--secondary) ${deg}deg, #cbd5e1 ${deg}deg)`;
+
+                let message = "";
+                if(percentage === 100) { message = "🌟 بطل الأبطال! درجة نهائية ممتازة، استمر في هذا الإبداع!"; }
+                else if(percentage >= 80) { message = "🔥 مستواك ممتاز جداً، بتبذل مجهود رائع واصل!"; }
+                else if(percentage >= 50) { message = "👍 مستواك جيد، لكن تحتاج تدريب ومراجعة بسيطة لتكون الأفضل."; }
+                else { message = "⚠️ مستواك يحتاج تدريباً كبيراً ومراجعة دروسك مرة أخرى بعناية."; }
+
+                motivationalText.innerText = message;
+                summary.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
 </body>
 </html>
