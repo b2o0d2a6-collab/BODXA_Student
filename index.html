@@ -420,8 +420,10 @@
             <div class="quiz-config">
                 <label for="questionCount">عدد الأسئلة الموضوعية:</label>
                 <select id="questionCount">
-                    <option value="5" selected>5 أسئلة</option>
-                    <option value="10">10 أسئلة</option>
+                    <option value="5">5 أسئلة</option>
+                    <option value="10" selected>10 أسئلة</option>
+                    <option value="15">15 سؤالاً</option>
+                    <option value="20">20 سؤالاً</option>
                 </select>
                 <button class="action-btn" onclick="startCustomQuiz()" style="background-color: var(--accent);">ابدأ الاختبار 🎯</button>
             </div>
@@ -465,7 +467,7 @@
         </div>
     </div>
 
-    <!-- السكربت المحدث والمنظم -->
+    <!-- السكربت المحدث لتوليد عدد الأسئلة حسب اختيار الطالب -->
     <script>
         let isSignupMode = true;
 
@@ -663,28 +665,31 @@
                     `;
                 }
 
-                explContent.innerHTML = historyHTML;
+,                explContent.innerHTML = historyHTML;
                 btn.disabled = false;
                 btn.innerHTML = `اشرح وتعمق في الإجابة 💡`;
             }, 600);
         }
 
-        // بنك الأسئلة التفاعلي الحقيقي
+        // بنك الأسئلة التفاعلي ليتناسب مع العدد المختار (5، 10، 15، 20)
         function startCustomQuiz() {
             if(selectedLessons.length === 0) {
                 alert('من فضلك اختر درساً واحداً على الأقل من أزرار الدروس بالأعلى!');
                 return;
             }
 
+            const countSelect = document.getElementById('questionCount').value;
+            const targetCount = parseInt(countSelect);
+
             const quizContainer = document.getElementById('quizContainer');
             const quizHeader = document.getElementById('quizHeader');
             const quizQuestions = document.getElementById('quizQuestions');
             
             quizContainer.style.display = 'block';
-            quizHeader.innerText = `📝 اختبار تفاعلي للدروس: ${selectedLessons.join(' - ')}`;
+            quizHeader.innerText = `📝 اختبار تفاعلي للدروس: ${selectedLessons.join(' - ')} (إجمالي الأسئلة: ${targetCount})`;
             
-            // بنك أسئلة تجريبي مبسط يظهر للطالب
-            const sampleQuestions = [
+            // قاعدة أسئلة أساسية يمكن تكرارها أو تنويعها لتغطية العدد المطلوب
+            const baseBank = [
                 {
                     q: "أي مما يلي يُعد من المصادر الأولية لدراسة الحضارات؟",
                     options: ["الأساطير", "النقوش والآثار", "كتب الفلاسفة المحدثين", "المقالات الحديثة"],
@@ -694,18 +699,35 @@
                     q: "قامت الحضارة المصرية القديمة بشكل أساسي بفضل:",
                     options: ["نهر النيل والموقع الجغرافي", "المحيط الأطلسي", "الغابات الاستوائية", "المناخ القاري البارد"],
                     correct: 0
+                },
+                {
+                    q: "تتمثل المصادر الثانوية في:",
+                    options: ["البرديات الأصلية", "الآثار القائمة", "كتابات المؤرخين والفلاسفة", "النقوش الغائر والبارزة"],
+                    correct: 2
+                },
+                {
+                    q: "العامل البشري الأساسي في قيام الحضارة المصرية هو:",
+                    options: ["كفاح الإنسان المصري", "كثرة الأمطار", "وجود البحار الفاصلة", "البراكين النشطة"],
+                    correct: 0
+                },
+                {
+                    q: "علم يدرس الماضي لفهم الحاضر واستشراف المستقبل هو:",
+                    options: ["علم الفلك", "علم التاريخ", "علم الجغرافيا", "علم الأحياء"],
+                    correct: 1
                 }
             ];
 
             let html = "";
-            sampleQuestions.forEach((item, index) => {
+            for (let i = 0; i < targetCount; i++) {
+                // نأخذ الأسئلة بالدور من القاعدة الأساسية
+                let currentQ = baseBank[i % baseBank.length];
                 html += `<div class="question-box">
-                    <div class="question-title">س${index + 1}: ${item.q}</div>`;
-                item.options.forEach((opt, optIndex) => {
-                    html += `<button class="option-btn" onclick="checkAnswer(this, ${optIndex}, ${item.correct})">${opt}</button>`;
+                    <div class="question-title">س${i + 1}: ${currentQ.q}</div>`;
+                currentQ.options.forEach((opt, optIndex) => {
+                    html += `<button class="option-btn" onclick="checkAnswer(this, ${optIndex}, ${currentQ.correct})">${opt}</button>`;
                 });
                 html += `</div>`;
-            });
+            }
 
             quizQuestions.innerHTML = html;
             quizContainer.scrollIntoView({ behavior: 'smooth' });
