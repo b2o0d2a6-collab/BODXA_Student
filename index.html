@@ -341,26 +341,6 @@
         .option-btn.correct { background-color: #d1fae5 !important; border-color: var(--success) !important; color: #065f46 !important; font-weight: bold; }
         .option-btn.wrong { background-color: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
 
-        .pdf-list { list-style: none; padding: 0; }
-        .pdf-list li {
-            background: #f8fafc;
-            margin: 10px 0;
-            padding: 12px 15px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #e2e8f0;
-        }
-        .pdf-list a {
-            background-color: var(--accent);
-            color: white;
-            padding: 6px 15px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        .pdf-list a:hover { background-color: #0f766e; }
         .loading-spinner {
             display: inline-block;
             width: 14px;
@@ -419,7 +399,7 @@
     <div id="welcomeScreen" style="display: none;">
         <div class="welcome-card">
             <h1>BODXA Student</h1>
-            <div class="sub-title">مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة والاختبارات</div>
+            <div class="sub-title">مساعدك الذكي لشرح المناهج، الأسئلة والاختبارات</div>
             <h2>BODXA Student يرحب بكم</h2>
             
             <div class="select-group">
@@ -442,7 +422,7 @@
         <header>
             <button class="back-home-btn" onclick="returnToHome()">⬅️ تغيير السنة</button>
             <h1>🚀 BODXA Student</h1>
-            <p>مساعدك الذكي لشرح المناهج، مكتبة الكتب، الأسئلة، واختبارات أولى ثانوي</p>
+            <p>مساعدك الذكي لشرح المناهج والأسئلة واختبارات أولى ثانوي</p>
         </header>
 
         <!-- المعلم الذكي الشات الحقيقي -->
@@ -457,7 +437,7 @@
 
             <div class="chat-container">
                 <div class="chat-messages" id="chatMessages">
-                    <div class="message bot">أهلاً بك يا بطل في منصة BODXA Student! 🎓 أنا معلمك الذكي المدعوم بالذكاء الاصطناعي. ضع مفتاح الـ API الخاص بك في الخانة بالأعلى واحفظه، ثم اسألني عن أي درس وسأقوم بشرحه لك فوراً!</div>
+                    <div class="message bot">أهلاً بك يا بطل في منصة BODXA Student! 🎓 أنا معلمك الذكي المدعوم بالذكاء الاصطناعي. ضع مفتاح الـ API الخاص بك في الخانة بالأعلى واحفظه، ثم اسألني عن أي درس وسأقوم بشرحه لك فوراً بالتفصيل!</div>
                 </div>
                 <div class="chat-input-area">
                     <input type="text" id="chatInput" placeholder="اكتب سؤالك أو اسم الدرس هنا..." onkeypress="handleKeyPress(event)">
@@ -493,41 +473,9 @@
                 <div id="quizQuestions"></div>
             </div>
         </div>
-
-        <!-- مكتبة كتب الـ PDF الكاملة -->
-        <div class="card">
-            <h3>📚 مكتبة كتب المنهج (PDF)</h3>
-            <p>حمل الكتب الدراسية الخاصة بأولى ثانوي لتذاكر في أي وقت:</p>
-            <ul class="pdf-list">
-                <li>
-                    <span>📖 كتاب التاريخ</span>
-                    <a href="https://drive.google.com/file/d/1Z4yd1F6TXkwBVbAMHHkA3HIbbtThB7HC/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
-                <li>
-                    <span>📐 كتاب الرياضيات</span>
-                    <a href="https://drive.google.com/file/d/1OGFqzyC6IPaWYSrQ-vxqc5q6KaGKUJ4O/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
-                <li>
-                    <span>🧪 كتاب العلوم المتكاملة</span>
-                    <a href="https://drive.google.com/file/d/1v7tAQT7Su5VLyDGQgU4k7_6PAd0erLW8/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
-                <li>
-                    <span>📜 كتاب الفلسفة والمنطق</span>
-                    <a href="https://drive.google.com/file/d/1DeAYyZRSDIs6ztIH5sHCbHh9-rFg4Hp2/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
-                <li>
-                    <span>🔤 كتاب اللغة الإنجليزية</span>
-                    <a href="https://drive.google.com/file/d/1aZtqobA7nIjXQ52QIDiHtyUNummiWQEA/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
-                <li>
-                    <span>📖 كتاب اللغة العربية</span>
-                    <a href="https://drive.google.com/file/d/1B4a_GQfADTTPJiYYQEzS2A3CEbbkquQW/view?usp=drive_link" target="_blank">تحميل / تصفح</a>
-                </li>
-            </ul>
-        </div>
     </div>
 
-    <!-- السكربت النهائي والمحدث بقوة -->
+    <!-- السكربت النهائي والمحدث -->
     <script>
         let isSignupMode = true;
 
@@ -698,8 +646,8 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             try {
-                // استخدام أحدث موديل متوافق ومستقر لـ Gemini API
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                // استخدام الموديل المستقر والمضبوط gemini-1.5-flash
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
