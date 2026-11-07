@@ -24,7 +24,6 @@
             text-align: right;
         }
 
-        /* --- شاشة الحسابات (تسجيل الدخول / إنشاء حساب) --- */
         #authScreen {
             display: flex;
             justify-content: center;
@@ -32,7 +31,6 @@
             min-height: 90vh;
         }
 
-        /* --- شاشة اختيار السنة الدراسية --- */
         #welcomeScreen {
             display: none;
             justify-content: center;
@@ -134,7 +132,6 @@
             text-decoration: underline;
         }
 
-        /* --- المنصة الداخلية (أولى ثانوي) --- */
         #mainPlatform {
             display: none;
             max-width: 800px;
@@ -328,7 +325,7 @@
 </head>
 <body>
 
-    <!-- 🔐 1. شاشة تسجيل الدخول / إنشاء الحساب (الصفحة الأولى) -->
+    <!-- 🔐 1. شاشة تسجيل الدخول / إنشاء الحساب -->
     <div id="authScreen">
         <div class="welcome-card">
             <h1>BODXA Student</h1>
@@ -366,7 +363,7 @@
         </div>
     </div>
 
-    <!-- 🌟 2. شاشة اختيار السنة الدراسية (الصفحة الثانية التي طلبتها) -->
+    <!-- 🌟 2. شاشة اختيار السنة الدراسية -->
     <div id="welcomeScreen">
         <div class="welcome-card">
             <h1>BODXA Student</h1>
@@ -388,7 +385,7 @@
         </div>
     </div>
 
-    <!-- 🚀 3. المنصة الداخلية (الصفحة الثالثة والأخيرة - أولى ثانوي) -->
+    <!-- 🚀 3. المنصة الداخلية (أولى ثانوي) -->
     <div id="mainPlatform">
         <header>
             <button class="back-home-btn" onclick="returnToHome()">⬅️ تغيير السنة</button>
@@ -423,9 +420,8 @@
             <div class="quiz-config">
                 <label for="questionCount">عدد الأسئلة الموضوعية:</label>
                 <select id="questionCount">
-                    <option value="10" selected>10 أسئلة</option>
-                    <option value="15">15 سؤالاً</option>
-                    <option value="20">20 سؤالاً</option>
+                    <option value="5" selected>5 أسئلة</option>
+                    <option value="10">10 أسئلة</option>
                 </select>
                 <button class="action-btn" onclick="startCustomQuiz()" style="background-color: var(--accent);">ابدأ الاختبار 🎯</button>
             </div>
@@ -469,11 +465,10 @@
         </div>
     </div>
 
-    <!-- سكربت التحكم الشامل -->
+    <!-- السكربت المحدث والمنظم -->
     <script>
         let isSignupMode = true;
 
-        // التحقق عند فتح الموقع إذا كان المستخدم مسجل دخول من قبل
         window.onload = function() {
             const savedUser = localStorage.getItem('bodxa_logged_user');
             if (savedUser) {
@@ -600,7 +595,7 @@
             }
         }
 
-        // الشرح التفصيلي للدروس
+        // المعلم الذكي الشامل للدروس الثلاثة
         function startExplain() {
             const query = document.getElementById('topic').value.trim().toLowerCase();
             const resBox = document.getElementById('explanationResult');
@@ -622,12 +617,38 @@
             setTimeout(() => {
                 let historyHTML = "";
 
-                if(query.includes("الحضارة والتاريخ") || query.includes("تعريف الحضارة") || query.includes("الحضارة")) {
+                if(query.includes("الحضارة والتاريخ")) {
                     historyHTML = `
                         <div class="explain-section">
-                            <h4>1. مفهوم الحضارة (Civilization)</h4>
+                            <h4>1. مفهوم الحضارة</h4>
                             <ul>
-                                <li><strong>التعريف الدقيق:</strong> هي ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته على وجه الأرض.</li>
+                                <li>ثمرة أي مجهود يقوم به الإنسان نتيجة تفاعله مع البيئة لتحسين ظروف حياته.</li>
+                            </ul>
+                        </div>
+                        <div class="explain-section">
+                            <h4>2. مفهوم التاريخ</h4>
+                            <ul>
+                                <li>علم يدرس الماضي لفهم الحاضر واستشراف المستقبل.</li>
+                            </ul>
+                        </div>
+                    `;
+                } else if(query.includes("مصادر دراسة الحضارات")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            <h4>مصادر أولية وثانوية</h4>
+                            <ul>
+                                <li><strong>المصادر الأولية:</strong> الآثار، النقوش، البرديات، وكتب التاريخ القديم.</li>
+                                <li><strong>المصادر الثانوية (المراجع):</strong> كتابات المؤرخين المتأخرين، الفلاسفة، والأساطير.</li>
+                            </ul>
+                        </div>
+                    `;
+                } else if(query.includes("عوامل قيام الحضارات")) {
+                    historyHTML = `
+                        <div class="explain-section">
+                            <h4>عوامل قيام الحضارة المصرية القديمة</h4>
+                            <ul>
+                                <li><strong>عوامل طبيعية:</strong> نهر النيل، الموقع الجغرافي المتميز، المناخ المعتدل، والثروات المعدنية.</li>
+                                <li><strong>عوامل بشرية:</strong> كفاح الإنسان المصري وحبه لوطنه.</li>
                             </ul>
                         </div>
                     `;
@@ -636,7 +657,7 @@
                         <div class="explain-section">
                             <h4>📖 تنبيه من المعلم الذكي</h4>
                             <ul>
-                                <li>عذراً يا بطل، هذا الدرس غير متاح حالياً بالشرح التفصيلي. الدروس المتاحة هي: (الحضارة والتاريخ، مصادر دراسة الحضارات، وعوامل قيام الحضارات).</li>
+                                <li>جرب كتابة أحد دروس التاريخ المقررة مثل: (الحضارة والتاريخ، مصادر دراسة الحضارات، عوامل قيام الحضارات).</li>
                             </ul>
                         </div>
                     `;
@@ -645,15 +666,65 @@
                 explContent.innerHTML = historyHTML;
                 btn.disabled = false;
                 btn.innerHTML = `اشرح وتعمق في الإجابة 💡`;
-            }, 800);
+            }, 600);
         }
 
+        // بنك الأسئلة التفاعلي الحقيقي
         function startCustomQuiz() {
             if(selectedLessons.length === 0) {
                 alert('من فضلك اختر درساً واحداً على الأقل من أزرار الدروس بالأعلى!');
                 return;
             }
-            alert('تم تفعيل بنك الأسئلة بنجاح وجاري تجهيز الاختبار!');
+
+            const quizContainer = document.getElementById('quizContainer');
+            const quizHeader = document.getElementById('quizHeader');
+            const quizQuestions = document.getElementById('quizQuestions');
+            
+            quizContainer.style.display = 'block';
+            quizHeader.innerText = `📝 اختبار تفاعلي للدروس: ${selectedLessons.join(' - ')}`;
+            
+            // بنك أسئلة تجريبي مبسط يظهر للطالب
+            const sampleQuestions = [
+                {
+                    q: "أي مما يلي يُعد من المصادر الأولية لدراسة الحضارات؟",
+                    options: ["الأساطير", "النقوش والآثار", "كتب الفلاسفة المحدثين", "المقالات الحديثة"],
+                    correct: 1
+                },
+                {
+                    q: "قامت الحضارة المصرية القديمة بشكل أساسي بفضل:",
+                    options: ["نهر النيل والموقع الجغرافي", "المحيط الأطلسي", "الغابات الاستوائية", "المناخ القاري البارد"],
+                    correct: 0
+                }
+            ];
+
+            let html = "";
+            sampleQuestions.forEach((item, index) => {
+                html += `<div class="question-box">
+                    <div class="question-title">س${index + 1}: ${item.q}</div>`;
+                item.options.forEach((opt, optIndex) => {
+                    html += `<button class="option-btn" onclick="checkAnswer(this, ${optIndex}, ${item.correct})">${opt}</button>`;
+                });
+                html += `</div>`;
+            });
+
+            quizQuestions.innerHTML = html;
+            quizContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function checkAnswer(btn, chosen, correct) {
+            const parent = btn.parentElement;
+            const buttons = parent.getElementsByClassName('option-btn');
+            
+            for(let b of buttons) {
+                b.disabled = true;
+            }
+
+            if(chosen === correct) {
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('wrong');
+                buttons[correct].classList.add('correct');
+            }
         }
     </script>
 </body>
